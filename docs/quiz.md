@@ -119,7 +119,7 @@ In the quiz editor, next to "Add question", users who may create quizzes find a 
 - Settings: number of questions (1 to 50), one category or any, difficulty, and multiple choice or true/false
 - Multiple choice questions get their four answers in random order; true/false questions get `True` and `False`
 - Each question has 20 seconds, a 5 second cooldown and the Open Trivia DB category as its `category` (so every generated category becomes its own round)
-- The questions are in English. Before adding them you can keep them, or download them as a small JSON file together with an instruction for an AI tool that translates it. The AI must answer in the same JSON format; import that file (or paste the JSON) in the same dialog to add the translated questions
+- The questions are in English. Before adding them you can keep them, or download them as a small JSON file together with an instruction for an AI tool that translates it. The instruction makes clear that the AI must deliver a JSON file (not JSON as chat text) in the same format; import that file (pasting the JSON also works as a fallback) in the same dialog to add the translated questions
 - The server asks Open Trivia DB for at most one request every 5 seconds (their limit per IP), so generating can take a few seconds, and keeps a session token per user so consecutive generations do not repeat questions
 - A quiz with generated questions gets `"source": "opentdb"` (kept on export and import). The podium shows the credit "Questions from Open Trivia Database (CC BY-SA 4.0)" for such quizzes
 
