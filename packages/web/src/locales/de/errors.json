@@ -91,5 +91,15 @@
     "usernameTaken": "Dieser Benutzername ist bereits vergeben",
     "lastAdmin": "Es muss immer mindestens einen Admin geben",
     "cannotDeleteSelf": "Du kannst dein eigenes Konto nicht löschen"
+  },
+  "generator": {
+    "invalidAmount": "Wähle zwischen 1 und 50 Fragen",
+    "invalidParameter": "Der Fragen-Dienst hat diese Einstellungen abgelehnt",
+    "noResults": "Keine Fragen für diese Einstellungen gefunden, versuche weniger Fragen oder andere Einstellungen",
+    "exhausted": "Du hast bereits alle Fragen für diese Einstellungen erhalten, versuche andere Einstellungen",
+    "rateLimited": "Der Fragen-Dienst ist ausgelastet, versuche es in ein paar Sekunden erneut",
+    "busy": "Es werden gerade zu viele Quizze generiert, versuche es gleich erneut",
+    "unavailable": "Der Fragen-Dienst ist gerade nicht erreichbar, versuche es später erneut",
+    "failed": "Quiz konnte nicht generiert werden"
   }
 }

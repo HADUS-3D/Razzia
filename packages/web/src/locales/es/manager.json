@@ -101,5 +101,46 @@
     "canEdit": "Editar",
     "editHint": "Para editar, el usuario también necesita el permiso de edición. Todos pueden iniciar los cuestionarios que pueden ver.",
     "saved": "Acceso guardado"
+  },
+  "generator": {
+    "button": "Generar quiz",
+    "title": "Generar un quiz",
+    "description": "Crea un quiz con preguntas de Open Trivia Database.",
+    "category": "Categoría",
+    "anyCategory": "Cualquier categoría",
+    "difficulty": "Dificultad",
+    "anyDifficulty": "Cualquier dificultad",
+    "difficulties": {
+      "easy": "Fácil",
+      "medium": "Media",
+      "hard": "Difícil"
+    },
+    "type": "Tipo de pregunta",
+    "anyType": "Cualquier tipo",
+    "types": {
+      "multiple": "Opción múltiple",
+      "boolean": "Verdadero / Falso"
+    },
+    "amount": "Número de preguntas (1-50)",
+    "subject": "Título (opcional)",
+    "englishNote": "Las preguntas se generan en inglés. Puedes traducirlas después.",
+    "attribution": "Preguntas de <odb>Open Trivia Database</odb>, con licencia <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Puede tardar hasta 15 segundos, el servicio de preguntas solo permite una petición cada 5 segundos.",
+    "generating": "Generando...",
+    "submit": "Generar",
+    "createdTitle": "Quiz creado",
+    "created": "\"{{subject}}\" se guardó con {{count}} pregunta(s).",
+    "keepOrTranslate": "Las preguntas están en inglés. ¿Conservarlas o traducirlas?",
+    "targetLanguage": "Traducir a",
+    "keepEnglish": "Mantener inglés y editar",
+    "translate": "Traducir",
+    "translateSteps": "El quiz se descargó como archivo JSON. Dale ese archivo a una herramienta de IA junto con la instrucción de abajo y luego importa el JSON traducido con el botón de importar de la lista de quizzes.",
+    "instruction": "Instrucción para la herramienta de IA",
+    "downloadAgain": "Descargar JSON de nuevo",
+    "copy": "Copiar instrucción",
+    "copied": "Instrucción copiada",
+    "copyFailed": "No se pudo copiar, selecciona el texto y cópialo manualmente",
+    "editEnglish": "Editar el quiz en inglés",
+    "done": "Hecho"
   }
 }

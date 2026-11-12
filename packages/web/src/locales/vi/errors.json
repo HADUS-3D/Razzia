@@ -91,5 +91,15 @@
     "usernameTaken": "Tên đăng nhập này đã được sử dụng",
     "lastAdmin": "Phải luôn có ít nhất một quản trị viên",
     "cannotDeleteSelf": "Bạn không thể xóa tài khoản của chính mình"
+  },
+  "generator": {
+    "invalidAmount": "Chọn từ 1 đến 50 câu hỏi",
+    "invalidParameter": "Dịch vụ câu hỏi đã từ chối các thiết lập này",
+    "noResults": "Không có câu hỏi cho các thiết lập này, hãy thử ít câu hỏi hơn hoặc thiết lập khác",
+    "exhausted": "Bạn đã nhận hết câu hỏi cho các thiết lập này, hãy thử thiết lập khác",
+    "rateLimited": "Dịch vụ câu hỏi đang bận, hãy thử lại sau vài giây",
+    "busy": "Hiện có quá nhiều quiz đang được tạo, hãy thử lại sau ít phút",
+    "unavailable": "Hiện không kết nối được dịch vụ câu hỏi, hãy thử lại sau",
+    "failed": "Không thể tạo quiz"
   }
 }

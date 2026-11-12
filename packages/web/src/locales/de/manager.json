@@ -101,5 +101,46 @@
     "canEdit": "Bearbeiten",
     "editHint": "Zum Bearbeiten braucht der Benutzer zusätzlich das Bearbeitungsrecht. Jeder kann die Quizze starten, die er sehen kann.",
     "saved": "Zugriff gespeichert"
+  },
+  "generator": {
+    "button": "Quiz generieren",
+    "title": "Quiz generieren",
+    "description": "Erstelle ein Quiz mit Fragen aus der Open Trivia Database.",
+    "category": "Kategorie",
+    "anyCategory": "Beliebige Kategorie",
+    "difficulty": "Schwierigkeit",
+    "anyDifficulty": "Beliebige Schwierigkeit",
+    "difficulties": {
+      "easy": "Leicht",
+      "medium": "Mittel",
+      "hard": "Schwer"
+    },
+    "type": "Fragetyp",
+    "anyType": "Beliebiger Typ",
+    "types": {
+      "multiple": "Multiple Choice",
+      "boolean": "Wahr / Falsch"
+    },
+    "amount": "Anzahl der Fragen (1-50)",
+    "subject": "Titel (optional)",
+    "englishNote": "Die Fragen werden auf Englisch erstellt. Du kannst sie danach übersetzen.",
+    "attribution": "Fragen von <odb>Open Trivia Database</odb>, lizenziert unter <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Das kann bis zu 15 Sekunden dauern, der Fragen-Dienst erlaubt nur eine Anfrage alle 5 Sekunden.",
+    "generating": "Wird generiert...",
+    "submit": "Generieren",
+    "createdTitle": "Quiz erstellt",
+    "created": "\"{{subject}}\" wurde mit {{count}} Frage(n) gespeichert.",
+    "keepOrTranslate": "Die Fragen sind auf Englisch. Beibehalten oder übersetzen?",
+    "targetLanguage": "Übersetzen nach",
+    "keepEnglish": "Englisch behalten und bearbeiten",
+    "translate": "Übersetzen",
+    "translateSteps": "Das Quiz wurde als JSON-Datei heruntergeladen. Gib die Datei zusammen mit der Anweisung unten an ein KI-Tool und importiere das übersetzte JSON danach mit der Import-Schaltfläche in der Quizliste.",
+    "instruction": "Anweisung für das KI-Tool",
+    "downloadAgain": "JSON erneut herunterladen",
+    "copy": "Anweisung kopieren",
+    "copied": "Anweisung kopiert",
+    "copyFailed": "Kopieren nicht möglich, markiere den Text und kopiere ihn manuell",
+    "editEnglish": "Englisches Quiz bearbeiten",
+    "done": "Fertig"
   }
 }

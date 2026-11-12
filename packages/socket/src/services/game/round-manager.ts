@@ -484,12 +484,14 @@ export class RoundManager {
 
     this.opts.send(this.opts.getManagerId(), STATUS.FINISHED, {
       subject: this.opts.quizz.subject,
+      source: this.opts.quizz.source,
       top,
     })
 
     this.leaderboard.forEach((player, index) => {
       this.opts.send(player.id, STATUS.FINISHED, {
         subject: this.opts.quizz.subject,
+        source: this.opts.quizz.source,
         top,
         rank: index + 1,
       })

@@ -112,6 +112,19 @@ Here the leaderboard appears once after the two geography questions, and the mus
 
 > **Note:** the app automatically adds and manages an `id` field inside each quiz file the first time it's loaded — you don't need to set it yourself, and editing it manually may cause conflicts if it collides with another quiz's id.
 
+## Generated quizzes (Open Trivia Database)
+
+Users who may create quizzes get a generate button next to the import button in the Manager. The server fetches questions from the [Open Trivia Database](https://opentdb.com) and saves them as a normal quiz that is owned by the user and can be edited afterwards.
+
+- Settings: number of questions (1 to 50), one category or any, difficulty, and multiple choice or true/false
+- Multiple choice questions get their four answers in random order; true/false questions get `True` and `False`
+- Each question has 20 seconds, a 5 second cooldown and the Open Trivia DB category as its `category`
+- The questions are in English. After generating you can keep them or download the quiz as JSON together with an instruction for an AI tool that translates it; import the translated JSON with the import button
+- The server asks Open Trivia DB for at most one request every 5 seconds (their limit per IP), so generating can take a few seconds, and keeps a session token per user so consecutive generations do not repeat questions
+- Generated quizzes get `"source": "opentdb"` (kept on export and import). The podium shows the credit "Questions from Open Trivia Database (CC BY-SA 4.0)" for such quizzes
+
+The questions are provided by the Open Trivia Database under the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/). Keep the attribution when you share generated quizzes.
+
 ## Survey mode
 
 A quiz with `"gameMode": "survey"` collects opinions instead of testing knowledge: there is no scoring, no leaderboard and no podium, and no answer is correct. The host still controls the pace and still sees how the answers are distributed after each question, but players see neither points nor a rank, and the game ends on a summary screen rather than a podium.

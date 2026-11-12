@@ -91,5 +91,15 @@
     "usernameTaken": "Questo nome utente è già in uso",
     "lastAdmin": "Deve esserci sempre almeno un amministratore",
     "cannotDeleteSelf": "Non puoi eliminare il tuo account"
+  },
+  "generator": {
+    "invalidAmount": "Scegli tra 1 e 50 domande",
+    "invalidParameter": "Il servizio di domande ha rifiutato queste impostazioni",
+    "noResults": "Nessuna domanda per queste impostazioni, prova con meno domande o altre impostazioni",
+    "exhausted": "Hai già ricevuto tutte le domande per queste impostazioni, prova altre impostazioni",
+    "rateLimited": "Il servizio di domande è occupato, riprova tra qualche secondo",
+    "busy": "Troppi quiz in generazione in questo momento, riprova tra poco",
+    "unavailable": "Il servizio di domande non è raggiungibile al momento, riprova più tardi",
+    "failed": "Impossibile generare il quiz"
   }
 }

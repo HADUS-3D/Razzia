@@ -3,6 +3,7 @@ import type {
   QuestionMedia,
   QuestionOptions,
   QuestionType,
+  QuizzSource,
 } from "@razzia/common/types/game"
 
 export const STATUS = {
@@ -54,6 +55,7 @@ export interface CommonStatusDataMap {
   WAIT: { text: string }
   FINISHED: {
     subject: string
+    source?: QuizzSource
     top: Array<Pick<Player, "username" | "points">>
     rank?: number
   }

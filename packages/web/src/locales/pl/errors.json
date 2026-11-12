@@ -91,5 +91,15 @@
     "usernameTaken": "Ta nazwa użytkownika jest już zajęta",
     "lastAdmin": "Musi zawsze istnieć co najmniej jeden administrator",
     "cannotDeleteSelf": "Nie możesz usunąć własnego konta"
+  },
+  "generator": {
+    "invalidAmount": "Wybierz od 1 do 50 pytań",
+    "invalidParameter": "Serwis pytań odrzucił te ustawienia",
+    "noResults": "Brak pytań dla tych ustawień, spróbuj mniej pytań lub innych ustawień",
+    "exhausted": "Otrzymano już wszystkie pytania dla tych ustawień, spróbuj innych ustawień",
+    "rateLimited": "Serwis pytań jest zajęty, spróbuj ponownie za kilka sekund",
+    "busy": "Generowanych jest teraz zbyt wiele quizów, spróbuj ponownie za chwilę",
+    "unavailable": "Serwis pytań jest teraz niedostępny, spróbuj ponownie później",
+    "failed": "Nie udało się wygenerować quizu"
   }
 }

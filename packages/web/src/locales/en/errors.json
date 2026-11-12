@@ -91,5 +91,15 @@
     "usernameTaken": "This username is already taken",
     "lastAdmin": "There must always be at least one admin",
     "cannotDeleteSelf": "You cannot delete your own account"
+  },
+  "generator": {
+    "invalidAmount": "Choose between 1 and 50 questions",
+    "invalidParameter": "The question service rejected these settings",
+    "noResults": "No questions found for these settings, try fewer questions or other settings",
+    "exhausted": "You have already received all questions for these settings, try other settings",
+    "rateLimited": "The question service is busy, try again in a few seconds",
+    "busy": "Too many quizzes are being generated right now, try again in a moment",
+    "unavailable": "The question service is not reachable right now, try again later",
+    "failed": "Could not generate the quizz"
   }
 }

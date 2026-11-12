@@ -65,5 +65,6 @@
   },
   "showQrCode": "Mostra codice QR",
   "streak": "Serie di risposte",
-  "pinDigit": "Cifra {{position}} del PIN"
+  "pinDigit": "Cifra {{position}} del PIN",
+  "source": "Domande da <odb>Open Trivia Database</odb> (<cc>CC BY-SA 4.0</cc>)"
 }

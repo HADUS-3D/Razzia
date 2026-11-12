@@ -106,6 +106,15 @@ The quiz body is validated against the same schema as the files in `config/quizz
 | `DELETE /api/users/:id`              | admin        | quizzes of the user go to the deleting admin                                                   |
 | `PATCH /api/quizz/:id/access`        | owner, admin | `{ visibility: "all" \| "secret", viewers, editors, ownerId? }`; `ownerId` hands the quiz over |
 
+### Question generator
+
+| Route                           | Who                | Notes                                                                                                                         |
+| ------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `GET /api/generator/categories` | create-quiz rights | `200 { categories: [{ id, name }] }`, cached for 24 hours                                                                     |
+| `POST /api/generator`           | create-quiz rights | `{ amount (1-50), category?, difficulty?, type?, subject? }`, saves the quiz and returns `201 { id, subject, questionCount }` |
+
+Failures use `errors:generator.*` keys: `noResults`, `exhausted` (all questions already served to this user), `invalidParameter`, `rateLimited` and `busy` (`429`), `unavailable` (`500`).
+
 ### Media
 
 `POST /api/media` takes a `multipart/form-data` body with a single `file` field, up to 100 MB (`413 errors:media.tooLarge` beyond). The type is detected from the file's content, not its name or declared MIME: PNG, JPEG, WebP and GIF images, MP3, OGG and WAV audio, MP4 and WebM video. Anything else is refused with `415 errors:media.invalidType`.

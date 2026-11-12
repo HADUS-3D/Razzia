@@ -101,5 +101,46 @@
     "canEdit": "Modifier",
     "editHint": "Pour modifier, l'utilisateur doit aussi avoir le droit de modification. Chacun peut lancer les quiz qu'il peut voir.",
     "saved": "Accès enregistré"
+  },
+  "generator": {
+    "button": "Générer un quiz",
+    "title": "Générer un quiz",
+    "description": "Créez un quiz avec des questions de l'Open Trivia Database.",
+    "category": "Catégorie",
+    "anyCategory": "Toutes les catégories",
+    "difficulty": "Difficulté",
+    "anyDifficulty": "Toutes les difficultés",
+    "difficulties": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    },
+    "type": "Type de question",
+    "anyType": "Tous les types",
+    "types": {
+      "multiple": "Choix multiple",
+      "boolean": "Vrai / Faux"
+    },
+    "amount": "Nombre de questions (1-50)",
+    "subject": "Titre (facultatif)",
+    "englishNote": "Les questions sont générées en anglais. Vous pouvez les traduire ensuite.",
+    "attribution": "Questions fournies par <odb>Open Trivia Database</odb>, sous licence <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Cela peut prendre jusqu'à 15 secondes, le service de questions n'autorise qu'une requête toutes les 5 secondes.",
+    "generating": "Génération...",
+    "submit": "Générer",
+    "createdTitle": "Quiz créé",
+    "created": "\"{{subject}}\" a été enregistré avec {{count}} question(s).",
+    "keepOrTranslate": "Les questions sont en anglais. Les garder ou les traduire ?",
+    "targetLanguage": "Traduire en",
+    "keepEnglish": "Garder l'anglais et modifier",
+    "translate": "Traduire",
+    "translateSteps": "Le quiz a été téléchargé en fichier JSON. Donnez ce fichier à un outil d'IA avec l'instruction ci-dessous, puis importez le JSON traduit avec le bouton d'import de la liste des quiz.",
+    "instruction": "Instruction pour l'outil d'IA",
+    "downloadAgain": "Télécharger à nouveau le JSON",
+    "copy": "Copier l'instruction",
+    "copied": "Instruction copiée",
+    "copyFailed": "Copie impossible, sélectionnez le texte et copiez-le manuellement",
+    "editEnglish": "Modifier le quiz en anglais",
+    "done": "Terminé"
   }
 }

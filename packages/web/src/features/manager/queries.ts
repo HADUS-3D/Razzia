@@ -5,6 +5,7 @@ import type {
   UserRole,
 } from "@razzia/common/types/auth"
 import type { GameSettings } from "@razzia/common/types/game"
+import type { GeneratorInput } from "@razzia/common/validators/generator"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import { api, unwrap, unwrapEmpty } from "@razzia/web/lib/api"
 
@@ -41,6 +42,16 @@ export const resultQuery = (id: string) =>
     queryKey: resultKeys.detail(id),
     queryFn: () => unwrap(api.results[":id"].$get({ param: { id } })),
   })
+
+export const generatorCategoriesQuery = () =>
+  queryOptions({
+    queryKey: ["generator", "categories"] as const,
+    queryFn: () => unwrap(api.generator.categories.$get()),
+    staleTime: 60 * 60 * 1000,
+  })
+
+export const generateQuizz = (json: GeneratorInput) =>
+  unwrap(api.generator.$post({ json }))
 
 export const createQuizz = (json: QuizzValidated) =>
   unwrap(api.quizz.$post({ json }))

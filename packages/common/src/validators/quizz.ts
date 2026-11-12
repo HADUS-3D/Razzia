@@ -5,6 +5,7 @@ import {
   MEDIA_URL_PREFIX,
   QUESTION_TYPES,
   QUIZZ_MODES,
+  QUIZZ_SOURCES,
   SCORING_MODES,
 } from "@razzia/common/constants"
 import { QUESTION_REFINEMENTS } from "@razzia/common/validators/questions"
@@ -65,6 +66,7 @@ export const quizzValidator = z
   .object({
     gameMode: z.enum(QUIZZ_MODES),
     subject: z.string().min(1, "errors:quizz.subjectEmpty"),
+    source: z.enum(QUIZZ_SOURCES).optional(),
     questions: z.array(questionValidator).min(1, "errors:quizz.noQuestions"),
   })
   .superRefine((quizz, ctx) => {

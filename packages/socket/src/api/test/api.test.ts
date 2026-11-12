@@ -36,6 +36,31 @@ import { createUser } from "@razzia/socket/services/users"
 import { createFakeIo } from "@razzia/socket/test/fake-io"
 import { createQuestion, createQuizz } from "@razzia/socket/test/fixtures"
 
+vi.mock("@razzia/socket/services/opentdb", () => ({
+  openTdb: {
+    getCategories: vi.fn(() =>
+      Promise.resolve([{ id: 9, name: "General Knowledge" }]),
+    ),
+    generate: vi.fn(() =>
+      Promise.resolve({
+        gameMode: "quiz",
+        subject: "Trivia: General Knowledge",
+        source: "opentdb",
+        questions: [
+          {
+            type: "single",
+            question: "Q?",
+            answers: ["A", "B"],
+            solutions: [1],
+            cooldown: 5,
+            time: 20,
+          },
+        ],
+      }),
+    ),
+  },
+}))
+
 interface RequestOptions {
   method?: string
   token?: string
@@ -807,5 +832,56 @@ describe("user management", () => {
     })
 
     expect(login.status).toBe(StatusCodes.OK)
+  })
+})
+
+describe("generator", () => {
+  it("saves a generated quizz for the user with the source set", async () => {
+    const author = await addUser("gen", { createQuizz: true })
+    const response = await request("/generator", {
+      method: "POST",
+      token: author.token,
+      body: { amount: 5, category: 9 },
+    })
+
+    expect(response.status).toBe(StatusCodes.CREATED)
+
+    const { id } = await json<{ id: string }>(response)
+    const saved = await json<{ source: string }>(
+      await request(`/quizz/${id}`, { token: author.token }),
+    )
+
+    expect(saved.source).toBe("opentdb")
+  })
+
+  it("lists categories and rejects invalid input", async () => {
+    const categories = await json<{ categories: Array<{ id: number }> }>(
+      await request("/generator/categories", { token: managerToken }),
+    )
+
+    expect(categories.categories[0].id).toBe(9)
+
+    const response = await request("/generator", {
+      method: "POST",
+      token: managerToken,
+      body: { amount: 51 },
+    })
+
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+  })
+
+  it("is forbidden without quizz rights", async () => {
+    const reader = await addUser("reader")
+
+    for (const response of [
+      await request("/generator", {
+        method: "POST",
+        token: reader.token,
+        body: { amount: 5 },
+      }),
+      await request("/generator/categories", { token: reader.token }),
+    ]) {
+      expect(response.status).toBe(StatusCodes.FORBIDDEN)
+    }
   })
 })

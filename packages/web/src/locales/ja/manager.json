@@ -101,5 +101,46 @@
     "canEdit": "編集",
     "editHint": "編集にはユーザーの編集権限も必要です。表示できるクイズは誰でも開始できます。",
     "saved": "アクセス設定を保存しました"
+  },
+  "generator": {
+    "button": "クイズを生成",
+    "title": "クイズを生成",
+    "description": "Open Trivia Databaseの問題でクイズを作成します。",
+    "category": "カテゴリ",
+    "anyCategory": "すべてのカテゴリ",
+    "difficulty": "難易度",
+    "anyDifficulty": "すべての難易度",
+    "difficulties": {
+      "easy": "易しい",
+      "medium": "普通",
+      "hard": "難しい"
+    },
+    "type": "問題の種類",
+    "anyType": "すべての種類",
+    "types": {
+      "multiple": "選択式",
+      "boolean": "○ / ×"
+    },
+    "amount": "問題数 (1-50)",
+    "subject": "タイトル (任意)",
+    "englishNote": "問題は英語で生成されます。生成後に翻訳できます。",
+    "attribution": "問題提供: <odb>Open Trivia Database</odb> (ライセンス: <cc>CC BY-SA 4.0</cc>)",
+    "wait": "最大15秒かかることがあります。問題サービスは5秒に1回しかリクエストできません。",
+    "generating": "生成中...",
+    "submit": "生成",
+    "createdTitle": "クイズを作成しました",
+    "created": "「{{subject}}」を{{count}}問で保存しました。",
+    "keepOrTranslate": "問題は英語です。そのままにしますか、翻訳しますか?",
+    "targetLanguage": "翻訳先",
+    "keepEnglish": "英語のまま編集",
+    "translate": "翻訳する",
+    "translateSteps": "クイズをJSONファイルとしてダウンロードしました。このファイルを下の指示と一緒にAIツールに渡し、翻訳されたJSONをクイズ一覧のインポートボタンで取り込んでください。",
+    "instruction": "AIツール用の指示",
+    "downloadAgain": "JSONを再ダウンロード",
+    "copy": "指示をコピー",
+    "copied": "指示をコピーしました",
+    "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください",
+    "editEnglish": "英語のクイズを編集",
+    "done": "完了"
   }
 }

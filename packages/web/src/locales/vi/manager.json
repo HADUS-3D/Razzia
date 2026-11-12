@@ -101,5 +101,46 @@
     "canEdit": "Sửa",
     "editHint": "Để sửa, người dùng cũng cần có quyền chỉnh sửa. Ai cũng có thể tổ chức các quiz mà họ nhìn thấy.",
     "saved": "Đã lưu quyền truy cập"
+  },
+  "generator": {
+    "button": "Tạo quiz",
+    "title": "Tạo quiz",
+    "description": "Tạo quiz với câu hỏi từ Open Trivia Database.",
+    "category": "Danh mục",
+    "anyCategory": "Bất kỳ danh mục",
+    "difficulty": "Độ khó",
+    "anyDifficulty": "Bất kỳ độ khó",
+    "difficulties": {
+      "easy": "Dễ",
+      "medium": "Trung bình",
+      "hard": "Khó"
+    },
+    "type": "Loại câu hỏi",
+    "anyType": "Bất kỳ loại",
+    "types": {
+      "multiple": "Trắc nghiệm",
+      "boolean": "Đúng / Sai"
+    },
+    "amount": "Số câu hỏi (1-50)",
+    "subject": "Tiêu đề (tùy chọn)",
+    "englishNote": "Câu hỏi được tạo bằng tiếng Anh. Bạn có thể dịch sau.",
+    "attribution": "Câu hỏi từ <odb>Open Trivia Database</odb>, giấy phép <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Có thể mất tới 15 giây, dịch vụ câu hỏi chỉ cho phép một yêu cầu mỗi 5 giây.",
+    "generating": "Đang tạo...",
+    "submit": "Tạo",
+    "createdTitle": "Đã tạo quiz",
+    "created": "\"{{subject}}\" đã được lưu với {{count}} câu hỏi.",
+    "keepOrTranslate": "Các câu hỏi bằng tiếng Anh. Giữ nguyên hay dịch?",
+    "targetLanguage": "Dịch sang",
+    "keepEnglish": "Giữ tiếng Anh và chỉnh sửa",
+    "translate": "Dịch",
+    "translateSteps": "Quiz đã được tải về dưới dạng tệp JSON. Hãy đưa tệp này cho một công cụ AI cùng với hướng dẫn bên dưới, sau đó nhập JSON đã dịch bằng nút nhập trong danh sách quiz.",
+    "instruction": "Hướng dẫn cho công cụ AI",
+    "downloadAgain": "Tải lại JSON",
+    "copy": "Sao chép hướng dẫn",
+    "copied": "Đã sao chép hướng dẫn",
+    "copyFailed": "Không thể sao chép, hãy chọn văn bản và sao chép thủ công",
+    "editEnglish": "Chỉnh sửa quiz tiếng Anh",
+    "done": "Xong"
   }
 }

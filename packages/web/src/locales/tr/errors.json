@@ -91,5 +91,15 @@
     "usernameTaken": "Bu kullanıcı adı zaten alınmış",
     "lastAdmin": "En az bir yönetici bulunmalıdır",
     "cannotDeleteSelf": "Kendi hesabınızı silemezsiniz"
+  },
+  "generator": {
+    "invalidAmount": "1 ile 50 arasında soru seç",
+    "invalidParameter": "Soru servisi bu ayarları reddetti",
+    "noResults": "Bu ayarlar için soru bulunamadı, daha az soru veya başka ayarlar dene",
+    "exhausted": "Bu ayarlardaki tüm soruları zaten aldın, başka ayarlar dene",
+    "rateLimited": "Soru servisi meşgul, birkaç saniye sonra tekrar dene",
+    "busy": "Şu anda çok fazla quiz oluşturuluyor, biraz sonra tekrar dene",
+    "unavailable": "Soru servisine şu anda ulaşılamıyor, daha sonra tekrar dene",
+    "failed": "Quiz oluşturulamadı"
   }
 }

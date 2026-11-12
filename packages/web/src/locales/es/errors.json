@@ -91,5 +91,15 @@
     "usernameTaken": "Este nombre de usuario ya está en uso",
     "lastAdmin": "Siempre debe haber al menos un administrador",
     "cannotDeleteSelf": "No puedes eliminar tu propia cuenta"
+  },
+  "generator": {
+    "invalidAmount": "Elige entre 1 y 50 preguntas",
+    "invalidParameter": "El servicio de preguntas rechazó estos ajustes",
+    "noResults": "No hay preguntas para estos ajustes, prueba con menos preguntas u otros ajustes",
+    "exhausted": "Ya has recibido todas las preguntas para estos ajustes, prueba con otros ajustes",
+    "rateLimited": "El servicio de preguntas está ocupado, inténtalo de nuevo en unos segundos",
+    "busy": "Se están generando demasiados quizzes ahora mismo, inténtalo de nuevo en un momento",
+    "unavailable": "El servicio de preguntas no está disponible ahora, inténtalo más tarde",
+    "failed": "No se pudo generar el quiz"
   }
 }
