@@ -1,14 +1,25 @@
+import { ADMIN_USERNAME } from "@razzia/e2e/utils/constants"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { loginManager } from "@razzia/e2e/utils/manager"
 
+test("opens the manager login from the home page", async ({ page }) => {
+  await page.goto("/")
+  await page.getByRole("link", { name: t("manager:login.link") }).click()
+
+  await expect(page).toHaveURL(/\/manager$/u)
+})
+
 test("refuses a wrong manager password", async ({ page }) => {
   await page.goto("/manager")
+  await page
+    .getByPlaceholder(t("manager:account.username"))
+    .fill(ADMIN_USERNAME)
   await page.getByPlaceholder(t("manager:passwordPlaceholder")).fill("wrong")
-  await page.getByRole("button", { name: t("common:submit") }).click()
+  await page.getByRole("button", { name: t("manager:login.submit") }).click()
 
   await expect(
-    page.getByText(t("errors:manager.invalidPassword")),
+    page.getByText(t("errors:auth.invalidCredentials")),
   ).toBeVisible()
   await expect(page).toHaveURL(/\/manager$/u)
 })

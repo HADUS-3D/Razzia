@@ -51,5 +51,58 @@
     "play": "Graj",
     "quizz": "Quizy",
     "results": "Wyniki"
+  },
+  "login": {
+    "title": "Logowanie menedżera",
+    "submit": "Zaloguj się",
+    "link": "Logowanie menedżera"
+  },
+  "setup": {
+    "title": "Utwórz pierwszego administratora",
+    "description": "Wybierz konto pierwszego administratora. Jako kod konfiguracji wpisz hasło menedżera z konfiguracji serwera.",
+    "code": "Kod konfiguracji (MANAGER_PASSWORD)",
+    "submit": "Utwórz administratora"
+  },
+  "account": {
+    "username": "Nazwa użytkownika",
+    "confirmPassword": "Powtórz hasło",
+    "currentPassword": "Obecne hasło",
+    "newPassword": "Nowe hasło",
+    "changePassword": "Zmień hasło",
+    "passwordChanged": "Hasło zostało zmienione",
+    "passwordMismatch": "Hasła nie są takie same",
+    "mustChange": "Wybierz nowe hasło, zanim przejdziesz dalej."
+  },
+  "users": {
+    "title": "Użytkownicy",
+    "add": "Dodaj użytkownika",
+    "created": "Użytkownik utworzony",
+    "deleted": "Użytkownik usunięty",
+    "temporaryPassword": "Hasło tymczasowe",
+    "temporaryPasswordIs": "Hasło tymczasowe (przekaż je użytkownikowi, jest pokazywane tylko raz):",
+    "pendingPassword": "(musi zmienić hasło)",
+    "admin": "Administrator",
+    "resetPassword": "Zresetuj hasło",
+    "resetConfirm": "Zresetować hasło użytkownika „{{name}}”? Zostanie wygenerowane hasło tymczasowe, które trzeba zmienić przy następnym logowaniu.",
+    "reset": "Zresetuj",
+    "delete": "Usuń użytkownika",
+    "deleteConfirm": "Usunąć użytkownika „{{name}}”? Jego quizy zostaną przekazane Tobie. Tej operacji nie można cofnąć.",
+    "newHint": "Nowi użytkownicy muszą zmienić hasło tymczasowe przy pierwszym logowaniu. Zaznaczone pola to uprawnienia użytkownika.",
+    "permissions": {
+      "createQuizz": "Tworzenie",
+      "editQuizz": "Edycja",
+      "deleteQuizz": "Usuwanie własnych"
+    }
+  },
+  "access": {
+    "title": "Kto może zobaczyć i edytować ten quiz",
+    "secret": "Tajny quiz",
+    "secretHint": "Mogą go zobaczyć tylko właściciel, administratorzy i wybrane poniżej osoby.",
+    "owner": "Właściciel",
+    "user": "Użytkownik",
+    "canView": "Podgląd",
+    "canEdit": "Edycja",
+    "editHint": "Do edycji użytkownik potrzebuje też uprawnienia do edycji. Każdy może uruchamiać quizy, które widzi.",
+    "saved": "Zapisano dostęp"
   }
 }

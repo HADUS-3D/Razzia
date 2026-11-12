@@ -48,5 +48,58 @@
     "play": "Jugar",
     "quizz": "Cuestionario",
     "results": "Resultados"
+  },
+  "login": {
+    "title": "Acceso de gestor",
+    "submit": "Iniciar sesión",
+    "link": "Acceso de gestor"
+  },
+  "setup": {
+    "title": "Crear el primer administrador",
+    "description": "Elige una cuenta para el primer administrador. Introduce la contraseña de gestor de la configuración del servidor como código de configuración.",
+    "code": "Código de configuración (MANAGER_PASSWORD)",
+    "submit": "Crear administrador"
+  },
+  "account": {
+    "username": "Usuario",
+    "confirmPassword": "Repetir contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "changePassword": "Cambiar contraseña",
+    "passwordChanged": "Contraseña cambiada",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "mustChange": "Elige una nueva contraseña antes de continuar."
+  },
+  "users": {
+    "title": "Usuarios",
+    "add": "Añadir usuario",
+    "created": "Usuario creado",
+    "deleted": "Usuario eliminado",
+    "temporaryPassword": "Contraseña temporal",
+    "temporaryPasswordIs": "Contraseña temporal (compártela con el usuario, solo se muestra una vez):",
+    "pendingPassword": "(debe cambiar la contraseña)",
+    "admin": "Administrador",
+    "resetPassword": "Restablecer contraseña",
+    "resetConfirm": "¿Restablecer la contraseña de \"{{name}}\"? Se genera una contraseña temporal que debe cambiarse en el próximo inicio de sesión.",
+    "reset": "Restablecer",
+    "delete": "Eliminar usuario",
+    "deleteConfirm": "¿Eliminar a \"{{name}}\"? Sus cuestionarios pasan a ser tuyos. Esta acción no se puede deshacer.",
+    "newHint": "Los usuarios nuevos deben cambiar la contraseña temporal en su primer inicio de sesión. Las casillas marcadas son los permisos del usuario.",
+    "permissions": {
+      "createQuizz": "Crear",
+      "editQuizz": "Editar",
+      "deleteQuizz": "Eliminar propios"
+    }
+  },
+  "access": {
+    "title": "Quién puede ver y editar este cuestionario",
+    "secret": "Cuestionario secreto",
+    "secretHint": "Solo el propietario, los administradores y las personas seleccionadas abajo pueden verlo.",
+    "owner": "Propietario",
+    "user": "Usuario",
+    "canView": "Ver",
+    "canEdit": "Editar",
+    "editHint": "Para editar, el usuario también necesita el permiso de edición. Todos pueden iniciar los cuestionarios que pueden ver.",
+    "saved": "Acceso guardado"
   }
 }

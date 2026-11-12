@@ -11,7 +11,17 @@
     "tokenMissing": "Brak tokenu sesji",
     "unauthorized": "Nie masz uprawnień",
     "usernameTooLong": "Nazwa użytkownika nie może mieć więcej niż 24 znaki",
-    "usernameTooShort": "Nazwa użytkownika nie może być pusta"
+    "usernameTooShort": "Nazwa użytkownika nie może być pusta",
+    "accountNameTooShort": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
+    "accountNameTooLong": "Nazwa użytkownika nie może mieć więcej niż 32 znaki",
+    "accountNameInvalid": "Nazwa użytkownika może zawierać tylko litery, cyfry, kropki, myślniki i podkreślenia",
+    "passwordTooShort": "Hasło musi mieć co najmniej 8 znaków",
+    "passwordTooLong": "Hasło nie może mieć więcej niż 128 znaków",
+    "invalidCredentials": "Nieprawidłowa nazwa użytkownika lub hasło",
+    "tooManyAttempts": "Zbyt wiele prób, spróbuj ponownie później",
+    "setupDone": "Konfiguracja została już zakończona",
+    "passwordChangeRequired": "Najpierw musisz zmienić hasło",
+    "forbidden": "Nie masz uprawnień do tej czynności"
   },
   "game": {
     "alreadyStarted": "Gra już się rozpoczęła",
@@ -75,5 +85,11 @@
     "notFound": "Nie znaleziono pliku multimedialnego",
     "tooLarge": "Plik jest za duży",
     "uploadFailed": "Nie udało się przesłać pliku"
+  },
+  "users": {
+    "notFound": "Nie znaleziono użytkownika",
+    "usernameTaken": "Ta nazwa użytkownika jest już zajęta",
+    "lastAdmin": "Musi zawsze istnieć co najmniej jeden administrator",
+    "cannotDeleteSelf": "Nie możesz usunąć własnego konta"
   }
 }

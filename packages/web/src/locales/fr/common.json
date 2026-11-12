@@ -25,5 +25,6 @@
   "submit": "Valider",
   "close": "Fermer",
   "previous": "Précédent",
-  "changeLanguage": "Changer de langue"
+  "changeLanguage": "Changer de langue",
+  "back": "Retour"
 }

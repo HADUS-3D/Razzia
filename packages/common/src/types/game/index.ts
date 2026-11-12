@@ -6,6 +6,7 @@ import type {
   QUIZZ_MODES,
   SCORING_MODES,
 } from "@razzia/common/constants"
+import type { QuizzVisibility } from "@razzia/common/types/auth"
 
 export type QuizzMode = (typeof QUIZZ_MODES)[keyof typeof QUIZZ_MODES]
 
@@ -89,6 +90,10 @@ export type QuizzWithId = Quizz & { id: string }
 export interface QuizzMeta {
   id: string
   subject: string
+  ownerId: string | null
+  visibility: QuizzVisibility
+  canEdit: boolean
+  canDelete: boolean
 }
 
 export interface AutoAdvanceSettings {
@@ -132,6 +137,8 @@ export interface GameResult {
   date: string
   players: GameResultPlayer[]
   questions: QuestionResult[]
+  /** User id of the host. Results without it are visible to admins only. */
+  hostId?: string
 }
 
 export interface GameResultMeta {

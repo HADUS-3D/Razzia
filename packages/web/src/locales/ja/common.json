@@ -25,5 +25,6 @@
   "submit": "送信",
   "close": "閉じる",
   "previous": "前へ",
-  "changeLanguage": "言語を変更"
+  "changeLanguage": "言語を変更",
+  "back": "戻る"
 }

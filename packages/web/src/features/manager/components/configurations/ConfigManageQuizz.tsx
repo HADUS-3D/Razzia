@@ -5,12 +5,15 @@ import { type ChangeEvent, useRef } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
+import { canCreateQuizz, canManageAccess } from "@razzia/common/permissions"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import { SkeletonRows } from "@razzia/web/components/Skeleton"
+import QuizzAccessDialog from "@razzia/web/features/manager/components/QuizzAccessDialog"
 import {
   createQuizz,
   deleteQuizz,
+  meQuery,
   quizzKeys,
   quizzListQuery,
 } from "@razzia/web/features/manager/queries"
@@ -32,6 +35,8 @@ const downloadJson = (data: unknown, filename: string) => {
 
 const ConfigManageQuizz = () => {
   const { data, isPending } = useQuery(quizzListQuery())
+  const { data: me } = useQuery(meQuery())
+  const canCreate = me ? canCreateQuizz(me) : false
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -101,28 +106,30 @@ const ConfigManageQuizz = () => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="mb-4 flex shrink-0 gap-2">
-        <Button
-          className="flex-1"
-          onClick={() => navigate({ to: "/manager/quizz" })}
-        >
-          {t("manager:quizz.create")}
-        </Button>
-        <Button
-          className="aspect-square bg-accent px-3 text-accent-foreground"
-          onClick={() => fileInputRef.current?.click()}
-          title={t("manager:quizz.import")}
-        >
-          <Upload className="size-4" />
-        </Button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={handleImport}
-        />
-      </div>
+      {canCreate && (
+        <div className="mb-4 flex shrink-0 gap-2">
+          <Button
+            className="flex-1"
+            onClick={() => navigate({ to: "/manager/quizz" })}
+          >
+            {t("manager:quizz.create")}
+          </Button>
+          <Button
+            className="aspect-square bg-accent px-3 text-accent-foreground"
+            onClick={() => fileInputRef.current?.click()}
+            title={t("manager:quizz.import")}
+          >
+            <Upload className="size-4" />
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={handleImport}
+          />
+        </div>
+      )}
       <div className="min-h-0 flex-1 space-y-2 overflow-auto p-0.5">
         {isPending && <SkeletonRows className="h-12" />}
 
@@ -133,18 +140,28 @@ const ConfigManageQuizz = () => {
           >
             <p className="truncate font-medium text-foreground">{q.subject}</p>
             <div className="flex gap-0.5">
-              <button
-                className="rounded-sm p-2 text-accent-foreground hover:bg-accent-foreground/10"
-                title={t("manager:quizz.edit")}
-                onClick={() =>
-                  navigate({
-                    to: "/manager/quizz/$quizzId",
-                    params: { quizzId: q.id },
-                  })
-                }
-              >
-                <SquarePen className="size-4" />
-              </button>
+              {me &&
+                canManageAccess(me, {
+                  ownerId: q.ownerId,
+                  visibility: q.visibility,
+                  viewers: [],
+                  editors: [],
+                }) && <QuizzAccessDialog quizzId={q.id} subject={q.subject} />}
+
+              {q.canEdit && (
+                <button
+                  className="rounded-sm p-2 text-accent-foreground hover:bg-accent-foreground/10"
+                  title={t("manager:quizz.edit")}
+                  onClick={() =>
+                    navigate({
+                      to: "/manager/quizz/$quizzId",
+                      params: { quizzId: q.id },
+                    })
+                  }
+                >
+                  <SquarePen className="size-4" />
+                </button>
+              )}
 
               <button
                 className="rounded-sm p-2 text-accent-foreground hover:bg-accent-foreground/10"
@@ -154,22 +171,24 @@ const ConfigManageQuizz = () => {
                 <Download className="size-4" />
               </button>
 
-              <AlertDialog
-                trigger={
-                  <button
-                    className="rounded-sm p-2 hover:bg-red-600/10"
-                    title={t("manager:quizz.delete")}
-                  >
-                    <Trash2 className="size-4 stroke-red-500" />
-                  </button>
-                }
-                title={t("manager:quizz.delete")}
-                description={t("manager:quizz.deleteConfirm", {
-                  name: q.subject,
-                })}
-                confirmLabel={t("common:delete")}
-                onConfirm={() => remove(q.id)}
-              />
+              {q.canDelete && (
+                <AlertDialog
+                  trigger={
+                    <button
+                      className="rounded-sm p-2 hover:bg-red-600/10"
+                      title={t("manager:quizz.delete")}
+                    >
+                      <Trash2 className="size-4 stroke-red-500" />
+                    </button>
+                  }
+                  title={t("manager:quizz.delete")}
+                  description={t("manager:quizz.deleteConfirm", {
+                    name: q.subject,
+                  })}
+                  confirmLabel={t("common:delete")}
+                  onConfirm={() => remove(q.id)}
+                />
+              )}
             </div>
           </div>
         ))}

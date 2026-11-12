@@ -11,7 +11,17 @@
     "tokenMissing": "Missing session token",
     "unauthorized": "You are not authorized",
     "usernameTooLong": "Username cannot exceed 24 characters",
-    "usernameTooShort": "Username cannot be empty"
+    "usernameTooShort": "Username cannot be empty",
+    "accountNameTooShort": "Username must be at least 3 characters",
+    "accountNameTooLong": "Username cannot exceed 32 characters",
+    "accountNameInvalid": "Username may only contain letters, numbers, dots, dashes and underscores",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordTooLong": "Password cannot exceed 128 characters",
+    "invalidCredentials": "Invalid username or password",
+    "tooManyAttempts": "Too many attempts, try again later",
+    "setupDone": "Setup is already completed",
+    "passwordChangeRequired": "You must change your password first",
+    "forbidden": "You are not allowed to do this"
   },
   "game": {
     "alreadyStarted": "Game already started",
@@ -75,5 +85,11 @@
     "notFound": "Media not found",
     "tooLarge": "File is too large",
     "uploadFailed": "Failed to upload the file"
+  },
+  "users": {
+    "notFound": "User not found",
+    "usernameTaken": "This username is already taken",
+    "lastAdmin": "There must always be at least one admin",
+    "cannotDeleteSelf": "You cannot delete your own account"
   }
 }

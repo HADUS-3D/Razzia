@@ -48,5 +48,58 @@
     "play": "Play",
     "quizz": "Quizz",
     "results": "Results"
+  },
+  "login": {
+    "title": "Manager login",
+    "submit": "Log in",
+    "link": "Manager login"
+  },
+  "setup": {
+    "title": "Create the first admin",
+    "description": "Choose an account for the first admin. Enter the manager password from the server configuration as setup code.",
+    "code": "Setup code (MANAGER_PASSWORD)",
+    "submit": "Create admin"
+  },
+  "account": {
+    "username": "Username",
+    "confirmPassword": "Repeat password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed",
+    "passwordMismatch": "The passwords do not match",
+    "mustChange": "Choose a new password before you continue."
+  },
+  "users": {
+    "title": "Users",
+    "add": "Add user",
+    "created": "User created",
+    "deleted": "User deleted",
+    "temporaryPassword": "Temporary password",
+    "temporaryPasswordIs": "Temporary password (share it with the user, it is shown only once):",
+    "pendingPassword": "(must change password)",
+    "admin": "Admin",
+    "resetPassword": "Reset password",
+    "resetConfirm": "Reset the password of \"{{name}}\"? A temporary password is generated that must be changed at the next login.",
+    "reset": "Reset",
+    "delete": "Delete user",
+    "deleteConfirm": "Delete \"{{name}}\"? Their quizzes are handed over to you. This cannot be undone.",
+    "newHint": "New users must change the temporary password at their first login. Checked boxes are the rights of the user.",
+    "permissions": {
+      "createQuizz": "Create",
+      "editQuizz": "Edit",
+      "deleteQuizz": "Delete own"
+    }
+  },
+  "access": {
+    "title": "Who can see and edit this quizz",
+    "secret": "Secret quizz",
+    "secretHint": "Only the owner, admins and the people selected below can see it.",
+    "owner": "Owner",
+    "user": "User",
+    "canView": "View",
+    "canEdit": "Edit",
+    "editHint": "Editing also requires the edit right of the user. Everyone can host the quizzes they can see.",
+    "saved": "Access saved"
   }
 }

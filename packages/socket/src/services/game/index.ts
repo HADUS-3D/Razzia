@@ -43,6 +43,8 @@ class Game {
   private readonly playerManager: PlayerManager
   private readonly round: RoundManager
   private readonly cooldown: CooldownTimer
+  /** Account of the host; stored with the result to scope who may read it. */
+  hostUserId?: string
   private managerGraceTimer: NodeJS.Timeout | null = null
 
   private lastBroadcastStatus: {
@@ -92,7 +94,8 @@ class Game {
         this.playerStatus.clear()
         this.managerStatus = null
       },
-      onGameFinished: saveResult,
+      onGameFinished: (result) =>
+        saveResult({ ...result, hostId: this.hostUserId }),
       getSettings: () => this._settings,
     })
 

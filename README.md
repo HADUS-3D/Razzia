@@ -113,7 +113,7 @@ Full index in [docs/](docs/README.md).
 ## 🎮 How to Play
 
 1. Access the manager interface at http://localhost:3000/manager
-2. Enter the manager password (defined by `MANAGER_PASSWORD`)
+2. On the very first start, create the first admin (setup code: `MANAGER_PASSWORD`); afterwards log in with your account. Admins add more users, see [Configuration](docs/configuration.md#accounts-and-permissions)
 3. Share the game URL (http://localhost:3000) and room code with participants
 4. Wait for players to join
 5. Click the start button to begin the game
