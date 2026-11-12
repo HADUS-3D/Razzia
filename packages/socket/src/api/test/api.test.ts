@@ -25,6 +25,7 @@ import { app } from "@razzia/socket/app"
 import { mintToken, verifyJoinTicket } from "@razzia/socket/services/auth"
 import {
   getPath,
+  getQuizz,
   initConfig,
   saveQuizz,
   saveResult,
@@ -42,21 +43,16 @@ vi.mock("@razzia/socket/services/opentdb", () => ({
       Promise.resolve([{ id: 9, name: "General Knowledge" }]),
     ),
     generate: vi.fn(() =>
-      Promise.resolve({
-        gameMode: "quiz",
-        subject: "Trivia: General Knowledge",
-        source: "opentdb",
-        questions: [
-          {
-            type: "single",
-            question: "Q?",
-            answers: ["A", "B"],
-            solutions: [1],
-            cooldown: 5,
-            time: 20,
-          },
-        ],
-      }),
+      Promise.resolve([
+        {
+          type: "single",
+          question: "Q?",
+          answers: ["A", "B"],
+          solutions: [1],
+          cooldown: 5,
+          time: 20,
+        },
+      ]),
     ),
   },
 }))
@@ -836,7 +832,7 @@ describe("user management", () => {
 })
 
 describe("generator", () => {
-  it("saves a generated quizz for the user with the source set", async () => {
+  it("returns generated questions without saving a quizz", async () => {
     const author = await addUser("gen", { createQuizz: true })
     const response = await request("/generator", {
       method: "POST",
@@ -844,14 +840,12 @@ describe("generator", () => {
       body: { amount: 5, category: 9 },
     })
 
-    expect(response.status).toBe(StatusCodes.CREATED)
+    expect(response.status).toBe(StatusCodes.OK)
 
-    const { id } = await json<{ id: string }>(response)
-    const saved = await json<{ source: string }>(
-      await request(`/quizz/${id}`, { token: author.token }),
-    )
+    const { questions } = await json<{ questions: unknown[] }>(response)
 
-    expect(saved.source).toBe("opentdb")
+    expect(questions).toHaveLength(1)
+    expect(getQuizz().map((q) => q.subject)).toEqual(["Example Quizz"])
   })
 
   it("lists categories and rejects invalid input", async () => {

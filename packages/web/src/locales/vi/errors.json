@@ -100,6 +100,7 @@
     "rateLimited": "Dịch vụ câu hỏi đang bận, hãy thử lại sau vài giây",
     "busy": "Hiện có quá nhiều quiz đang được tạo, hãy thử lại sau ít phút",
     "unavailable": "Hiện không kết nối được dịch vụ câu hỏi, hãy thử lại sau",
-    "failed": "Không thể tạo quiz"
+    "failed": "Không thể tạo quiz",
+    "invalidImport": "Đây không phải vòng câu hỏi hợp lệ, hãy kiểm tra AI đã trả JSON đúng định dạng chưa"
   }
 }

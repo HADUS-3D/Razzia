@@ -23,6 +23,7 @@ import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import type { Question } from "@razzia/common/types/game"
 import Button from "@razzia/web/components/Button"
+import GeneratorDialog from "@razzia/web/features/quizz/components/GeneratorDialog"
 import QuizzEditorCard from "@razzia/web/features/quizz/components/QuizzEditorCard"
 import {
   useQuizzEditor,
@@ -87,6 +88,7 @@ const QuizzEditorSidebar = () => {
     currentIndex,
     setCurrentIndex,
     addQuestion,
+    addQuestions,
     removeQuestion,
     reorderQuestions,
   } = useQuizzEditor()
@@ -159,11 +161,13 @@ const QuizzEditorSidebar = () => {
 
       <Button
         onClick={addQuestion}
-        className="bg text-md mt-1 mb-8 flex items-center justify-center gap-1 bg-accent text-accent-foreground"
+        className="bg text-md mt-1 flex items-center justify-center gap-1 bg-accent text-accent-foreground"
       >
         <Plus className="size-6" />
         {t("quizz:addQuestion")}
       </Button>
+
+      <GeneratorDialog onAdd={addQuestions} />
     </aside>
   )
 }

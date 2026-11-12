@@ -1,17 +1,19 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { Sparkles, X } from "lucide-react"
 import { Dialog } from "radix-ui"
-import { useState, type SubmitEvent } from "react"
+import { useRef, useState, type ChangeEvent, type SubmitEvent } from "react"
 import toast from "react-hot-toast"
 import { Trans, useTranslation } from "react-i18next"
+import type { Question, QuizzSource } from "@razzia/common/types/game"
 import {
   OPENTDB_DIFFICULTIES,
   OPENTDB_LICENSE_URL,
   OPENTDB_MAX_AMOUNT,
   OPENTDB_TYPES,
   OPENTDB_URL,
+  QUIZZ_SOURCES,
 } from "@razzia/common/constants"
+import { parseRound, toRound } from "@razzia/common/validators/round"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
 import {
@@ -22,23 +24,16 @@ import {
   SelectValue,
 } from "@razzia/web/components/Select"
 import {
-  generateQuizz,
+  generateQuestions,
   generatorCategoriesQuery,
-  quizzKeys,
 } from "@razzia/web/features/manager/queries"
-import { buildTranslationPrompt } from "@razzia/web/features/manager/utils/translation-prompt"
-import { api, ApiError, unwrap } from "@razzia/web/lib/api"
+import { buildTranslationPrompt } from "@razzia/web/features/quizz/utils/translation-prompt"
+import { ApiError } from "@razzia/web/lib/api"
 import { downloadJson } from "@razzia/web/lib/download"
 
 const ANY = "any"
 const DEFAULT_AMOUNT = 10
 const DEFAULT_LANGUAGE = "Dutch"
-
-interface Created {
-  id: string
-  subject: string
-  questionCount: number
-}
 
 const linkClass = "underline hover:text-foreground"
 
@@ -82,12 +77,11 @@ const Field = ({
 )
 
 interface FormProps {
-  onCreated: (created: Created) => void
+  onGenerated: (questions: Question[]) => void
 }
 
-const GeneratorForm = ({ onCreated }: FormProps) => {
+const GeneratorForm = ({ onGenerated }: FormProps) => {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const { data: categoriesData, isPending: loadingCategories } = useQuery(
     generatorCategoriesQuery(),
   )
@@ -95,14 +89,10 @@ const GeneratorForm = ({ onCreated }: FormProps) => {
   const [difficulty, setDifficulty] = useState(ANY)
   const [type, setType] = useState(ANY)
   const [amount, setAmount] = useState(String(DEFAULT_AMOUNT))
-  const [subject, setSubject] = useState("")
 
   const { mutate, isPending } = useMutation({
-    mutationFn: generateQuizz,
-    onSuccess: async (created) => {
-      await queryClient.invalidateQueries({ queryKey: quizzKeys.all })
-      onCreated(created)
-    },
+    mutationFn: generateQuestions,
+    onSuccess: ({ questions }) => onGenerated(questions as Question[]),
     onError: (error) =>
       toast.error(
         t(error instanceof ApiError ? error.key : "errors:generator.failed"),
@@ -112,16 +102,13 @@ const GeneratorForm = ({ onCreated }: FormProps) => {
   const submit = (e: SubmitEvent) => {
     e.preventDefault()
 
-    const parsedAmount = Number(amount)
-
     mutate({
-      amount: parsedAmount,
+      amount: Number(amount),
       ...(category !== ANY ? { category: Number(category) } : {}),
       ...(difficulty !== ANY
         ? { difficulty: difficulty as (typeof OPENTDB_DIFFICULTIES)[number] }
         : {}),
       ...(type !== ANY ? { type: type as (typeof OPENTDB_TYPES)[number] } : {}),
-      ...(subject.trim() ? { subject: subject.trim() } : {}),
     })
   }
 
@@ -196,16 +183,6 @@ const GeneratorForm = ({ onCreated }: FormProps) => {
         />
       </Field>
 
-      <Field label={t("manager:generator.subject")}>
-        <Input
-          variant="sm"
-          className="w-full"
-          value={subject}
-          maxLength={100}
-          onChange={(e) => setSubject(e.target.value)}
-        />
-      </Field>
-
       <p className="text-sm text-muted-foreground">
         {t("manager:generator.englishNote")}
       </p>
@@ -229,35 +206,24 @@ const GeneratorForm = ({ onCreated }: FormProps) => {
   )
 }
 
-interface DoneProps {
-  created: Created
-  onClose: () => void
+interface ReadyProps {
+  questions: Question[]
+  onAdd: (questions: Question[]) => void
 }
 
-const GeneratorDone = ({ created, onClose }: DoneProps) => {
+const GeneratorReady = ({ questions, onAdd }: ReadyProps) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [translating, setTranslating] = useState(false)
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE)
+  const [pasted, setPasted] = useState("")
   const prompt = buildTranslationPrompt(language || DEFAULT_LANGUAGE)
 
-  const download = async () => {
-    try {
-      const { id: _id, ...quizz } = await unwrap(
-        api.quizz[":id"].$get({ param: { id: created.id } }),
-      )
+  const download = () => downloadJson(toRound(questions), "round.json")
 
-      downloadJson(quizz, `${created.subject}.json`)
-    } catch (error) {
-      toast.error(
-        t(error instanceof ApiError ? error.key : "errors:quizz.notFound"),
-      )
-    }
-  }
-
-  const startTranslation = async () => {
+  const startTranslation = () => {
     setTranslating(true)
-    await download()
+    download()
   }
 
   const copy = async () => {
@@ -269,23 +235,34 @@ const GeneratorDone = ({ created, onClose }: DoneProps) => {
     }
   }
 
-  const edit = () => {
-    onClose()
-    void navigate({
-      to: "/manager/quizz/$quizzId",
-      params: { quizzId: created.id },
-    })
+  const importText = (text: string) => {
+    const imported = parseRound(text)
+
+    if (!imported) {
+      toast.error(t("errors:generator.invalidImport"))
+
+      return
+    }
+
+    onAdd(imported)
+  }
+
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+
+    e.target.value = ""
+
+    if (!file) {
+      return
+    }
+
+    void file.text().then(importText)
   }
 
   if (!translating) {
     return (
       <div className="mt-4 flex flex-col gap-4">
-        <p>
-          {t("manager:generator.created", {
-            subject: created.subject,
-            count: created.questionCount,
-          })}
-        </p>
+        <p>{t("manager:generator.created", { count: questions.length })}</p>
         <p className="font-semibold">
           {t("manager:generator.keepOrTranslate")}
         </p>
@@ -300,7 +277,7 @@ const GeneratorDone = ({ created, onClose }: DoneProps) => {
         <div className="flex flex-wrap justify-end gap-2">
           <Button
             className="bg-accent px-4 py-2 text-sm text-accent-foreground"
-            onClick={edit}
+            onClick={() => onAdd(questions)}
           >
             {t("manager:generator.keepEnglish")}
           </Button>
@@ -322,7 +299,7 @@ const GeneratorDone = ({ created, onClose }: DoneProps) => {
       <Field label={t("manager:generator.instruction")}>
         <textarea
           readOnly
-          rows={9}
+          rows={8}
           value={prompt}
           onFocus={(e) => e.currentTarget.select()}
           className="w-full rounded-lg border-2 border-accent bg-background p-2 text-sm text-foreground"
@@ -339,42 +316,79 @@ const GeneratorDone = ({ created, onClose }: DoneProps) => {
           {t("manager:generator.copy")}
         </Button>
       </div>
-      <div className="flex justify-end gap-2 border-t border-accent pt-3">
-        <Button
-          className="bg-accent px-4 py-2 text-sm text-accent-foreground"
-          onClick={edit}
+
+      <div className="flex flex-col gap-2 border-t border-accent pt-3">
+        <p className="font-semibold">{t("manager:generator.importTitle")}</p>
+        <textarea
+          rows={4}
+          value={pasted}
+          onChange={(e) => setPasted(e.target.value)}
+          placeholder={t("manager:generator.importPaste")}
+          className="w-full rounded-lg border-2 border-accent bg-background p-2 text-sm text-foreground"
+        />
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button
+            className="bg-accent px-4 py-2 text-sm text-accent-foreground"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {t("manager:generator.importFile")}
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            className="hidden"
+            onChange={handleFile}
+          />
+          <Button
+            className="px-4 py-2 text-sm"
+            disabled={!pasted.trim()}
+            onClick={() => importText(pasted)}
+          >
+            {t("manager:generator.importSubmit")}
+          </Button>
+        </div>
+        <button
+          type="button"
+          className="self-start text-sm text-muted-foreground underline hover:text-foreground"
+          onClick={() => onAdd(questions)}
         >
-          {t("manager:generator.editEnglish")}
-        </Button>
-        <Button className="px-4 py-2 text-sm" onClick={onClose}>
-          {t("manager:generator.done")}
-        </Button>
+          {t("manager:generator.addEnglish")}
+        </button>
       </div>
     </div>
   )
 }
 
-const GeneratorDialog = () => {
+interface Props {
+  onAdd: (questions: Question[], source: QuizzSource) => void
+}
+
+const GeneratorDialog = ({ onAdd }: Props) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const [created, setCreated] = useState<Created | null>(null)
+  const [questions, setQuestions] = useState<Question[] | null>(null)
 
   const onOpenChange = (value: boolean) => {
     setOpen(value)
 
     if (!value) {
-      setCreated(null)
+      setQuestions(null)
     }
+  }
+
+  const add = (added: Question[]) => {
+    onAdd(added, QUIZZ_SOURCES.OPENTDB)
+    toast.success(t("manager:generator.added", { count: added.length }))
+    onOpenChange(false)
   }
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger asChild>
-        <Button
-          className="aspect-square bg-accent px-3 text-accent-foreground"
-          title={t("manager:generator.button")}
-        >
-          <Sparkles className="size-4" />
+        <Button className="mt-1 mb-8 flex items-center justify-center gap-2 bg-accent text-accent-foreground">
+          <Sparkles className="size-5" />
+          {t("manager:generator.button")}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -383,12 +397,12 @@ const GeneratorDialog = () => {
           <div className="flex items-start justify-between gap-4">
             <div>
               <Dialog.Title className="text-lg font-semibold">
-                {created
+                {questions
                   ? t("manager:generator.createdTitle")
                   : t("manager:generator.title")}
               </Dialog.Title>
               <Dialog.Description className="text-sm text-muted-foreground">
-                {created ? created.subject : t("manager:generator.description")}
+                {t("manager:generator.description")}
               </Dialog.Description>
             </div>
             <Dialog.Close className="rounded-sm p-1 text-muted-foreground hover:bg-accent">
@@ -396,13 +410,10 @@ const GeneratorDialog = () => {
             </Dialog.Close>
           </div>
 
-          {created ? (
-            <GeneratorDone
-              created={created}
-              onClose={() => onOpenChange(false)}
-            />
+          {questions ? (
+            <GeneratorReady questions={questions} onAdd={add} />
           ) : (
-            <GeneratorForm onCreated={setCreated} />
+            <GeneratorForm onGenerated={setQuestions} />
           )}
         </Dialog.Content>
       </Dialog.Portal>

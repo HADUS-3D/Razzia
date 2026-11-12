@@ -108,10 +108,10 @@ The quiz body is validated against the same schema as the files in `config/quizz
 
 ### Question generator
 
-| Route                           | Who                | Notes                                                                                                                         |
-| ------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `GET /api/generator/categories` | create-quiz rights | `200 { categories: [{ id, name }] }`, cached for 24 hours                                                                     |
-| `POST /api/generator`           | create-quiz rights | `{ amount (1-50), category?, difficulty?, type?, subject? }`, saves the quiz and returns `201 { id, subject, questionCount }` |
+| Route                           | Who                | Notes                                                                                                          |
+| ------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `GET /api/generator/categories` | create-quiz rights | `200 { categories: [{ id, name }] }`, cached for 24 hours                                                      |
+| `POST /api/generator`           | create-quiz rights | `{ amount (1-50), category?, difficulty?, type? }`, returns `200 { questions }`; nothing is saved by the route |
 
 Failures use `errors:generator.*` keys: `noResults`, `exhausted` (all questions already served to this user), `invalidParameter`, `rateLimited` and `busy` (`429`), `unavailable` (`500`).
 

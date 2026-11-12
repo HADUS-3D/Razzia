@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 import { DomainError } from "@razzia/socket/services/errors"
 import {
-  buildSubject,
   createOpenTdbClient,
   mapQuestion,
   type OpenTdbDeps,
@@ -82,26 +81,18 @@ describe("mapQuestion", () => {
   })
 })
 
-describe("buildSubject", () => {
-  it("uses the given subject or builds one", () => {
-    expect(buildSubject({ subject: "Mine" }, "Art")).toBe("Mine")
-    expect(buildSubject({ difficulty: "hard" }, "Art")).toBe(
-      "Trivia: Art (hard)",
-    )
-    expect(buildSubject({}, undefined)).toBe("Trivia: Mixed")
-  })
-})
-
 describe("generate", () => {
   const ok = { response_code: 0, results: [apiQuestion()] }
   const token = { response_code: 0, token: "tok" }
 
-  it("requests a token, fetches base64 questions and builds a quizz", async () => {
+  it("requests a token and fetches base64 questions", async () => {
     const { client, calls } = setup([json(token), json(ok)])
-    const quizz = await client.generate("u1", { amount: 1, difficulty: "easy" })
+    const questions = await client.generate("u1", {
+      amount: 1,
+      difficulty: "easy",
+    })
 
-    expect(quizz.source).toBe("opentdb")
-    expect(quizz.questions).toHaveLength(1)
+    expect(questions).toHaveLength(1)
     expect(calls[1]).toContain("encode=base64")
     expect(calls[1]).toContain("token=tok")
     expect(calls[1]).toContain("difficulty=easy")
@@ -164,12 +155,11 @@ describe("generate", () => {
         },
       }),
       json(ok),
-      json({ trivia_categories: [{ id: 9, name: "General Knowledge" }] }),
     ])
-    const quizz = await client.generate("u1", { amount: 50, category: 9 })
+    const questions = await client.generate("u1", { amount: 50, category: 9 })
 
     expect(calls[3]).toContain("amount=20")
-    expect(quizz.subject).toBe("Trivia: General Knowledge")
+    expect(questions).toHaveLength(1)
   })
 
   it("reports code 1 without a category as no results", async () => {

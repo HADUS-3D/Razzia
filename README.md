@@ -120,7 +120,7 @@ Full index in [docs/](docs/README.md).
 
 ## 🎲 Question generator
 
-The Manager can generate a quiz from the [Open Trivia Database](https://opentdb.com) (category, difficulty, type and number of questions). Questions are in English and can be translated afterwards with an AI tool. The questions are provided by the Open Trivia Database under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the podium of a generated quiz shows this credit. See [Quiz](docs/quiz.md#generated-quizzes-open-trivia-database).
+The quiz editor can add a generated round of questions from the [Open Trivia Database](https://opentdb.com) (category, difficulty, type and number of questions), next to "Add question". Questions are in English and can be translated with an AI tool before they are added. The questions are provided by the Open Trivia Database under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the podium of a quiz with generated questions shows this credit. See [Quiz](docs/quiz.md#generated-question-rounds-open-trivia-database).
 
 ## 📝 Contributing
 

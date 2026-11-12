@@ -50,7 +50,7 @@ export const generatorCategoriesQuery = () =>
     staleTime: 60 * 60 * 1000,
   })
 
-export const generateQuizz = (json: GeneratorInput) =>
+export const generateQuestions = (json: GeneratorInput) =>
   unwrap(api.generator.$post({ json }))
 
 export const createQuizz = (json: QuizzValidated) =>
