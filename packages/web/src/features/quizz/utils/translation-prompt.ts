@@ -3,11 +3,13 @@
  * together with the downloaded round JSON and must be understood by any model.
  */
 export const buildTranslationPrompt = (language: string) =>
-  `You will receive a JSON file with a round of quiz questions. Translate the questions into ${language}.
+  `IMPORTANT: I expect a JSON FILE back, not text. Deliver the result as a downloadable file named round-translated.json, attached to your reply. Do not paste the JSON into the chat and do not put it in a code block. If you can only reply with text, say so instead of pasting the JSON.
 
-Rules:
+I attached a JSON file with a round of quiz questions. Translate the questions into ${language}.
+
+Rules for the file you create:
+- It must have exactly the same structure as the file I gave you: the same keys, the same order and the same number of questions.
 - Only translate the text values of "question", "answers" and "category".
 - Keep the order of the "answers". The numbers in "solutions" are positions in "answers", so they must not change.
-- Do not change anything else: keep every key and the structure of the JSON exactly the same.
 - Translate the answers "True" and "False" as well.
-- The output must be JSON in the same format as the input. Reply with the complete, valid JSON only, without explanation and without markdown code fences, so it can be imported straight back into the quizz editor.`
+- The file must contain valid JSON only, nothing else.`
