@@ -101,5 +101,46 @@
     "canEdit": "Edit",
     "editHint": "Editing also requires the edit right of the user. Everyone can host the quizzes they can see.",
     "saved": "Access saved"
+  },
+  "generator": {
+    "button": "Generate quizz",
+    "title": "Generate a quizz",
+    "description": "Make a quizz with questions from the Open Trivia Database.",
+    "category": "Category",
+    "anyCategory": "Any category",
+    "difficulty": "Difficulty",
+    "anyDifficulty": "Any difficulty",
+    "difficulties": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "type": "Question type",
+    "anyType": "Any type",
+    "types": {
+      "multiple": "Multiple choice",
+      "boolean": "True / False"
+    },
+    "amount": "Number of questions (1-50)",
+    "subject": "Title (optional)",
+    "englishNote": "Questions are generated in English. You can translate them afterwards.",
+    "attribution": "Questions provided by <odb>Open Trivia Database</odb>, licensed under <cc>CC BY-SA 4.0</cc>.",
+    "wait": "This can take up to 15 seconds, the question service allows one request every 5 seconds.",
+    "generating": "Generating...",
+    "submit": "Generate",
+    "createdTitle": "Quizz created",
+    "created": "\"{{subject}}\" was saved with {{count}} question(s).",
+    "keepOrTranslate": "The questions are in English. Keep them, or translate them?",
+    "targetLanguage": "Translate to",
+    "keepEnglish": "Keep English and edit",
+    "translate": "Translate",
+    "translateSteps": "The quizz was downloaded as a JSON file. Give that file to an AI tool together with the instruction below, then import the translated JSON with the import button in the quizz list.",
+    "instruction": "Instruction for the AI tool",
+    "downloadAgain": "Download JSON again",
+    "copy": "Copy instruction",
+    "copied": "Instruction copied",
+    "copyFailed": "Could not copy, select the text and copy it manually",
+    "editEnglish": "Edit the English quizz",
+    "done": "Done"
   }
 }

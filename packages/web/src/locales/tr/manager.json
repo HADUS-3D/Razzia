@@ -101,5 +101,46 @@
     "canEdit": "Düzenleme",
     "editHint": "Düzenlemek için kullanıcının ayrıca düzenleme yetkisi olmalıdır. Herkes görebildiği quizleri başlatabilir.",
     "saved": "Erişim kaydedildi"
+  },
+  "generator": {
+    "button": "Quiz oluştur",
+    "title": "Quiz oluştur",
+    "description": "Open Trivia Database'den sorularla bir quiz oluştur.",
+    "category": "Kategori",
+    "anyCategory": "Herhangi bir kategori",
+    "difficulty": "Zorluk",
+    "anyDifficulty": "Herhangi bir zorluk",
+    "difficulties": {
+      "easy": "Kolay",
+      "medium": "Orta",
+      "hard": "Zor"
+    },
+    "type": "Soru türü",
+    "anyType": "Herhangi bir tür",
+    "types": {
+      "multiple": "Çoktan seçmeli",
+      "boolean": "Doğru / Yanlış"
+    },
+    "amount": "Soru sayısı (1-50)",
+    "subject": "Başlık (isteğe bağlı)",
+    "englishNote": "Sorular İngilizce oluşturulur. Sonrasında çevirebilirsin.",
+    "attribution": "Sorular <odb>Open Trivia Database</odb> tarafından sağlanır, lisans: <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Bu 15 saniyeye kadar sürebilir, soru servisi her 5 saniyede yalnızca bir isteğe izin verir.",
+    "generating": "Oluşturuluyor...",
+    "submit": "Oluştur",
+    "createdTitle": "Quiz oluşturuldu",
+    "created": "\"{{subject}}\" {{count}} soruyla kaydedildi.",
+    "keepOrTranslate": "Sorular İngilizce. Böyle kalsın mı, çevrilsin mi?",
+    "targetLanguage": "Şu dile çevir",
+    "keepEnglish": "İngilizce kalsın ve düzenle",
+    "translate": "Çevir",
+    "translateSteps": "Quiz JSON dosyası olarak indirildi. Bu dosyayı aşağıdaki talimatla birlikte bir yapay zeka aracına ver, sonra çevrilen JSON'u quiz listesindeki içe aktar düğmesiyle içe aktar.",
+    "instruction": "Yapay zeka aracı için talimat",
+    "downloadAgain": "JSON'u tekrar indir",
+    "copy": "Talimatı kopyala",
+    "copied": "Talimat kopyalandı",
+    "copyFailed": "Kopyalanamadı, metni seçip elle kopyala",
+    "editEnglish": "İngilizce quizi düzenle",
+    "done": "Tamam"
   }
 }

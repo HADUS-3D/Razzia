@@ -4,11 +4,14 @@ import type {
   MEDIA_TYPES,
   QUESTION_TYPES,
   QUIZZ_MODES,
+  QUIZZ_SOURCES,
   SCORING_MODES,
 } from "@razzia/common/constants"
 import type { QuizzVisibility } from "@razzia/common/types/auth"
 
 export type QuizzMode = (typeof QUIZZ_MODES)[keyof typeof QUIZZ_MODES]
+
+export type QuizzSource = (typeof QUIZZ_SOURCES)[keyof typeof QUIZZ_SOURCES]
 
 export type QuestionType = (typeof QUESTION_TYPES)[keyof typeof QUESTION_TYPES]
 
@@ -82,6 +85,8 @@ export interface Question {
 export interface Quizz {
   gameMode: QuizzMode
   subject: string
+  /** Set on quizzes whose questions come from an external database. */
+  source?: QuizzSource
   questions: Question[]
 }
 

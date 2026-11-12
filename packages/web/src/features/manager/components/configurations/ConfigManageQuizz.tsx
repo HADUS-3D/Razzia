@@ -9,6 +9,7 @@ import { canCreateQuizz, canManageAccess } from "@razzia/common/permissions"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import { SkeletonRows } from "@razzia/web/components/Skeleton"
+import GeneratorDialog from "@razzia/web/features/manager/components/GeneratorDialog"
 import QuizzAccessDialog from "@razzia/web/features/manager/components/QuizzAccessDialog"
 import {
   createQuizz,
@@ -18,20 +19,7 @@ import {
   quizzListQuery,
 } from "@razzia/web/features/manager/queries"
 import { api, ApiError, unwrap } from "@razzia/web/lib/api"
-
-const downloadJson = (data: unknown, filename: string) => {
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-
-  a.href = url
-  a.download = filename
-  a.click()
-
-  URL.revokeObjectURL(url)
-}
+import { downloadJson } from "@razzia/web/lib/download"
 
 const ConfigManageQuizz = () => {
   const { data, isPending } = useQuery(quizzListQuery())
@@ -121,6 +109,7 @@ const ConfigManageQuizz = () => {
           >
             <Upload className="size-4" />
           </Button>
+          <GeneratorDialog />
           <input
             ref={fileInputRef}
             type="file"

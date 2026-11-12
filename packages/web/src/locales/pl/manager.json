@@ -104,5 +104,46 @@
     "canEdit": "Edycja",
     "editHint": "Do edycji użytkownik potrzebuje też uprawnienia do edycji. Każdy może uruchamiać quizy, które widzi.",
     "saved": "Zapisano dostęp"
+  },
+  "generator": {
+    "button": "Wygeneruj quiz",
+    "title": "Wygeneruj quiz",
+    "description": "Utwórz quiz z pytaniami z Open Trivia Database.",
+    "category": "Kategoria",
+    "anyCategory": "Dowolna kategoria",
+    "difficulty": "Poziom trudności",
+    "anyDifficulty": "Dowolny poziom",
+    "difficulties": {
+      "easy": "Łatwy",
+      "medium": "Średni",
+      "hard": "Trudny"
+    },
+    "type": "Typ pytania",
+    "anyType": "Dowolny typ",
+    "types": {
+      "multiple": "Wielokrotny wybór",
+      "boolean": "Prawda / Fałsz"
+    },
+    "amount": "Liczba pytań (1-50)",
+    "subject": "Tytuł (opcjonalnie)",
+    "englishNote": "Pytania są generowane po angielsku. Możesz je potem przetłumaczyć.",
+    "attribution": "Pytania pochodzą z <odb>Open Trivia Database</odb>, licencja <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Może to potrwać do 15 sekund, serwis pytań pozwala na jedno żądanie co 5 sekund.",
+    "generating": "Generowanie...",
+    "submit": "Generuj",
+    "createdTitle": "Quiz utworzony",
+    "created": "\"{{subject}}\" zapisano z liczbą pytań: {{count}}.",
+    "keepOrTranslate": "Pytania są po angielsku. Zostawić je czy przetłumaczyć?",
+    "targetLanguage": "Przetłumacz na",
+    "keepEnglish": "Zostaw angielski i edytuj",
+    "translate": "Przetłumacz",
+    "translateSteps": "Quiz został pobrany jako plik JSON. Przekaż ten plik narzędziu AI razem z poniższą instrukcją, a potem zaimportuj przetłumaczony JSON przyciskiem importu na liście quizów.",
+    "instruction": "Instrukcja dla narzędzia AI",
+    "downloadAgain": "Pobierz JSON ponownie",
+    "copy": "Kopiuj instrukcję",
+    "copied": "Skopiowano instrukcję",
+    "copyFailed": "Nie udało się skopiować, zaznacz tekst i skopiuj go ręcznie",
+    "editEnglish": "Edytuj angielski quiz",
+    "done": "Gotowe"
   }
 }

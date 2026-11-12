@@ -80,6 +80,21 @@ export const QUIZZ_MODES = {
   SURVEY: "survey",
 } as const
 
+export const QUIZZ_SOURCES = {
+  OPENTDB: "opentdb",
+} as const
+
+export const OPENTDB_URL = "https://opentdb.com"
+
+export const OPENTDB_LICENSE_URL =
+  "https://creativecommons.org/licenses/by-sa/4.0/"
+
+export const OPENTDB_MAX_AMOUNT = 50
+
+export const OPENTDB_DIFFICULTIES = ["easy", "medium", "hard"] as const
+
+export const OPENTDB_TYPES = ["multiple", "boolean"] as const
+
 export const QUESTION_TYPES = {
   SINGLE: "single",
   MULTI: "multi",
