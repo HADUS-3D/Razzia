@@ -2,6 +2,9 @@ import { StatusCodes } from "http-status-codes"
 
 type DomainErrorStatus =
   | StatusCodes.BAD_REQUEST
+  | StatusCodes.FORBIDDEN
+  | StatusCodes.CONFLICT
+  | StatusCodes.TOO_MANY_REQUESTS
   | StatusCodes.NOT_FOUND
   | StatusCodes.UNSUPPORTED_MEDIA_TYPE
   | StatusCodes.INTERNAL_SERVER_ERROR
@@ -28,3 +31,12 @@ export const unsupportedMediaType = (key: string) =>
 
 export const serverError = (key: string) =>
   new DomainError(key, StatusCodes.INTERNAL_SERVER_ERROR)
+
+export const forbidden = (key: string) =>
+  new DomainError(key, StatusCodes.FORBIDDEN)
+
+export const conflict = (key: string) =>
+  new DomainError(key, StatusCodes.CONFLICT)
+
+export const tooManyRequests = (key: string) =>
+  new DomainError(key, StatusCodes.TOO_MANY_REQUESTS)

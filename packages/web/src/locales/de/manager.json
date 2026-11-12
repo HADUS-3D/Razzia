@@ -48,5 +48,58 @@
     "play": "Spielen",
     "quizz": "Quiz",
     "results": "Ergebnisse"
+  },
+  "login": {
+    "title": "Manager-Anmeldung",
+    "submit": "Anmelden",
+    "link": "Manager-Anmeldung"
+  },
+  "setup": {
+    "title": "Ersten Admin erstellen",
+    "description": "Wähle ein Konto für den ersten Admin. Gib das Manager-Passwort aus der Serverkonfiguration als Einrichtungscode ein.",
+    "code": "Einrichtungscode (MANAGER_PASSWORD)",
+    "submit": "Admin erstellen"
+  },
+  "account": {
+    "username": "Benutzername",
+    "confirmPassword": "Passwort wiederholen",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "changePassword": "Passwort ändern",
+    "passwordChanged": "Passwort geändert",
+    "passwordMismatch": "Die Passwörter stimmen nicht überein",
+    "mustChange": "Wähle ein neues Passwort, bevor du fortfährst."
+  },
+  "users": {
+    "title": "Benutzer",
+    "add": "Benutzer hinzufügen",
+    "created": "Benutzer erstellt",
+    "deleted": "Benutzer gelöscht",
+    "temporaryPassword": "Temporäres Passwort",
+    "temporaryPasswordIs": "Temporäres Passwort (gib es an den Benutzer weiter, es wird nur einmal angezeigt):",
+    "pendingPassword": "(muss Passwort ändern)",
+    "admin": "Admin",
+    "resetPassword": "Passwort zurücksetzen",
+    "resetConfirm": "Das Passwort von „{{name}}“ zurücksetzen? Es wird ein temporäres Passwort erzeugt, das bei der nächsten Anmeldung geändert werden muss.",
+    "reset": "Zurücksetzen",
+    "delete": "Benutzer löschen",
+    "deleteConfirm": "„{{name}}“ löschen? Die Quizze gehen an dich über. Das kann nicht rückgängig gemacht werden.",
+    "newHint": "Neue Benutzer müssen das temporäre Passwort bei der ersten Anmeldung ändern. Angehakte Kästchen sind die Rechte des Benutzers.",
+    "permissions": {
+      "createQuizz": "Erstellen",
+      "editQuizz": "Bearbeiten",
+      "deleteQuizz": "Eigene löschen"
+    }
+  },
+  "access": {
+    "title": "Wer dieses Quiz sehen und bearbeiten darf",
+    "secret": "Geheimes Quiz",
+    "secretHint": "Nur der Besitzer, Admins und die unten ausgewählten Personen können es sehen.",
+    "owner": "Besitzer",
+    "user": "Benutzer",
+    "canView": "Ansehen",
+    "canEdit": "Bearbeiten",
+    "editHint": "Zum Bearbeiten braucht der Benutzer zusätzlich das Bearbeitungsrecht. Jeder kann die Quizze starten, die er sehen kann.",
+    "saved": "Zugriff gespeichert"
   }
 }

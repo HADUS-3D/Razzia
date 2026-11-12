@@ -11,7 +11,17 @@
     "tokenMissing": "Thiếu mã phiên",
     "unauthorized": "Bạn không có quyền truy cập",
     "usernameTooLong": "Tên người dùng không được vượt quá 24 ký tự",
-    "usernameTooShort": "Tên người dùng không được để trống"
+    "usernameTooShort": "Tên người dùng không được để trống",
+    "accountNameTooShort": "Tên đăng nhập phải có ít nhất 3 ký tự",
+    "accountNameTooLong": "Tên đăng nhập không được vượt quá 32 ký tự",
+    "accountNameInvalid": "Tên đăng nhập chỉ được chứa chữ cái, số, dấu chấm, gạch ngang và gạch dưới",
+    "passwordTooShort": "Mật khẩu phải có ít nhất 8 ký tự",
+    "passwordTooLong": "Mật khẩu không được vượt quá 128 ký tự",
+    "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng",
+    "tooManyAttempts": "Quá nhiều lần thử, vui lòng thử lại sau",
+    "setupDone": "Quá trình thiết lập đã hoàn tất",
+    "passwordChangeRequired": "Bạn phải đổi mật khẩu trước",
+    "forbidden": "Bạn không có quyền thực hiện thao tác này"
   },
   "game": {
     "alreadyStarted": "Trò chơi đã bắt đầu",
@@ -75,5 +85,11 @@
     "notFound": "Không tìm thấy media",
     "tooLarge": "Tệp quá lớn",
     "uploadFailed": "Tải tệp lên thất bại"
+  },
+  "users": {
+    "notFound": "Không tìm thấy người dùng",
+    "usernameTaken": "Tên đăng nhập này đã được sử dụng",
+    "lastAdmin": "Phải luôn có ít nhất một quản trị viên",
+    "cannotDeleteSelf": "Bạn không thể xóa tài khoản của chính mình"
   }
 }

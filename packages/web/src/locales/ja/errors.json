@@ -11,7 +11,17 @@
     "tokenMissing": "セッショントークンがありません",
     "unauthorized": "権限がありません",
     "usernameTooLong": "ユーザー名は24文字以内にしてください",
-    "usernameTooShort": "ユーザー名を入力してください"
+    "usernameTooShort": "ユーザー名を入力してください",
+    "accountNameTooShort": "ユーザー名は3文字以上にしてください",
+    "accountNameTooLong": "ユーザー名は32文字以内にしてください",
+    "accountNameInvalid": "ユーザー名には英数字、ピリオド、ハイフン、アンダースコアのみ使用できます",
+    "passwordTooShort": "パスワードは8文字以上にしてください",
+    "passwordTooLong": "パスワードは128文字以内にしてください",
+    "invalidCredentials": "ユーザー名またはパスワードが正しくありません",
+    "tooManyAttempts": "試行回数が多すぎます。しばらくしてからもう一度お試しください",
+    "setupDone": "初期設定はすでに完了しています",
+    "passwordChangeRequired": "先にパスワードを変更してください",
+    "forbidden": "この操作を行う権限がありません"
   },
   "game": {
     "alreadyStarted": "ゲームはすでに開始されています",
@@ -75,5 +85,11 @@
     "notFound": "メディアが見つかりません",
     "tooLarge": "ファイルサイズが大きすぎます",
     "uploadFailed": "ファイルのアップロードに失敗しました"
+  },
+  "users": {
+    "notFound": "ユーザーが見つかりません",
+    "usernameTaken": "このユーザー名はすでに使われています",
+    "lastAdmin": "管理者は常に1人以上必要です",
+    "cannotDeleteSelf": "自分のアカウントは削除できません"
   }
 }

@@ -48,5 +48,58 @@
     "play": "Oyna",
     "quizz": "Test",
     "results": "Sonuçlar"
+  },
+  "login": {
+    "title": "Yönetici girişi",
+    "submit": "Giriş yap",
+    "link": "Yönetici girişi"
+  },
+  "setup": {
+    "title": "İlk yöneticiyi oluştur",
+    "description": "İlk yönetici için bir hesap seçin. Kurulum kodu olarak sunucu yapılandırmasındaki yönetici parolasını girin.",
+    "code": "Kurulum kodu (MANAGER_PASSWORD)",
+    "submit": "Yönetici oluştur"
+  },
+  "account": {
+    "username": "Kullanıcı adı",
+    "confirmPassword": "Parolayı tekrarla",
+    "currentPassword": "Mevcut parola",
+    "newPassword": "Yeni parola",
+    "changePassword": "Parolayı değiştir",
+    "passwordChanged": "Parola değiştirildi",
+    "passwordMismatch": "Parolalar eşleşmiyor",
+    "mustChange": "Devam etmeden önce yeni bir parola seçin."
+  },
+  "users": {
+    "title": "Kullanıcılar",
+    "add": "Kullanıcı ekle",
+    "created": "Kullanıcı oluşturuldu",
+    "deleted": "Kullanıcı silindi",
+    "temporaryPassword": "Geçici parola",
+    "temporaryPasswordIs": "Geçici parola (kullanıcıyla paylaşın, yalnızca bir kez gösterilir):",
+    "pendingPassword": "(parolasını değiştirmeli)",
+    "admin": "Yönetici",
+    "resetPassword": "Parolayı sıfırla",
+    "resetConfirm": "\"{{name}}\" kullanıcısının parolası sıfırlansın mı? Bir sonraki girişte değiştirilmesi gereken geçici bir parola oluşturulur.",
+    "reset": "Sıfırla",
+    "delete": "Kullanıcıyı sil",
+    "deleteConfirm": "\"{{name}}\" silinsin mi? Quizleri size devredilir. Bu işlem geri alınamaz.",
+    "newHint": "Yeni kullanıcılar ilk girişte geçici parolayı değiştirmelidir. İşaretli kutular kullanıcının yetkileridir.",
+    "permissions": {
+      "createQuizz": "Oluşturma",
+      "editQuizz": "Düzenleme",
+      "deleteQuizz": "Kendininkini silme"
+    }
+  },
+  "access": {
+    "title": "Bu quizi kimler görebilir ve düzenleyebilir",
+    "secret": "Gizli quiz",
+    "secretHint": "Yalnızca sahibi, yöneticiler ve aşağıda seçilen kişiler görebilir.",
+    "owner": "Sahibi",
+    "user": "Kullanıcı",
+    "canView": "Görüntüleme",
+    "canEdit": "Düzenleme",
+    "editHint": "Düzenlemek için kullanıcının ayrıca düzenleme yetkisi olmalıdır. Herkes görebildiği quizleri başlatabilir.",
+    "saved": "Erişim kaydedildi"
   }
 }

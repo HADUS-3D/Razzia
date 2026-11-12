@@ -4,12 +4,14 @@ import { games } from "@razzia/socket/api/routes/games"
 import { media } from "@razzia/socket/api/routes/media"
 import { quizz } from "@razzia/socket/api/routes/quizz"
 import { results } from "@razzia/socket/api/routes/results"
+import { users } from "@razzia/socket/api/routes/users"
 
 const routes = new Hono()
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/auth", auth)
   .route("/quizz", quizz)
   .route("/results", results)
+  .route("/users", users)
   .route("/games", games)
   .route("/media", media)
 

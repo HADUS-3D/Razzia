@@ -48,5 +48,58 @@
     "play": "プレイ",
     "quizz": "クイズ",
     "results": "結果"
+  },
+  "login": {
+    "title": "マネージャーログイン",
+    "submit": "ログイン",
+    "link": "マネージャーログイン"
+  },
+  "setup": {
+    "title": "最初の管理者を作成",
+    "description": "最初の管理者のアカウントを選択してください。サーバー設定のマネージャーパスワードをセットアップコードとして入力します。",
+    "code": "セットアップコード (MANAGER_PASSWORD)",
+    "submit": "管理者を作成"
+  },
+  "account": {
+    "username": "ユーザー名",
+    "confirmPassword": "パスワードを再入力",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "changePassword": "パスワードを変更",
+    "passwordChanged": "パスワードを変更しました",
+    "passwordMismatch": "パスワードが一致しません",
+    "mustChange": "続行する前に新しいパスワードを設定してください。"
+  },
+  "users": {
+    "title": "ユーザー",
+    "add": "ユーザーを追加",
+    "created": "ユーザーを作成しました",
+    "deleted": "ユーザーを削除しました",
+    "temporaryPassword": "一時パスワード",
+    "temporaryPasswordIs": "一時パスワード(ユーザーに伝えてください。表示されるのは一度だけです):",
+    "pendingPassword": "(パスワード変更待ち)",
+    "admin": "管理者",
+    "resetPassword": "パスワードをリセット",
+    "resetConfirm": "「{{name}}」のパスワードをリセットしますか?一時パスワードが生成され、次回ログイン時に変更が必要です。",
+    "reset": "リセット",
+    "delete": "ユーザーを削除",
+    "deleteConfirm": "「{{name}}」を削除しますか?クイズはあなたに引き継がれます。この操作は元に戻せません。",
+    "newHint": "新しいユーザーは初回ログイン時に一時パスワードを変更する必要があります。チェックされた項目がそのユーザーの権限です。",
+    "permissions": {
+      "createQuizz": "作成",
+      "editQuizz": "編集",
+      "deleteQuizz": "自分のものを削除"
+    }
+  },
+  "access": {
+    "title": "このクイズを表示・編集できる人",
+    "secret": "非公開クイズ",
+    "secretHint": "所有者、管理者、および下で選択した人だけが表示できます。",
+    "owner": "所有者",
+    "user": "ユーザー",
+    "canView": "表示",
+    "canEdit": "編集",
+    "editHint": "編集にはユーザーの編集権限も必要です。表示できるクイズは誰でも開始できます。",
+    "saved": "アクセス設定を保存しました"
   }
 }

@@ -25,5 +25,6 @@
   "submit": "Wyślij",
   "close": "Zamknij",
   "previous": "Wstecz",
-  "changeLanguage": "Zmień język"
+  "changeLanguage": "Zmień język",
+  "back": "Wstecz"
 }

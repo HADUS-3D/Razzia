@@ -43,6 +43,18 @@ export const SESSION_ROLES = {
   MANAGER: "manager",
 } as const
 
+export const USER_ROLES = {
+  ADMIN: "admin",
+  USER: "user",
+} as const
+
+export const QUIZZ_VISIBILITIES = {
+  ALL: "all",
+  SECRET: "secret",
+} as const
+
+export const MIN_PASSWORD_LENGTH = 8
+
 export const NO_TIME_LIMIT = -1
 
 export const AUTO_ADVANCE_DELAY = { MIN: 3, MAX: 600 } as const

@@ -11,7 +11,17 @@
     "tokenMissing": "Falta el token de sesión",
     "unauthorized": "No estás autorizado",
     "usernameTooLong": "El nombre de usuario no puede superar los 24 caracteres",
-    "usernameTooShort": "El nombre de usuario no puede estar vacío"
+    "usernameTooShort": "El nombre de usuario no puede estar vacío",
+    "accountNameTooShort": "El nombre de usuario debe tener al menos 3 caracteres",
+    "accountNameTooLong": "El nombre de usuario no puede superar los 32 caracteres",
+    "accountNameInvalid": "El nombre de usuario solo puede contener letras, números, puntos, guiones y guiones bajos",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "passwordTooLong": "La contraseña no puede superar los 128 caracteres",
+    "invalidCredentials": "Usuario o contraseña no válidos",
+    "tooManyAttempts": "Demasiados intentos, inténtalo de nuevo más tarde",
+    "setupDone": "La configuración inicial ya está completada",
+    "passwordChangeRequired": "Primero debes cambiar tu contraseña",
+    "forbidden": "No tienes permiso para hacer esto"
   },
   "game": {
     "alreadyStarted": "La partida ya ha comenzado",
@@ -75,5 +85,11 @@
     "notFound": "Archivo no encontrado",
     "tooLarge": "El archivo es demasiado grande",
     "uploadFailed": "No se pudo subir el archivo"
+  },
+  "users": {
+    "notFound": "Usuario no encontrado",
+    "usernameTaken": "Este nombre de usuario ya está en uso",
+    "lastAdmin": "Siempre debe haber al menos un administrador",
+    "cannotDeleteSelf": "No puedes eliminar tu propia cuenta"
   }
 }

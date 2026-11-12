@@ -1,7 +1,13 @@
 import { defineConfig, devices } from "@playwright/test"
+import { randomBytes, scryptSync } from "crypto"
 import fs from "fs"
 import { join } from "path"
-import { CONFIG_PATH, MANAGER_PASSWORD } from "@razzia/e2e/utils/constants"
+import {
+  ADMIN_PASSWORD,
+  ADMIN_USERNAME,
+  CONFIG_PATH,
+  MANAGER_PASSWORD,
+} from "@razzia/e2e/utils/constants"
 
 const root = join(import.meta.dirname, "../..")
 
@@ -12,6 +18,25 @@ if (!process.env.TEST_WORKER_INDEX) {
     join(import.meta.dirname, "fixtures/quizz"),
     join(CONFIG_PATH, "quizz"),
     { recursive: true },
+  )
+
+  // Same scrypt format as the server, so the tests start with an admin account.
+  const salt = randomBytes(16)
+  const hash = scryptSync(ADMIN_PASSWORD, salt, 64)
+
+  fs.writeFileSync(
+    join(CONFIG_PATH, "users.json"),
+    JSON.stringify([
+      {
+        id: "e2e-admin-id",
+        username: ADMIN_USERNAME,
+        role: "admin",
+        permissions: { createQuizz: true, editQuizz: true, deleteQuizz: true },
+        mustChangePassword: false,
+        passwordHash: `scrypt$${salt.toString("hex")}$${hash.toString("hex")}`,
+        createdAt: new Date().toISOString(),
+      },
+    ]),
   )
 }
 

@@ -11,7 +11,17 @@
     "tokenMissing": "Jeton de session manquant",
     "unauthorized": "Vous n'êtes pas autorisé",
     "usernameTooLong": "Le pseudo ne peut pas dépasser 24 caractères",
-    "usernameTooShort": "Le pseudo ne peut pas être vide"
+    "usernameTooShort": "Le pseudo ne peut pas être vide",
+    "accountNameTooShort": "Le nom d'utilisateur doit contenir au moins 3 caractères",
+    "accountNameTooLong": "Le nom d'utilisateur ne peut pas dépasser 32 caractères",
+    "accountNameInvalid": "Le nom d'utilisateur ne peut contenir que des lettres, chiffres, points, tirets et tirets bas",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordTooLong": "Le mot de passe ne peut pas dépasser 128 caractères",
+    "invalidCredentials": "Nom d'utilisateur ou mot de passe invalide",
+    "tooManyAttempts": "Trop de tentatives, réessayez plus tard",
+    "setupDone": "La configuration initiale est déjà terminée",
+    "passwordChangeRequired": "Vous devez d'abord changer votre mot de passe",
+    "forbidden": "Vous n'avez pas le droit de faire cela"
   },
   "game": {
     "alreadyStarted": "La partie a déjà commencé",
@@ -75,5 +85,11 @@
     "notFound": "Média introuvable",
     "tooLarge": "Le fichier est trop volumineux",
     "uploadFailed": "Échec de l'import du fichier"
+  },
+  "users": {
+    "notFound": "Utilisateur introuvable",
+    "usernameTaken": "Ce nom d'utilisateur est déjà pris",
+    "lastAdmin": "Il doit toujours y avoir au moins un administrateur",
+    "cannotDeleteSelf": "Vous ne pouvez pas supprimer votre propre compte"
   }
 }

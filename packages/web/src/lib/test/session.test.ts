@@ -8,7 +8,7 @@ const createToken = (claims: Record<string, unknown>) =>
   `header.${Buffer.from(JSON.stringify(claims)).toString("base64url")}.signature`
 
 const validToken = (role: string = SESSION_ROLES.MANAGER) =>
-  createToken({ sub: "client", role, exp: now() + 3600 })
+  createToken({ sub: "client", role, userId: "user", exp: now() + 3600 })
 
 const expiredToken = () =>
   createToken({ sub: "client", role: SESSION_ROLES.MANAGER, exp: now() - 1 })
@@ -46,6 +46,17 @@ describe("session", () => {
 
     expect(getClientId()).toBe("client")
     expect(getRole()).toBe(SESSION_ROLES.MANAGER)
+  })
+
+  it("treats a manager token without user id as a player", async () => {
+    storage.set(
+      "token",
+      createToken({ sub: "client", role: "manager", exp: now() + 3600 }),
+    )
+
+    const { getRole } = await loadSession()
+
+    expect(getRole()).toBe(SESSION_ROLES.PLAYER)
   })
 
   it("falls back to the player role once the token expired", async () => {

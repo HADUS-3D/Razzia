@@ -11,7 +11,17 @@
     "tokenMissing": "Oturum belirteci eksik",
     "unauthorized": "Yetkiniz yok",
     "usernameTooLong": "Kullanıcı adı 24 karakteri geçemez",
-    "usernameTooShort": "Kullanıcı adı boş olamaz"
+    "usernameTooShort": "Kullanıcı adı boş olamaz",
+    "accountNameTooShort": "Kullanıcı adı en az 3 karakter olmalıdır",
+    "accountNameTooLong": "Kullanıcı adı en fazla 32 karakter olabilir",
+    "accountNameInvalid": "Kullanıcı adı yalnızca harf, rakam, nokta, tire ve alt çizgi içerebilir",
+    "passwordTooShort": "Parola en az 8 karakter olmalıdır",
+    "passwordTooLong": "Parola en fazla 128 karakter olabilir",
+    "invalidCredentials": "Geçersiz kullanıcı adı veya parola",
+    "tooManyAttempts": "Çok fazla deneme, lütfen daha sonra tekrar deneyin",
+    "setupDone": "Kurulum zaten tamamlandı",
+    "passwordChangeRequired": "Önce parolanızı değiştirmelisiniz",
+    "forbidden": "Bu işlem için yetkiniz yok"
   },
   "game": {
     "alreadyStarted": "Oyun zaten başladı",
@@ -75,5 +85,11 @@
     "notFound": "Medya bulunamadı",
     "tooLarge": "Dosya çok büyük",
     "uploadFailed": "Dosya yüklenemedi"
+  },
+  "users": {
+    "notFound": "Kullanıcı bulunamadı",
+    "usernameTaken": "Bu kullanıcı adı zaten alınmış",
+    "lastAdmin": "En az bir yönetici bulunmalıdır",
+    "cannotDeleteSelf": "Kendi hesabınızı silemezsiniz"
   }
 }

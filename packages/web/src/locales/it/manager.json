@@ -48,5 +48,58 @@
     "play": "Gioca",
     "quizz": "Quiz",
     "results": "Risultati"
+  },
+  "login": {
+    "title": "Accesso manager",
+    "submit": "Accedi",
+    "link": "Accesso manager"
+  },
+  "setup": {
+    "title": "Crea il primo amministratore",
+    "description": "Scegli un account per il primo amministratore. Inserisci la password manager della configurazione del server come codice di configurazione.",
+    "code": "Codice di configurazione (MANAGER_PASSWORD)",
+    "submit": "Crea amministratore"
+  },
+  "account": {
+    "username": "Nome utente",
+    "confirmPassword": "Ripeti la password",
+    "currentPassword": "Password attuale",
+    "newPassword": "Nuova password",
+    "changePassword": "Cambia password",
+    "passwordChanged": "Password cambiata",
+    "passwordMismatch": "Le password non corrispondono",
+    "mustChange": "Scegli una nuova password prima di continuare."
+  },
+  "users": {
+    "title": "Utenti",
+    "add": "Aggiungi utente",
+    "created": "Utente creato",
+    "deleted": "Utente eliminato",
+    "temporaryPassword": "Password temporanea",
+    "temporaryPasswordIs": "Password temporanea (condividila con l'utente, viene mostrata una sola volta):",
+    "pendingPassword": "(deve cambiare la password)",
+    "admin": "Amministratore",
+    "resetPassword": "Reimposta password",
+    "resetConfirm": "Reimpostare la password di \"{{name}}\"? Viene generata una password temporanea da cambiare al prossimo accesso.",
+    "reset": "Reimposta",
+    "delete": "Elimina utente",
+    "deleteConfirm": "Eliminare \"{{name}}\"? I suoi quiz passano a te. L'azione non può essere annullata.",
+    "newHint": "I nuovi utenti devono cambiare la password temporanea al primo accesso. Le caselle selezionate sono i permessi dell'utente.",
+    "permissions": {
+      "createQuizz": "Creare",
+      "editQuizz": "Modificare",
+      "deleteQuizz": "Eliminare i propri"
+    }
+  },
+  "access": {
+    "title": "Chi può vedere e modificare questo quiz",
+    "secret": "Quiz segreto",
+    "secretHint": "Solo il proprietario, gli amministratori e le persone selezionate sotto possono vederlo.",
+    "owner": "Proprietario",
+    "user": "Utente",
+    "canView": "Vedere",
+    "canEdit": "Modificare",
+    "editHint": "Per modificare serve anche il permesso di modifica dell'utente. Tutti possono avviare i quiz che possono vedere.",
+    "saved": "Accesso salvato"
   }
 }
