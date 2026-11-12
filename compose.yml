@@ -1,13 +1,18 @@
 services:
   razzia:
-    image: ralex91/razzia:latest
+    # Build from this repository instead of pulling the upstream image.
+    # Update with: git pull && docker compose up -d --build
+    build: .
+    image: razzia-local:latest
+    restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
+      # Holds users.json (accounts), quizzes and results. Must persist.
       - ./config:/app/config
     env_file:
       - .env
     # Or set them inline instead of using an .env file:
     # environment:
-    #   MANAGER_PASSWORD: "change-me"
+    #   MANAGER_PASSWORD: "change-me" # setup code for creating the first admin
     #   JWT_SECRET: "" # optional, 32+ characters
