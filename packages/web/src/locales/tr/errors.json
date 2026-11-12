@@ -100,6 +100,7 @@
     "rateLimited": "Soru servisi meşgul, birkaç saniye sonra tekrar dene",
     "busy": "Şu anda çok fazla quiz oluşturuluyor, biraz sonra tekrar dene",
     "unavailable": "Soru servisine şu anda ulaşılamıyor, daha sonra tekrar dene",
-    "failed": "Quiz oluşturulamadı"
+    "failed": "Quiz oluşturulamadı",
+    "invalidImport": "Bu geçerli bir tur değil, yapay zekanın JSON'u aynı biçimde döndürdüğünü kontrol et"
   }
 }

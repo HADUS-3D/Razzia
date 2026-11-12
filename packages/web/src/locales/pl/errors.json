@@ -100,6 +100,7 @@
     "rateLimited": "Serwis pytań jest zajęty, spróbuj ponownie za kilka sekund",
     "busy": "Generowanych jest teraz zbyt wiele quizów, spróbuj ponownie za chwilę",
     "unavailable": "Serwis pytań jest teraz niedostępny, spróbuj ponownie później",
-    "failed": "Nie udało się wygenerować quizu"
+    "failed": "Nie udało się wygenerować quizu",
+    "invalidImport": "To nie jest poprawna runda, sprawdź czy AI zwróciło JSON w tym samym formacie"
   }
 }

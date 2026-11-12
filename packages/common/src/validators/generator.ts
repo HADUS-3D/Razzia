@@ -14,7 +14,6 @@ export const generatorValidator = z.object({
   category: z.number().int().positive().optional(),
   difficulty: z.enum(OPENTDB_DIFFICULTIES).optional(),
   type: z.enum(OPENTDB_TYPES).optional(),
-  subject: z.string().trim().max(100).optional(),
 })
 
 export type GeneratorInput = z.infer<typeof generatorValidator>

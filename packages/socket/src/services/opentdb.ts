@@ -1,17 +1,12 @@
 // Upstream calls are sequential by design (one request per 5 seconds).
 /* oxlint-disable no-await-in-loop */
 import { randomInt } from "crypto"
-import type { Question, Quizz } from "@razzia/common/types/game"
+import type { Question } from "@razzia/common/types/game"
 import type {
   GeneratorInput,
   TriviaCategory,
 } from "@razzia/common/validators/generator"
-import {
-  OPENTDB_URL,
-  QUESTION_TYPES,
-  QUIZZ_MODES,
-  QUIZZ_SOURCES,
-} from "@razzia/common/constants"
+import { OPENTDB_URL, QUESTION_TYPES } from "@razzia/common/constants"
 import {
   invalidInput,
   serverError,
@@ -123,23 +118,6 @@ export const mapQuestion = (raw: ApiQuestion): Question => {
     cooldown: QUESTION_COOLDOWN,
     time: QUESTION_TIME,
   }
-}
-
-export const buildSubject = (
-  input: Pick<GeneratorInput, "difficulty" | "subject">,
-  categoryName: string | undefined,
-): string => {
-  if (input.subject) {
-    return input.subject
-  }
-
-  const parts = [`Trivia: ${categoryName ?? "Mixed"}`]
-
-  if (input.difficulty) {
-    parts.push(`(${input.difficulty})`)
-  }
-
-  return parts.join(" ")
 }
 
 export const createOpenTdbClient = (deps: OpenTdbDeps = defaultDeps) => {
@@ -372,20 +350,10 @@ export const createOpenTdbClient = (deps: OpenTdbDeps = defaultDeps) => {
   const generate = async (
     userId: string,
     input: GeneratorInput,
-  ): Promise<Quizz> => {
+  ): Promise<Question[]> => {
     const results = await fetchQuestions(userId, input)
-    const categoryName = input.category
-      ? (await getCategories().catch(() => [])).find(
-          (c) => c.id === input.category,
-        )?.name
-      : undefined
 
-    return {
-      gameMode: QUIZZ_MODES.QUIZ,
-      subject: buildSubject(input, categoryName),
-      source: QUIZZ_SOURCES.OPENTDB,
-      questions: results.map(mapQuestion),
-    }
+    return results.map(mapQuestion)
   }
 
   return { generate, getCategories }

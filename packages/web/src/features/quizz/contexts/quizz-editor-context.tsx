@@ -16,6 +16,7 @@ import {
 import type {
   Question,
   QuizzMode,
+  QuizzSource,
   QuizzWithId,
 } from "@razzia/common/types/game"
 import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
@@ -27,6 +28,7 @@ import {
 export interface QuizzFormValues {
   gameMode: QuizzMode
   subject: string
+  source?: QuizzSource
   questions: Question[]
 }
 
@@ -41,6 +43,7 @@ interface QuizzEditorContextType {
   isRemoving: boolean
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
+  addQuestions: (_questions: Question[], _source?: QuizzSource) => void
   removeQuestion: (_index: number) => void
   reorderQuestions: (_from: number, _to: number) => void
   updateQuestion: (_index: number, _updates: Partial<Question>) => void
@@ -76,12 +79,13 @@ export const QuizzEditorProvider = ({
     defaultValues: {
       gameMode: initialData?.gameMode ?? QUIZZ_MODES.QUIZ,
       subject: initialData?.subject ?? "Untitled Quizz",
+      source: initialData?.source,
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
   })
 
   const { control, getValues, setValue, formState } = form
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, replace, remove, move } = useFieldArray({
     control,
     name: "questions",
   })
@@ -98,6 +102,30 @@ export const QuizzEditorProvider = ({
     const category = questions.at(-1)?.category
 
     append({ ...defaultQuestion(), ...(category ? { category } : {}) })
+    setCurrentIndex(questions.length)
+  }
+
+  const isBlank = (question: Question) =>
+    !question.question && question.answers.every((answer) => !answer)
+
+  /** Adds a batch of questions; a lone untouched blank question makes room. */
+  const addQuestions = (added: Question[], source?: QuizzSource) => {
+    if (added.length === 0) {
+      return
+    }
+
+    if (source) {
+      setValue("source", source, { shouldDirty: true })
+    }
+
+    if (questions.length === 1 && isBlank(questions[0])) {
+      replace(added)
+      setCurrentIndex(0)
+
+      return
+    }
+
+    append(added)
     setCurrentIndex(questions.length)
   }
 
@@ -148,6 +176,7 @@ export const QuizzEditorProvider = ({
           isRemoving: removingFrom === questions,
           setCurrentIndex,
           addQuestion,
+          addQuestions,
           removeQuestion,
           reorderQuestions,
           updateQuestion,

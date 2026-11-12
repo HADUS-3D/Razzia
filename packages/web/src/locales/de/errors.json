@@ -100,6 +100,7 @@
     "rateLimited": "Der Fragen-Dienst ist ausgelastet, versuche es in ein paar Sekunden erneut",
     "busy": "Es werden gerade zu viele Quizze generiert, versuche es gleich erneut",
     "unavailable": "Der Fragen-Dienst ist gerade nicht erreichbar, versuche es später erneut",
-    "failed": "Quiz konnte nicht generiert werden"
+    "failed": "Quiz konnte nicht generiert werden",
+    "invalidImport": "Das ist keine gültige Runde, prüfe, ob die KI das JSON im gleichen Format geliefert hat"
   }
 }

@@ -100,6 +100,7 @@
     "rateLimited": "El servicio de preguntas está ocupado, inténtalo de nuevo en unos segundos",
     "busy": "Se están generando demasiados quizzes ahora mismo, inténtalo de nuevo en un momento",
     "unavailable": "El servicio de preguntas no está disponible ahora, inténtalo más tarde",
-    "failed": "No se pudo generar el quiz"
+    "failed": "No se pudo generar el quiz",
+    "invalidImport": "No es una ronda válida, comprueba que la IA devolvió el JSON en el mismo formato"
   }
 }

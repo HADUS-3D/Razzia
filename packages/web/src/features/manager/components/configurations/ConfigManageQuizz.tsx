@@ -9,7 +9,6 @@ import { canCreateQuizz, canManageAccess } from "@razzia/common/permissions"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import { SkeletonRows } from "@razzia/web/components/Skeleton"
-import GeneratorDialog from "@razzia/web/features/manager/components/GeneratorDialog"
 import QuizzAccessDialog from "@razzia/web/features/manager/components/QuizzAccessDialog"
 import {
   createQuizz,
@@ -109,7 +108,6 @@ const ConfigManageQuizz = () => {
           >
             <Upload className="size-4" />
           </Button>
-          <GeneratorDialog />
           <input
             ref={fileInputRef}
             type="file"
