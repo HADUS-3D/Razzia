@@ -118,6 +118,10 @@ Full index in [docs/](docs/README.md).
 4. Wait for players to join
 5. Click the start button to begin the game
 
+## 🌍 Languages
+
+The interface is available in English and Dutch. Use the language switcher to change it; the browser language is used the first time, with English as fallback. Add every new text to both `packages/web/src/locales/en` and `nl`; the tests check that both have the same keys.
+
 ## 🎲 Question generator
 
 The quiz editor can add a generated round of questions from the [Open Trivia Database](https://opentdb.com) (category, difficulty, type and number of questions), next to "Add question". Questions are in English and can be translated with an AI tool before they are added. The questions are provided by the Open Trivia Database under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the podium of a quiz with generated questions shows this credit. See [Quiz](docs/quiz.md#generated-question-rounds-open-trivia-database).
