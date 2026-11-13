@@ -102,5 +102,11 @@
     "unavailable": "Il servizio di domande non è raggiungibile al momento, riprova più tardi",
     "failed": "Impossibile generare il quiz",
     "invalidImport": "Non è un round valido, controlla che l'IA abbia restituito il JSON nello stesso formato"
+  },
+  "tokens": {
+    "notFound": "Token non trovato",
+    "nameEmpty": "Dai un nome al token",
+    "nameTooLong": "Il nome non può superare i 64 caratteri",
+    "invalidExpiry": "Scegli una validità tra 1 e 365 giorni"
   }
 }

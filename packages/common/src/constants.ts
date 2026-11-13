@@ -43,6 +43,11 @@ export const SESSION_ROLES = {
   MANAGER: "manager",
 } as const
 
+/** Every API token starts with this, so it is recognisable in a bearer header. */
+export const API_TOKEN_PREFIX = "razzia_"
+
+export const MAX_API_TOKEN_DAYS = 365
+
 export const USER_ROLES = {
   ADMIN: "admin",
   USER: "user",

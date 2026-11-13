@@ -151,5 +151,28 @@
     "hint": "Shown behind the game unless a quizz or question sets its own.",
     "stock": "Standard classroom background",
     "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "API jetonları",
+    "description": "Jetonlar, yapay zeka asistanı gibi harici bir aracın sizin yetkilerinizle quiz oluşturmasını ve düzenlemesini sağlar. Kullanıcıları veya ayarları yönetemez.",
+    "namePlaceholder": "Ad, ör. yapay zeka asistanı",
+    "create": "Jeton oluştur",
+    "shownOnce": "Bu jetonu şimdi kopyalayın, yalnızca bir kez gösterilir:",
+    "copy": "Jetonu kopyala",
+    "copied": "Jeton kopyalandı",
+    "empty": "Henüz API jetonunuz yok.",
+    "lastUsed": "Son kullanım: {{date}}",
+    "neverUsed": "hiç",
+    "expires": "Bitiş: {{date}}",
+    "revoke": "Jetonu iptal et",
+    "revokeConfirm": "\"{{name}}\" iptal edilsin mi? Onu kullanan araçlar hemen erişimi kaybeder.",
+    "revoked": "Jeton iptal edildi",
+    "expiry": {
+      "label": "Geçerlilik",
+      "never": "Süresiz",
+      "days30": "30 gün",
+      "days90": "90 gün",
+      "year": "1 yıl"
+    }
   }
 }

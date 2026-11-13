@@ -151,5 +151,28 @@
     "hint": "Shown behind the game unless a quizz or question sets its own.",
     "stock": "Standard classroom background",
     "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "Tokens de API",
+    "description": "Los tokens permiten que una herramienta externa, como un asistente de IA, cree y edite cuestionarios con tus permisos. No pueden gestionar usuarios ni ajustes.",
+    "namePlaceholder": "Nombre, p. ej. asistente de IA",
+    "create": "Crear token",
+    "shownOnce": "Copia este token ahora, solo se muestra una vez:",
+    "copy": "Copiar token",
+    "copied": "Token copiado",
+    "empty": "Todavía no tienes tokens de API.",
+    "lastUsed": "Último uso: {{date}}",
+    "neverUsed": "nunca",
+    "expires": "Caduca: {{date}}",
+    "revoke": "Revocar token",
+    "revokeConfirm": "¿Revocar \"{{name}}\"? Las herramientas que lo usan pierden el acceso de inmediato.",
+    "revoked": "Token revocado",
+    "expiry": {
+      "label": "Validez",
+      "never": "No caduca",
+      "days30": "30 días",
+      "days90": "90 días",
+      "year": "1 año"
+    }
   }
 }

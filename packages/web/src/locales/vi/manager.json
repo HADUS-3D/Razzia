@@ -151,5 +151,28 @@
     "hint": "Shown behind the game unless a quizz or question sets its own.",
     "stock": "Standard classroom background",
     "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "Token API",
+    "description": "Token cho phép công cụ bên ngoài, chẳng hạn trợ lý AI, tạo và chỉnh sửa quiz với quyền của bạn. Token không thể quản lý người dùng hay cài đặt.",
+    "namePlaceholder": "Tên, ví dụ trợ lý AI",
+    "create": "Tạo token",
+    "shownOnce": "Hãy sao chép token này ngay, nó chỉ hiển thị một lần:",
+    "copy": "Sao chép token",
+    "copied": "Đã sao chép token",
+    "empty": "Bạn chưa có token API nào.",
+    "lastUsed": "Dùng lần cuối: {{date}}",
+    "neverUsed": "chưa bao giờ",
+    "expires": "Hết hạn: {{date}}",
+    "revoke": "Thu hồi token",
+    "revokeConfirm": "Thu hồi \"{{name}}\"? Các công cụ đang dùng nó sẽ mất quyền truy cập ngay lập tức.",
+    "revoked": "Đã thu hồi token",
+    "expiry": {
+      "label": "Thời hạn",
+      "never": "Không hết hạn",
+      "days30": "30 ngày",
+      "days90": "90 ngày",
+      "year": "1 năm"
+    }
   }
 }

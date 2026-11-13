@@ -8,6 +8,7 @@ import {
 import { apiFactory } from "@razzia/socket/api/factory"
 import { requireAdmin, requireManager } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
+import { revokeUserApiTokens } from "@razzia/socket/services/api-tokens"
 import { reassignUserQuizzes } from "@razzia/socket/services/config"
 import { conflict } from "@razzia/socket/services/errors"
 import {
@@ -63,6 +64,7 @@ const routes = apiFactory
     }
 
     deleteUser(id)
+    revokeUserApiTokens(id)
     reassignUserQuizzes(id, self.id)
 
     return c.body(null, StatusCodes.NO_CONTENT)

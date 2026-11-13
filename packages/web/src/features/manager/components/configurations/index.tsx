@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import { KeyRound, LogOut, Users } from "lucide-react"
+import { KeyRound, LogOut, Plug, Users } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { isAdmin } from "@razzia/common/permissions"
@@ -84,6 +84,13 @@ const Configurations = () => {
               <Users className="size-4" />
             </button>
           )}
+          <button
+            className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            onClick={() => navigate({ to: "/manager/tokens" })}
+            title={t("manager:tokens.title")}
+          >
+            <Plug className="size-4" />
+          </button>
           <button
             className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             onClick={() => setChangingPassword(true)}

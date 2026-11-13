@@ -102,5 +102,11 @@
     "unavailable": "Der Fragen-Dienst ist gerade nicht erreichbar, versuche es später erneut",
     "failed": "Quiz konnte nicht generiert werden",
     "invalidImport": "Das ist keine gültige Runde, prüfe, ob die KI das JSON im gleichen Format geliefert hat"
+  },
+  "tokens": {
+    "notFound": "Token nicht gefunden",
+    "nameEmpty": "Gib dem Token einen Namen",
+    "nameTooLong": "Der Name darf höchstens 64 Zeichen lang sein",
+    "invalidExpiry": "Wähle eine Gültigkeit zwischen 1 und 365 Tagen"
   }
 }

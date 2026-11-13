@@ -102,5 +102,11 @@
     "unavailable": "Soru servisine şu anda ulaşılamıyor, daha sonra tekrar dene",
     "failed": "Quiz oluşturulamadı",
     "invalidImport": "Bu geçerli bir tur değil, yapay zekanın JSON'u aynı biçimde döndürdüğünü kontrol et"
+  },
+  "tokens": {
+    "notFound": "Jeton bulunamadı",
+    "nameEmpty": "Jetona bir ad verin",
+    "nameTooLong": "Ad en fazla 64 karakter olabilir",
+    "invalidExpiry": "1 ile 365 gün arasında bir geçerlilik seçin"
   }
 }

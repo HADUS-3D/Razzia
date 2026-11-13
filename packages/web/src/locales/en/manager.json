@@ -151,5 +151,28 @@
     "hint": "Shown behind the game unless a quizz or question sets its own.",
     "stock": "Standard classroom background",
     "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "API tokens",
+    "description": "Tokens let an external tool, such as an AI assistant, create and edit quizzes with your rights. They cannot manage users or settings.",
+    "namePlaceholder": "Name, e.g. AI assistant",
+    "create": "Create token",
+    "shownOnce": "Copy this token now, it is shown only once:",
+    "copy": "Copy token",
+    "copied": "Token copied",
+    "empty": "You have no API tokens yet.",
+    "lastUsed": "Last used: {{date}}",
+    "neverUsed": "never",
+    "expires": "Expires: {{date}}",
+    "revoke": "Revoke token",
+    "revokeConfirm": "Revoke \"{{name}}\"? Tools that use it lose access immediately.",
+    "revoked": "Token revoked",
+    "expiry": {
+      "label": "Validity",
+      "never": "Never expires",
+      "days30": "30 days",
+      "days90": "90 days",
+      "year": "1 year"
+    }
   }
 }

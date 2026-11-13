@@ -151,5 +151,28 @@
     "hint": "Shown behind the game unless a quizz or question sets its own.",
     "stock": "Standard classroom background",
     "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "Jetons d'API",
+    "description": "Les jetons permettent à un outil externe, comme un assistant IA, de créer et modifier des quiz avec tes droits. Ils ne peuvent pas gérer les utilisateurs ni les paramètres.",
+    "namePlaceholder": "Nom, p. ex. assistant IA",
+    "create": "Créer un jeton",
+    "shownOnce": "Copie ce jeton maintenant, il n'est affiché qu'une seule fois :",
+    "copy": "Copier le jeton",
+    "copied": "Jeton copié",
+    "empty": "Tu n'as pas encore de jeton d'API.",
+    "lastUsed": "Dernière utilisation : {{date}}",
+    "neverUsed": "jamais",
+    "expires": "Expire : {{date}}",
+    "revoke": "Révoquer le jeton",
+    "revokeConfirm": "Révoquer « {{name}} » ? Les outils qui l'utilisent perdent immédiatement l'accès.",
+    "revoked": "Jeton révoqué",
+    "expiry": {
+      "label": "Validité",
+      "never": "N'expire jamais",
+      "days30": "30 jours",
+      "days90": "90 jours",
+      "year": "1 an"
+    }
   }
 }
