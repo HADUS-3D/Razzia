@@ -11,7 +11,7 @@ import {
 import { quizzAccessValidator } from "@razzia/common/validators/auth"
 import { quizzValidator } from "@razzia/common/validators/quizz"
 import { apiFactory } from "@razzia/socket/api/factory"
-import { requireManager } from "@razzia/socket/api/middleware"
+import { requireManagerOrApiToken } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
 import {
   deleteQuizz,
@@ -59,7 +59,7 @@ const toMeta = (
 
 const routes = apiFactory
   .createApp()
-  .use(requireManager)
+  .use(requireManagerOrApiToken)
   .get("/", (c) => {
     const user = c.get("user")
 

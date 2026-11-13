@@ -58,3 +58,13 @@ export interface QuizzAccess {
 export interface AuthStatus {
   needsSetup: boolean
 }
+
+export interface ApiTokenMeta {
+  id: string
+  name: string
+  /** The first characters of the token, to recognise it in a list. */
+  prefix: string
+  createdAt: string
+  expiresAt: string | null
+  lastUsedAt: string | null
+}

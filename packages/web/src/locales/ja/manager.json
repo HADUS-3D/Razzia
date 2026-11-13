@@ -151,5 +151,28 @@
     "hint": "Shown behind the game unless a quizz or question sets its own.",
     "stock": "Standard classroom background",
     "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "APIトークン",
+    "description": "トークンを使うと、AIアシスタントなどの外部ツールがあなたの権限でクイズを作成・編集できます。ユーザーや設定の管理はできません。",
+    "namePlaceholder": "名前（例: AIアシスタント）",
+    "create": "トークンを作成",
+    "shownOnce": "このトークンは一度しか表示されません。今すぐコピーしてください:",
+    "copy": "トークンをコピー",
+    "copied": "トークンをコピーしました",
+    "empty": "APIトークンはまだありません。",
+    "lastUsed": "最終使用: {{date}}",
+    "neverUsed": "未使用",
+    "expires": "有効期限: {{date}}",
+    "revoke": "トークンを無効化",
+    "revokeConfirm": "「{{name}}」を無効化しますか？ 使用中のツールはすぐにアクセスできなくなります。",
+    "revoked": "トークンを無効化しました",
+    "expiry": {
+      "label": "有効期間",
+      "never": "無期限",
+      "days30": "30日",
+      "days90": "90日",
+      "year": "1年"
+    }
   }
 }

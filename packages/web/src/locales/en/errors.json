@@ -102,5 +102,11 @@
     "unavailable": "The question service is not reachable right now, try again later",
     "failed": "Could not generate the quizz",
     "invalidImport": "This is not a valid round, check that the AI returned the JSON in the same format"
+  },
+  "tokens": {
+    "notFound": "Token not found",
+    "nameEmpty": "Give the token a name",
+    "nameTooLong": "The name cannot exceed 64 characters",
+    "invalidExpiry": "Choose a validity between 1 and 365 days"
   }
 }

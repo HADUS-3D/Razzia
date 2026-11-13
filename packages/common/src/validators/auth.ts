@@ -1,5 +1,6 @@
 import z from "zod"
 import {
+  MAX_API_TOKEN_DAYS,
   MIN_PASSWORD_LENGTH,
   QUIZZ_VISIBILITIES,
   SESSION_ROLES,
@@ -90,4 +91,18 @@ export const quizzAccessValidator = z.object({
 
 export const sessionRequestValidator = z.object({
   token: z.string().optional(),
+})
+
+export const createApiTokenValidator = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "errors:tokens.nameEmpty")
+    .max(64, "errors:tokens.nameTooLong"),
+  expiresInDays: z
+    .number("errors:tokens.invalidExpiry")
+    .int("errors:tokens.invalidExpiry")
+    .min(1, "errors:tokens.invalidExpiry")
+    .max(MAX_API_TOKEN_DAYS, "errors:tokens.invalidExpiry")
+    .optional(),
 })

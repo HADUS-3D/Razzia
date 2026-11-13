@@ -13,6 +13,7 @@ import { Route as authLayoutRouteImport } from './pages/(auth)/layout'
 import { Route as authIndexRouteImport } from './pages/(auth)/index'
 import { Route as ManagerConfigRouteImport } from './pages/manager/config'
 import { Route as ManagerQuizzLayoutRouteImport } from './pages/manager/quizz/layout'
+import { Route as ManagerTokensRouteImport } from './pages/manager/tokens'
 import { Route as ManagerUsersRouteImport } from './pages/manager/users'
 import { Route as PartyGameIdRouteImport } from './pages/party/$gameId'
 import { Route as authManagerIndexRouteImport } from './pages/(auth)/manager/index'
@@ -37,6 +38,11 @@ const ManagerConfigRoute = ManagerConfigRouteImport.update({
 const ManagerQuizzLayoutRoute = ManagerQuizzLayoutRouteImport.update({
   id: '/manager/quizz',
   path: '/manager/quizz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagerTokensRoute = ManagerTokensRouteImport.update({
+  id: '/manager/tokens',
+  path: '/manager/tokens',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManagerUsersRoute = ManagerUsersRouteImport.update({
@@ -73,6 +79,7 @@ const PartyManagerGameIdRoute = PartyManagerGameIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
   '/manager/config': typeof ManagerConfigRoute
+  '/manager/tokens': typeof ManagerTokensRoute
   '/manager/users': typeof ManagerUsersRoute
   '/party/$gameId': typeof PartyGameIdRoute
   '/': typeof authIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/manager/config': typeof ManagerConfigRoute
+  '/manager/tokens': typeof ManagerTokensRoute
   '/manager/users': typeof ManagerUsersRoute
   '/party/$gameId': typeof PartyGameIdRoute
   '/': typeof authIndexRoute
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/(auth)': typeof authLayoutRouteWithChildren
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
   '/manager/config': typeof ManagerConfigRoute
+  '/manager/tokens': typeof ManagerTokensRoute
   '/manager/users': typeof ManagerUsersRoute
   '/party/$gameId': typeof PartyGameIdRoute
   '/(auth)/': typeof authIndexRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/manager/quizz'
     | '/manager/config'
+    | '/manager/tokens'
     | '/manager/users'
     | '/party/$gameId'
     | '/'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/manager/config'
+    | '/manager/tokens'
     | '/manager/users'
     | '/party/$gameId'
     | '/'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/(auth)'
     | '/manager/quizz'
     | '/manager/config'
+    | '/manager/tokens'
     | '/manager/users'
     | '/party/$gameId'
     | '/(auth)/'
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   authLayoutRoute: typeof authLayoutRouteWithChildren
   ManagerQuizzLayoutRoute: typeof ManagerQuizzLayoutRouteWithChildren
   ManagerConfigRoute: typeof ManagerConfigRoute
+  ManagerTokensRoute: typeof ManagerTokensRoute
   ManagerUsersRoute: typeof ManagerUsersRoute
   PartyGameIdRoute: typeof PartyGameIdRoute
   PartyManagerGameIdRoute: typeof PartyManagerGameIdRoute
@@ -177,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: '/manager/quizz'
       fullPath: '/manager/quizz'
       preLoaderRoute: typeof ManagerQuizzLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manager/tokens': {
+      id: '/manager/tokens'
+      path: '/manager/tokens'
+      fullPath: '/manager/tokens'
+      preLoaderRoute: typeof ManagerTokensRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manager/users': {
@@ -255,6 +275,7 @@ const rootRouteChildren: RootRouteChildren = {
   authLayoutRoute: authLayoutRouteWithChildren,
   ManagerQuizzLayoutRoute: ManagerQuizzLayoutRouteWithChildren,
   ManagerConfigRoute: ManagerConfigRoute,
+  ManagerTokensRoute: ManagerTokensRoute,
   ManagerUsersRoute: ManagerUsersRoute,
   PartyGameIdRoute: PartyGameIdRoute,
   PartyManagerGameIdRoute: PartyManagerGameIdRoute,

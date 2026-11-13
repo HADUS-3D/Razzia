@@ -147,6 +147,51 @@ Answers `200 { settings }` with the full settings after the change.
 
 The `autoAdvance` object is nested, so sending it replaces all three of its fields at once.
 
+## API tokens (for scripts and AI tools)
+
+Logging in with a username and password gives a 12-hour token, which is awkward for a script or an AI assistant. For those, create an **API token** in the manager (plug icon in the settings, or `/manager/tokens`). A token:
+
+- starts with `razzia_` and is shown **once** when you create it; only its SHA-256 hash is stored in `config/api-tokens.json`;
+- belongs to your account and has exactly your rights: it can create a quiz only if you may, and edit or delete only what you may edit or delete;
+- works on the **quiz routes only** (`/api/quizz/*` and `/api/generator/*`), as a normal bearer. It cannot reach accounts, tokens, results, media, games or settings;
+- can have an expiry (1 to 365 days) and can be revoked at any time; it stops working at once when the account is deleted or has to change its password.
+
+```
+Authorization: Bearer razzia_...
+```
+
+Example: create a quiz.
+
+```sh
+curl -X POST https://razzia.example.com/api/quizz \
+  -H "Authorization: Bearer razzia_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "gameMode": "quiz",
+    "subject": "Capitals",
+    "questions": [
+      {
+        "type": "single",
+        "question": "What is the capital of France?",
+        "answers": ["Paris", "Lyon", "Nice", "Lille"],
+        "solutions": [0],
+        "cooldown": 5,
+        "time": 20
+      }
+    ]
+  }'
+```
+
+Answers `201 { "id": "..." }`. The full format of a quiz is described in [Quiz](quiz.md); a `400` names the first failing rule, for example `errors:quizz.noSolution`.
+
+Tokens are managed with a normal manager session (not with a token):
+
+| Route                    | Success                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------ |
+| `GET /api/tokens`        | `200 { tokens: [{ id, name, prefix, createdAt, expiresAt, lastUsedAt }] }`, your own |
+| `POST /api/tokens`       | Body `{ name, expiresInDays? }`, `201` with the same fields plus the secret `token`  |
+| `DELETE /api/tokens/:id` | `204`; `404 errors:tokens.notFound` for a token that is not yours                    |
+
 ## Public routes
 
 | Route                   | Success                               | Notes                                       |

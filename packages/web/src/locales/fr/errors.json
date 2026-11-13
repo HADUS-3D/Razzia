@@ -102,5 +102,11 @@
     "unavailable": "Le service de questions est injoignable pour le moment, réessayez plus tard",
     "failed": "Impossible de générer le quiz",
     "invalidImport": "Ce n'est pas une manche valide, vérifiez que l'IA a renvoyé le JSON dans le même format"
+  },
+  "tokens": {
+    "notFound": "Jeton introuvable",
+    "nameEmpty": "Donne un nom au jeton",
+    "nameTooLong": "Le nom ne peut pas dépasser 64 caractères",
+    "invalidExpiry": "Choisis une validité entre 1 et 365 jours"
   }
 }

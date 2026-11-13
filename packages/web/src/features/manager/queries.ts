@@ -163,6 +163,24 @@ export const updateQuizzAccess = ({
   }
 }) => unwrap(api.quizz[":id"].access.$patch({ param: { id }, json }))
 
+export const tokenKeys = {
+  all: ["tokens"] as const,
+}
+
+export const apiTokensQuery = () =>
+  queryOptions({
+    queryKey: tokenKeys.all,
+    queryFn: () => unwrap(api.tokens.$get()),
+  })
+
+export const createApiToken = (json: {
+  name: string
+  expiresInDays?: number
+}) => unwrap(api.tokens.$post({ json }))
+
+export const revokeApiToken = (id: string) =>
+  unwrapEmpty(api.tokens[":id"].$delete({ param: { id } }))
+
 export const managerLogout = () => unwrap(api.auth.logout.$post())
 
 export const settingsKeys = {

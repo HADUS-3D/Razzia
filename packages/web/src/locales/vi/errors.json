@@ -102,5 +102,11 @@
     "unavailable": "Hiện không kết nối được dịch vụ câu hỏi, hãy thử lại sau",
     "failed": "Không thể tạo quiz",
     "invalidImport": "Đây không phải vòng câu hỏi hợp lệ, hãy kiểm tra AI đã trả JSON đúng định dạng chưa"
+  },
+  "tokens": {
+    "notFound": "Không tìm thấy token",
+    "nameEmpty": "Hãy đặt tên cho token",
+    "nameTooLong": "Tên không được vượt quá 64 ký tự",
+    "invalidExpiry": "Chọn thời hạn từ 1 đến 365 ngày"
   }
 }

@@ -102,5 +102,11 @@
     "unavailable": "Serwis pytań jest teraz niedostępny, spróbuj ponownie później",
     "failed": "Nie udało się wygenerować quizu",
     "invalidImport": "To nie jest poprawna runda, sprawdź czy AI zwróciło JSON w tym samym formacie"
+  },
+  "tokens": {
+    "notFound": "Nie znaleziono tokena",
+    "nameEmpty": "Nadaj tokenowi nazwę",
+    "nameTooLong": "Nazwa może mieć maksymalnie 64 znaki",
+    "invalidExpiry": "Wybierz okres ważności od 1 do 365 dni"
   }
 }
