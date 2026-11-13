@@ -395,6 +395,11 @@ class Game {
   advance() {
     this.round.advance()
   }
+
+  /** The host ends a running game: everyone goes to the final screen. */
+  endEarly() {
+    this.round.endEarly()
+  }
 }
 
 export default Game

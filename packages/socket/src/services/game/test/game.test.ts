@@ -263,6 +263,95 @@ describe("quiz flow", () => {
     })
   })
 
+  describe("ending the game early", () => {
+    const twoQuestions = () => [
+      createQuestion({ solutions: [0] }),
+      createQuestion({ solutions: [1] }),
+    ]
+
+    it("shows the standings of the scored questions and saves the result", async () => {
+      const questions = twoQuestions()
+      const { game, sockets, status, start, reachAnswers } = setup(
+        createQuizz(questions),
+      )
+
+      await start()
+      game.selectAnswer(sockets[0], [0])
+      await vi.advanceTimersByTimeAsync(5000)
+      game.selectAnswer(sockets[1], [1])
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      game.advance()
+      game.advance()
+      await reachAnswers(questions[1], false)
+
+      game.selectAnswer(sockets[1], [1])
+      game.endEarly()
+
+      expect(status(MANAGER)).toMatchObject({
+        name: STATUS.FINISHED,
+        data: {
+          top: [{ username: "Alice", points: 1000 }, { username: "Bob" }],
+        },
+      })
+      expect(status("bob")?.data).toMatchObject({ rank: 2 })
+      expect(getResultsMeta().at(0)).toMatchObject({ playerCount: 2 })
+
+      await vi.advanceTimersByTimeAsync(60 * TICK_MS)
+
+      expect(status(MANAGER)?.name).toBe(STATUS.FINISHED)
+      expect(game.started).toBe(false)
+    })
+
+    it("ends with every player at zero before a question was scored", async () => {
+      const { game, status, start } = setup(createQuizz(twoQuestions()))
+
+      await start()
+      game.endEarly()
+
+      expect(status(MANAGER)).toMatchObject({
+        name: STATUS.FINISHED,
+        data: { top: [{ points: 0 }, { points: 0 }] },
+      })
+      expect(status("alice")?.name).toBe(STATUS.FINISHED)
+      expect(getResultsMeta()).toHaveLength(0)
+
+      await vi.advanceTimersByTimeAsync(60 * TICK_MS)
+
+      expect(status(MANAGER)?.name).toBe(STATUS.FINISHED)
+    })
+
+    it("can end while the intro is still playing", async () => {
+      const { game, manager, status } = setup(createQuizz(twoQuestions()))
+
+      void game.start(manager)
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      game.endEarly()
+      await vi.advanceTimersByTimeAsync(60 * TICK_MS)
+
+      expect(status(MANAGER)?.name).toBe(STATUS.FINISHED)
+    })
+
+    it("gives players a summary in a survey", async () => {
+      const { game, status, start } = setup(
+        createQuizz(twoQuestions(), QUIZZ_MODES.SURVEY),
+      )
+
+      await start()
+      game.endEarly()
+
+      expect(status(MANAGER)?.name).toBe(STATUS.SUMMARY)
+      expect(status("alice")?.name).toBe(STATUS.SUMMARY)
+    })
+
+    it("does nothing in the lobby or after the game ended", () => {
+      const { game, status } = setup(createQuizz(twoQuestions()))
+
+      game.endEarly()
+
+      expect(status(MANAGER)?.name).not.toBe(STATUS.FINISHED)
+    })
+  })
+
   it("lets the manager skip the remaining answer time", async () => {
     const { game, status, start } = setup(createQuizz([createQuestion()]))
 

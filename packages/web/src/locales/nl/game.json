@@ -66,5 +66,12 @@
   "showQrCode": "QR-code tonen",
   "streak": "Reeks goede antwoorden",
   "pinDigit": "PIN-cijfer {{position}}",
-  "source": "Vragen van <odb>Open Trivia Database</odb> (<cc>CC BY-SA 4.0</cc>)"
+  "source": "Vragen van <odb>Open Trivia Database</odb> (<cc>CC BY-SA 4.0</cc>)",
+  "menu": {
+    "title": "Menu",
+    "endQuizz": "Quiz beëindigen",
+    "endTitle": "De quiz nu beëindigen?",
+    "endDescription": "De resterende vragen worden overgeslagen. Iedereen gaat naar het eindscherm met de scores tot nu toe.",
+    "endConfirm": "Quiz beëindigen"
+  }
 }

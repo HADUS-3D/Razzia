@@ -157,6 +157,29 @@ describe("game socket handlers", () => {
     expect(game.locked).toBe(false)
   })
 
+  it("lets only the manager end a started game", async () => {
+    const { game, manager } = await createGame()
+    const player = await joinGame(game, "alice", "Alice")
+    const started = waitFor(player, EVENTS.GAME.STATUS)
+
+    manager.emit(EVENTS.MANAGER.START_GAME, { gameId: game.gameId })
+    await started
+
+    const error = waitFor(player, EVENTS.GAME.ERROR_MESSAGE)
+
+    player.emit(EVENTS.MANAGER.END_GAME, { gameId: game.gameId })
+
+    expect(await error).toBe("errors:auth.unauthorized")
+    expect(game.started).toBe(true)
+
+    const finished = waitFor(player, EVENTS.GAME.STATUS)
+
+    manager.emit(EVENTS.MANAGER.END_GAME, { gameId: game.gameId })
+
+    expect(await finished).toMatchObject({ name: "FINISHED" })
+    expect(game.started).toBe(false)
+  })
+
   it("lets the manager kick a player", async () => {
     const { game, manager } = await createGame()
     const player = await joinGame(game, "alice", "Alice")
