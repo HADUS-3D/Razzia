@@ -107,6 +107,10 @@
     "notFound": "Không tìm thấy token",
     "nameEmpty": "Hãy đặt tên cho token",
     "nameTooLong": "Tên không được vượt quá 64 ký tự",
-    "invalidExpiry": "Chọn thời hạn từ 1 đến 365 ngày"
+    "invalidExpiry": "Chọn thời hạn từ 1 đến 365 ngày",
+    "missing": "Hãy gửi token API dưới dạng \"Authorization: Bearer razzia_...\"",
+    "wrongFormat": "Đây không phải token API: nó phải bắt đầu bằng razzia_",
+    "invalid": "Token API không tồn tại hoặc đã bị thu hồi, hãy tạo token mới",
+    "expired": "Token API này đã hết hạn, hãy tạo token mới"
   }
 }

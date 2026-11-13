@@ -107,6 +107,10 @@
     "notFound": "トークンが見つかりません",
     "nameEmpty": "トークンに名前を付けてください",
     "nameTooLong": "名前は64文字以内にしてください",
-    "invalidExpiry": "有効期間は1〜365日で選んでください"
+    "invalidExpiry": "有効期間は1〜365日で選んでください",
+    "missing": "APIトークンを「Authorization: Bearer razzia_...」として送信してください",
+    "wrongFormat": "これはAPIトークンではありません。razzia_ で始まる必要があります",
+    "invalid": "APIトークンが不明か無効化されています。新しく作成してください",
+    "expired": "このAPIトークンは期限切れです。新しく作成してください"
   }
 }

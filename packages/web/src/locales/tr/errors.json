@@ -107,6 +107,10 @@
     "notFound": "Jeton bulunamadı",
     "nameEmpty": "Jetona bir ad verin",
     "nameTooLong": "Ad en fazla 64 karakter olabilir",
-    "invalidExpiry": "1 ile 365 gün arasında bir geçerlilik seçin"
+    "invalidExpiry": "1 ile 365 gün arasında bir geçerlilik seçin",
+    "missing": "API jetonunuzu \"Authorization: Bearer razzia_...\" olarak gönderin",
+    "wrongFormat": "Bu bir API jetonu değil: razzia_ ile başlamalı",
+    "invalid": "Bilinmeyen veya iptal edilmiş API jetonu, yenisini oluşturun",
+    "expired": "Bu API jetonunun süresi doldu, yenisini oluşturun"
   }
 }
