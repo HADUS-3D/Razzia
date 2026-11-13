@@ -16,6 +16,7 @@ import {
 import BackgroundField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/BackgroundField"
 import CategoryField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CategoryField"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
+import RoundField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/RoundField"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 
 const QuestionEditorConfig = () => {
@@ -66,6 +67,8 @@ const QuestionEditorConfig = () => {
           </SelectContent>
         </Select>
       </ConfigField>
+
+      <RoundField />
 
       {gameMode === QUIZZ_MODES.QUIZ && <CategoryField />}
 

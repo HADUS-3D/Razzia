@@ -60,6 +60,8 @@ export interface RoundManagerOptions {
   getSettings: () => GameSettings
 }
 
+const ROUND_INTRO_SECONDS = 4
+
 interface RoundStep {
   name: string
   gameModes: QuizzMode[]
@@ -97,7 +99,9 @@ export class RoundManager {
       {
         name: "leaderboard",
         gameModes: [QUIZZ_MODES.QUIZ],
-        skip: () => this.isLastQuestion() || this.isSameCategoryNext(),
+        skip: () =>
+          this.isLastQuestion() ||
+          (!this.startsRoundNext() && this.isSameCategoryNext()),
         enter: () => {
           this.showLeaderboard()
         },
@@ -132,6 +136,10 @@ export class RoundManager {
 
   /** The ranking screens fall back to the quizz background. */
   backgroundFor(status: Status): string | undefined {
+    if (status === STATUS.SHOW_ROUND) {
+      return this.question.round?.background ?? this.opts.quizz.background
+    }
+
     const ranking: Status[] = [
       STATUS.SHOW_LEADERBOARD,
       STATUS.FINISHED,
@@ -165,6 +173,28 @@ export class RoundManager {
     const next = this.opts.quizz.questions[this.currentQuestion + 1]
 
     return Boolean(category) && next?.category?.trim() === category
+  }
+
+  private startsRoundNext(): boolean {
+    return Boolean(this.opts.quizz.questions[this.currentQuestion + 1]?.round)
+  }
+
+  /** The round the current question belongs to, with its position in the quizz. */
+  private roundInfo(): { name: string; number: number; total: number } | null {
+    const { questions } = this.opts.quizz
+    const total = questions.filter((question) => question.round).length
+    const upToNow = questions
+      .slice(0, this.currentQuestion + 1)
+      .filter((question) => question.round)
+
+    const name = upToNow.at(-1)?.round?.name
+
+    return name ? { name, number: upToNow.length, total } : null
+  }
+
+  /** The name of the round that the current question closes, if it does. */
+  private endedRound(): string | undefined {
+    return this.startsRoundNext() ? this.roundInfo()?.name : undefined
   }
 
   private isSurvey(): boolean {
@@ -240,19 +270,13 @@ export class RoundManager {
 
     this.started = true
 
-    this.opts.broadcast(STATUS.SHOW_START, {
-      time: 3,
-      subject: this.opts.quizz.subject,
-    })
-
-    await sleep(3)
+    this.opts.broadcast(STATUS.SHOW_START, { time: 3 })
+    this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
+    await this.opts.cooldown.start(3)
 
     if (!this.started) {
       return
     }
-
-    this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
-    await this.opts.cooldown.start(3)
 
     void this.newQuestion()
   }
@@ -338,6 +362,20 @@ export class RoundManager {
       current: this.currentQuestion + 1,
       total: this.opts.quizz.questions.length,
     })
+
+    if (this.question.round) {
+      this.opts.broadcast(STATUS.SHOW_ROUND, {
+        name: this.question.round.name,
+        number: this.roundInfo()?.number ?? 1,
+        total: this.roundInfo()?.total ?? 1,
+      })
+
+      await sleep(ROUND_INTRO_SECONDS)
+
+      if (!this.started) {
+        return
+      }
+    }
 
     this.opts.broadcast(STATUS.SHOW_PREPARED, {
       totalAnswers: this.question.answers.length,
@@ -483,10 +521,12 @@ export class RoundManager {
 
   private showLeaderboard(): void {
     const oldLeaderboard = this.tempOldLeaderboard ?? this.leaderboard
+    const round = this.endedRound()
 
     this.opts.send(this.opts.getManagerId(), STATUS.SHOW_LEADERBOARD, {
-      oldLeaderboard: oldLeaderboard.slice(0, 5),
-      leaderboard: this.leaderboard.slice(0, 5),
+      oldLeaderboard: round ? oldLeaderboard : oldLeaderboard.slice(0, 5),
+      leaderboard: round ? this.leaderboard : this.leaderboard.slice(0, 5),
+      ...(round ? { round: { name: round } } : {}),
     })
 
     this.tempOldLeaderboard = null

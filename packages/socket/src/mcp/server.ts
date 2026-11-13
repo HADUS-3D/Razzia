@@ -33,7 +33,8 @@ const text = (value: unknown, isError = false): ToolResult => ({
 const QUIZ_GUIDE = `A quiz is a JSON object: { gameMode, subject, questions[] }.
 - gameMode: "quiz" (every question needs "solutions") or "survey" (no right answers).
 - Each question: type ("single" = exactly one correct answer, "multi" = one or more, "estimation" = a number), question (text), answers (2-4 strings, empty for estimation), solutions (array of zero-based indexes into answers; for estimation the correct number), cooldown (3-15 seconds shown before the question), time (seconds to answer, -1 for no limit).
-- Optional per question: category (round name), note (explanation shown after the answer), media { type: "image"|"video"|"audio", url }, maxPoints, penalty, options.
+- Rounds: set "round": { "name": "...", "background"?: url } on the first question of a round. A round starts with a title slide showing its name and, once it is over, a full leaderboard with each player's longest streak of right answers. Quizzes without any "round" simply play as one long quiz.
+- Optional per question: category (the leaderboard is skipped between consecutive questions with the same category), note (explanation shown after the answer), media { type: "image"|"video"|"audio", url }, maxPoints, penalty, options.
 - Keep answers short and make exactly the intended answers correct. Do not number the answers.
 - The JSON Schema below is the authoritative definition; create_quiz returns the first failing rule when a quiz is invalid.`
 

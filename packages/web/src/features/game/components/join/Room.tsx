@@ -19,8 +19,8 @@ const Room = () => {
 
   const { mutate: check, isPending } = useMutation({
     mutationFn: checkInviteCode,
-    onSuccess: ({ generatedUsernames }, code) => {
-      updatePlayer({ inviteCode: code, generatedUsernames })
+    onSuccess: ({ generatedUsernames, subject }, code) => {
+      updatePlayer({ inviteCode: code, generatedUsernames, subject })
     },
     onError: (error) => {
       toast.error(

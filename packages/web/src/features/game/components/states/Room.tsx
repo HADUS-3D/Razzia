@@ -18,7 +18,7 @@ interface Props {
   data: ManagerStatusDataMap["SHOW_ROOM"]
 }
 
-const Room = ({ data: { text, inviteCode } }: Props) => {
+const Room = ({ data: { text, inviteCode, subject } }: Props) => {
   const { gameId, players, locked } = useManagerStore()
   const { socket } = useSocket()
   const webUrl = window.location.origin
@@ -66,6 +66,11 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
 
   return (
     <section className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-2">
+      {subject && (
+        <h1 className="mb-6 text-center text-4xl font-bold break-words text-white drop-shadow-lg md:text-5xl">
+          {subject}
+        </h1>
+      )}
       <div className="mb-10 flex flex-col-reverse items-center gap-3 md:flex-row md:items-stretch">
         <div className="flex flex-col gap-3 md:flex-row">
           <div className="flex flex-col items-center justify-center rounded-xl bg-white px-6 py-4 md:flex-row">

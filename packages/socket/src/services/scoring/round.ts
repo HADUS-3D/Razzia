@@ -40,6 +40,7 @@ export const scoreQuestion = (
 
     player.points = Math.max(0, player.points + points - penalty)
     player.streak = isCorrect ? player.streak + 1 : 0
+    player.bestStreak = Math.max(player.bestStreak, player.streak)
 
     return {
       ...player,

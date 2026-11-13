@@ -65,6 +65,33 @@ describe("quizzValidator", () => {
     expect(issues(data)).toEqual([])
   })
 
+  it("accepts rounds on questions, with or without a background", () => {
+    const data = quizz([
+      choiceQuestion({
+        round: { name: "Round 1", background: "/media/a.png" },
+      }),
+      choiceQuestion(),
+      choiceQuestion({ round: { name: "Round 2" } }),
+    ])
+
+    expect(issues(data)).toEqual([])
+  })
+
+  it("keeps working for quizzes without rounds", () => {
+    expect(issues(quizz([choiceQuestion(), choiceQuestion()]))).toEqual([])
+  })
+
+  it("rejects a round without a name or with a bad background", () => {
+    expect(
+      issues(quizz([choiceQuestion({ round: { name: "  " } })])),
+    ).not.toEqual([])
+    expect(
+      issues(
+        quizz([choiceQuestion({ round: { name: "R", background: "nope" } })]),
+      ),
+    ).not.toEqual([])
+  })
+
   it("requires at least one question", () => {
     expect(issues(quizz([]))).toContain("errors:quizz.noQuestions")
   })

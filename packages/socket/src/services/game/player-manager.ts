@@ -56,6 +56,7 @@ export class PlayerManager {
       username,
       points: 0,
       streak: 0,
+      bestStreak: 0,
     }
 
     this.players.push(player)

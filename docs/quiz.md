@@ -52,7 +52,8 @@ Quiz Options:
 - `questions`: Array of question objects containing:
   - `type`: `"single"` (exactly one answer), `"multi"` (one or more) or `"estimation"` (a number, see [Estimation questions](#estimation-questions)). Defaults to `"single"` when omitted
   - `question`: The question text
-  - `category`: Optional round name, see [Categories](#categories)
+  - `category`: Optional category, see [Categories](#categories)
+  - `round`: Optional `{ "name": string, "background"?: url }` that starts a new round with this question, see [Rounds](#rounds)
   - `note`: Optional explanation shown on the main screen when the answer is revealed, e.g. `"Red, green and blue are the primary colors of light"`
   - `answers`: Array of possible answers (2-4 options)
   - `media`: Optional media object displayed with the question:
@@ -94,9 +95,27 @@ An `"estimation"` question asks for a number instead of offering answers to pick
 - `options.step`: Precision of the slider (must be greater than 0)
 - `options.margin`: How far from the expected value an answer still counts as correct. An exact answer earns `maxPoints`, an answer at the edge of the margin earns half of it, and anything further away earns nothing (and the `penalty`, if any). A margin of `0` only accepts the exact value
 
+## Rounds
+
+Put `round` on the first question of each round to play the quiz in rounds:
+
+```json
+{ "question": "What is Canada's capital?", "round": { "name": "Geography", "background": "/media/map.png" }, ... },
+{ "question": "What is the longest river?", ... },
+{ "question": "Who sang Thriller?", "round": { "name": "Music" }, ... }
+```
+
+- A round runs from the question that carries `round` up to the next question that carries one
+- The round opens with a title slide with its name (and the round number), on its own `background` (a `/media/...` path or an `http(s)://` URL). Without one it falls back to the quiz background, then to the app background
+- When a round is over, the host sees the **full** leaderboard (not just the top 5) with an animated score movement, and a flame with each player's **longest streak of right answers so far in the whole quiz**
+- The last round has no leaderboard of its own: the quiz goes straight to the podium
+- Questions are not required to belong to a round. A quiz without any `round` plays as one long quiz, as before, and there is no title slide: the quiz name is shown in the lobby and on the screen where players enter their name
+- Rounds work together with [categories](#categories): the leaderboard is still shown or skipped by category inside a round, and always shown at the end of a round
+- In `"survey"` mode a round only shows its title slide; there is no leaderboard
+
 ## Categories
 
-By default the leaderboard is shown after every question. To play in rounds instead, give consecutive questions the same `category`: the leaderboard is then skipped inside the round and only shown when the category changes, with the score movement of the whole round.
+By default the leaderboard is shown after every question. To skip the leaderboard between a few questions, give consecutive questions the same `category`: the leaderboard is then skipped inside the round and only shown when the category changes, with the score movement of the whole round.
 
 ```json
 { "question": "What is Canada's capital?", "category": "Geography", ... },

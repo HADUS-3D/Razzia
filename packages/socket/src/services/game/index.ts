@@ -30,6 +30,7 @@ class Game {
   readonly gameId: string
   readonly inviteCode: string
   readonly gameMode: QuizzMode
+  readonly subject: string
 
   private _settings: GameSettings = createDefaultGameSettings()
   private _locked = false
@@ -65,6 +66,7 @@ class Game {
     this.gameId = uuid()
     this.inviteCode = createInviteCode()
     this.gameMode = quizz.gameMode
+    this.subject = quizz.subject
     this._manager = {
       id: "",
       clientId: managerClientId,
@@ -262,6 +264,7 @@ class Game {
         data: {
           text: "game:waitingForPlayers",
           inviteCode: this.inviteCode,
+          subject: this.subject,
         },
       }
     })()

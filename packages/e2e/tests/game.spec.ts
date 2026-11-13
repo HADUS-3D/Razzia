@@ -1,4 +1,3 @@
-import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
 import { closePage, expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
@@ -101,7 +100,6 @@ test("brings a player back into the game after a reload", async ({
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(player.getByText(BASIC_QUIZZ)).toBeVisible()
 
   await player.reload()
 
@@ -148,7 +146,6 @@ test("lets a player rejoin from the home page after closing the tab", async ({
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(player.getByText(BASIC_QUIZZ)).toBeVisible()
   await closePage(player)
 
   const home = await context.newPage()

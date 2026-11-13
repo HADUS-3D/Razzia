@@ -32,6 +32,7 @@ const ConfigSelectQuizz = () => {
         status: createStatus(STATUS.SHOW_ROOM, {
           text: "game:waitingForPlayers",
           inviteCode,
+          subject: data?.quizz.find((quizz) => quizz.id === selected)?.subject,
         }),
       })
       navigate({ to: "/party/manager/$gameId", params: { gameId } })

@@ -73,5 +73,13 @@
     "endTitle": "De quiz nu beëindigen?",
     "endDescription": "De resterende vragen worden overgeslagen. Iedereen gaat naar het eindscherm met de scores tot nu toe.",
     "endConfirm": "Quiz beëindigen"
+  },
+  "round": {
+    "title": "Ronde {{number}}",
+    "of": "van {{total}}",
+    "over": "{{name}} zit erop",
+    "bestStreak": "Langste reeks",
+    "bestStreakCount_one": "{{count}} op rij",
+    "bestStreakCount_other": "{{count}} op rij"
   }
 }

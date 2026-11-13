@@ -75,5 +75,13 @@
     "endTitle": "End the quiz now?",
     "endDescription": "The remaining questions are skipped. Everyone goes to the final screen with the scores so far.",
     "endConfirm": "End quiz"
+  },
+  "round": {
+    "title": "Round {{number}}",
+    "of": "of {{total}}",
+    "over": "{{name}} is over",
+    "bestStreak": "Longest streak",
+    "bestStreakCount_one": "{{count}} in a row",
+    "bestStreakCount_other": "{{count}} in a row"
   }
 }

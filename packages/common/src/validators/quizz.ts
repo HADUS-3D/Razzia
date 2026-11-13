@@ -44,10 +44,16 @@ export const mediaUploadValidator = z.object({
     .max(MAX_MEDIA_SIZE, "errors:media.tooLarge"),
 })
 
+export const questionRoundValidator = z.object({
+  name: z.string().trim().min(1, "errors:quizz.roundNameEmpty"),
+  background: backgroundValidator.optional(),
+})
+
 const questionSchema = z.object({
   type: z.enum(QUESTION_TYPES),
   question: z.string().min(1, "errors:quizz.questionEmpty"),
   category: z.string().optional(),
+  round: questionRoundValidator.optional(),
   note: z.string().optional(),
   media: questionMediaValidator.optional(),
   background: backgroundValidator.optional(),

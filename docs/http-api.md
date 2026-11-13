@@ -194,10 +194,10 @@ Tokens are managed with a normal manager session (not with a token):
 
 ## Public routes
 
-| Route                   | Success                               | Notes                                       |
-| ----------------------- | ------------------------------------- | ------------------------------------------- |
-| `GET /api/health`       | `200 { status: "ok" }`                | Liveness probe                              |
-| `POST /api/games/check` | `200 { generatedUsernames: boolean }` | Checks a 6-digit invite code before joining |
+| Route                   | Success                                                | Notes                                       |
+| ----------------------- | ------------------------------------------------------ | ------------------------------------------- |
+| `GET /api/health`       | `200 { status: "ok" }`                                 | Liveness probe                              |
+| `POST /api/games/check` | `200 { generatedUsernames: boolean, subject: string }` | Checks a 6-digit invite code before joining |
 
 Body `{ "inviteCode": string }`. It is a `POST` rather than a `GET` on purpose: the invite code is a room key, and a body keeps it out of access logs, browser history and `Referer` headers — and out of proxy caches, which matters because the answer changes as games start and end.
 

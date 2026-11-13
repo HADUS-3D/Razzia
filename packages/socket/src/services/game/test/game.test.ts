@@ -22,7 +22,7 @@ import {
   createQuizz,
 } from "@razzia/socket/test/fixtures"
 
-const FIRST_QUESTION_DELAY_MS = 8000
+const FIRST_QUESTION_DELAY_MS = 5000
 const NEXT_QUESTION_DELAY_MS = 2000
 const TICK_MS = 1000
 
@@ -480,6 +480,183 @@ describe("quiz flow", () => {
         oldLeaderboard: [{ points: 0 }, { points: 0 }],
         leaderboard: [{ points: 1000 }, { points: 1000 }],
       },
+    })
+  })
+
+  describe("rounds", () => {
+    const ROUND_INTRO_MS = 4000
+
+    it("opens a round with its name on its own background", async () => {
+      const questions = [
+        createQuestion({ round: { name: "Warm-up", background: "/r.png" } }),
+      ]
+      const quizz = { ...createQuizz(questions), background: "/quizz.png" }
+      const { game, manager, status, lastEvent } = setup(quizz)
+
+      void game.start(manager)
+      await vi.advanceTimersByTimeAsync(3000)
+
+      expect(status(game.gameId)).toMatchObject({
+        name: STATUS.SHOW_ROUND,
+        data: { name: "Warm-up", number: 1, total: 1 },
+      })
+      expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+        background: "/r.png",
+      })
+
+      await vi.advanceTimersByTimeAsync(ROUND_INTRO_MS)
+
+      expect(status(game.gameId)?.name).toBe(STATUS.SHOW_PREPARED)
+    })
+
+    it("falls back to the quizz background for the round slide", async () => {
+      const questions = [createQuestion({ round: { name: "One" } })]
+      const quizz = { ...createQuizz(questions), background: "/quizz.png" }
+      const { game, manager, lastEvent } = setup(quizz)
+
+      void game.start(manager)
+      await vi.advanceTimersByTimeAsync(3000)
+
+      expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+        name: STATUS.SHOW_ROUND,
+        background: "/quizz.png",
+      })
+    })
+
+    it("starts a quizz without rounds on the countdown, with no title slide", async () => {
+      const { game, manager, status } = setup(createQuizz([createQuestion()]))
+
+      void game.start(manager)
+
+      expect(status(game.gameId)).toMatchObject({
+        name: STATUS.SHOW_START,
+        data: { time: 3 },
+      })
+
+      await vi.advanceTimersByTimeAsync(3000)
+
+      expect(status(game.gameId)?.name).toBe(STATUS.SHOW_PREPARED)
+    })
+
+    it("shows the full leaderboard with best streaks when a round ends", async () => {
+      const questions = [
+        createQuestion({ round: { name: "Round 1" } }),
+        createQuestion(),
+        createQuestion({ round: { name: "Round 2" } }),
+      ]
+      const names = ["A", "B", "C", "D", "E", "F", "G"]
+      const { game, sockets, status, reachAnswers } = setup(
+        createQuizz(questions),
+        names,
+      )
+
+      void game.start(sockets[0])
+      await vi.advanceTimersByTimeAsync(
+        FIRST_QUESTION_DELAY_MS + ROUND_INTRO_MS + questions[0].cooldown * 1000,
+      )
+      expect(status(game.gameId)?.name).toBe(STATUS.SELECT_ANSWER)
+
+      game.selectAnswer(sockets[0], [0])
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      // The round is not over yet: the leaderboard is still shown after a question
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      game.advance()
+
+      await reachAnswers(questions[1], false)
+      game.selectAnswer(sockets[0], [0])
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      game.advance()
+
+      const leaderboard = status(MANAGER)
+
+      expect(leaderboard?.name).toBe(STATUS.SHOW_LEADERBOARD)
+      const { leaderboard: ranking, round } = (leaderboard?.data ?? {}) as {
+        leaderboard: Array<{
+          username: string
+          points: number
+          bestStreak: number
+        }>
+        round?: { name: string }
+      }
+
+      expect(round).toEqual({ name: "Round 1" })
+      expect(ranking).toHaveLength(names.length)
+      expect(ranking[0]).toMatchObject({
+        username: "A",
+        points: 2000,
+        bestStreak: 2,
+      })
+
+      game.advance()
+
+      expect(status(game.gameId)).toMatchObject({
+        name: STATUS.SHOW_ROUND,
+        data: { name: "Round 2", number: 2, total: 2 },
+      })
+    })
+
+    it("keeps the best streak when a wrong answer breaks the run", async () => {
+      const questions = [
+        createQuestion({ round: { name: "Round 1" } }),
+        createQuestion(),
+        createQuestion(),
+        createQuestion({ round: { name: "Round 2" } }),
+      ]
+      const { game, sockets, status, reachAnswers } = setup(
+        createQuizz(questions),
+        ["Alice"],
+      )
+
+      void game.start(sockets[0])
+      await vi.advanceTimersByTimeAsync(
+        FIRST_QUESTION_DELAY_MS + ROUND_INTRO_MS + questions[0].cooldown * 1000,
+      )
+
+      const answer = async (index: number, choice: number, more: boolean) => {
+        if (index > 0) {
+          await reachAnswers(questions[index], false)
+        }
+
+        game.selectAnswer(sockets[0], [choice])
+        game.advance()
+        await vi.advanceTimersByTimeAsync(TICK_MS)
+        game.advance()
+
+        if (more) {
+          await vi.advanceTimersByTimeAsync(TICK_MS)
+          game.advance()
+        }
+      }
+
+      await answer(0, 0, true)
+      await answer(1, 0, true)
+      await answer(2, 1, false)
+
+      expect(status(MANAGER)?.data).toMatchObject({
+        round: { name: "Round 1" },
+        leaderboard: [{ bestStreak: 2, streak: 0 }],
+      })
+    })
+
+    it("keeps the category behaviour inside a round", async () => {
+      const questions = [
+        createQuestion({ round: { name: "Round 1" }, category: "Geography" }),
+        createQuestion({ category: "Geography" }),
+      ]
+      const { game, sockets, status } = setup(createQuizz(questions))
+
+      void game.start(sockets[0])
+      await vi.advanceTimersByTimeAsync(
+        FIRST_QUESTION_DELAY_MS + ROUND_INTRO_MS + questions[0].cooldown * 1000,
+      )
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      game.advance()
+
+      expect(status(game.gameId)?.name).toBe(STATUS.SHOW_PREPARED)
     })
   })
 
