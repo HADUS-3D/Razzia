@@ -172,6 +172,38 @@ describe("quiz flow", () => {
     expect(lastEvent(MANAGER, EVENTS.MANAGER.REMOVE_PLAYER)?.data).toBe(bob.id)
   })
 
+  it("sends the question note to players with their result", async () => {
+    const { game, sockets, status, start } = setup(
+      createQuizz([createQuestion({ note: "Because of X." })]),
+    )
+    const [alice, bob] = sockets
+
+    await start()
+    game.selectAnswer(alice, [0])
+    game.selectAnswer(bob, [1])
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    for (const player of ["alice", "bob"]) {
+      expect(status(player)).toMatchObject({
+        name: STATUS.SHOW_RESULT,
+        data: { note: "Because of X." },
+      })
+    }
+  })
+
+  it("leaves the note out of the result when the question has none", async () => {
+    const { game, sockets, status, start } = setup(
+      createQuizz([createQuestion()]),
+    )
+
+    await start()
+    game.selectAnswer(sockets[0], [0])
+    game.selectAnswer(sockets[1], [1])
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    expect(status("alice")?.data).not.toHaveProperty("note", expect.any(String))
+  })
+
   it("plays a full game and saves the result", async () => {
     const questions = [
       createQuestion({ solutions: [0] }),

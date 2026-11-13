@@ -51,6 +51,7 @@ export interface CommonStatusDataMap {
     myPoints: number
     rank: number
     aheadOfMe: string | null
+    note?: string
   }
   WAIT: { text: string }
   FINISHED: {
