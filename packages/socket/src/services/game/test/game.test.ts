@@ -509,6 +509,38 @@ describe("quiz flow", () => {
       expect(status(game.gameId)?.name).toBe(STATUS.SHOW_PREPARED)
     })
 
+    it("keeps the first question's background out of sight before the round slide", async () => {
+      const questions = [
+        createQuestion({
+          background: "/q1.png",
+          round: { name: "Warm-up", background: "/r.png" },
+        }),
+      ]
+      const quizz = { ...createQuizz(questions), background: "/quizz.png" }
+      const { game, manager, lastEvent } = setup(quizz)
+
+      void game.start(manager)
+
+      expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+        name: STATUS.SHOW_START,
+        background: "/r.png",
+      })
+
+      await vi.advanceTimersByTimeAsync(3000)
+
+      expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+        name: STATUS.SHOW_ROUND,
+        background: "/r.png",
+      })
+
+      await vi.advanceTimersByTimeAsync(ROUND_INTRO_MS)
+      await vi.advanceTimersByTimeAsync(2000)
+
+      expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+        background: "/q1.png",
+      })
+    })
+
     it("falls back to the quizz background for the round slide", async () => {
       const questions = [createQuestion({ round: { name: "One" } })]
       const quizz = { ...createQuizz(questions), background: "/quizz.png" }
