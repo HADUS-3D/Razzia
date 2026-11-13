@@ -6,6 +6,7 @@ import type {
   GameUpdateQuestion,
   Player,
   Question,
+  QuestionMedia,
   QuestionResult,
   Quizz,
   QuizzMode,
@@ -115,6 +116,40 @@ export class RoundManager {
 
   private get question(): Question {
     return this.opts.quizz.questions[this.currentQuestion]
+  }
+
+  /**
+   * Background for the current moment: the question's own, else the quizz's.
+   * Before the game starts only the quizz background applies.
+   */
+  get background(): string | undefined {
+    if (!this.started) {
+      return this.opts.quizz.background
+    }
+
+    return this.question.background ?? this.opts.quizz.background
+  }
+
+  /** The ranking screens fall back to the quizz background. */
+  backgroundFor(status: Status): string | undefined {
+    const ranking: Status[] = [
+      STATUS.SHOW_LEADERBOARD,
+      STATUS.FINISHED,
+      STATUS.SUMMARY,
+    ]
+
+    return ranking.includes(status)
+      ? this.opts.quizz.background
+      : this.background
+  }
+
+  /** An image that already serves as the background needs no small copy. */
+  private get questionImage(): QuestionMedia | undefined {
+    const { media, background } = this.question
+
+    return media?.type === MEDIA_TYPES.IMAGE && media.url === background
+      ? undefined
+      : media
   }
 
   private isAskingQuestion(): boolean {
@@ -292,13 +327,10 @@ export class RoundManager {
       return
     }
 
-    const imageMedia = (() => {
-      if (this.question.media?.type !== MEDIA_TYPES.IMAGE) {
-        return undefined
-      }
-
-      return this.question.media
-    })()
+    const imageMedia =
+      this.questionImage?.type === MEDIA_TYPES.IMAGE
+        ? this.questionImage
+        : undefined
 
     this.opts.broadcast(STATUS.SHOW_QUESTION, {
       question: this.question.question,
@@ -318,7 +350,7 @@ export class RoundManager {
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
       question: this.question.question,
       answers: this.question.answers,
-      media: this.question.media,
+      media: this.questionImage,
       time: this.question.time,
       totalPlayer: this.opts.players.count(),
       questionType: this.question.type,

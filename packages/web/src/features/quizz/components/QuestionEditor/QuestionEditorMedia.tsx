@@ -34,7 +34,12 @@ const MEDIA_TYPE_BUTTONS = [
 ] as const
 
 const QuestionEditorMedia = () => {
-  const { updateQuestion, currentIndex, currentQuestion } = useQuizzEditor()
+  const {
+    updateQuestion,
+    currentIndex,
+    currentQuestion,
+    removeMediaReferences,
+  } = useQuizzEditor()
   const questionMedia = currentQuestion.media
   const [isLibraryOpen, setIsLibraryOpen] = useState(false)
   const [isUrlOpen, setIsUrlOpen] = useState(Boolean(questionMedia?.url))
@@ -177,7 +182,14 @@ const QuestionEditorMedia = () => {
         </Card>
       )}
 
-      <MediaLibrary open={isLibraryOpen} onOpenChange={setIsLibraryOpen} />
+      <MediaLibrary
+        open={isLibraryOpen}
+        onOpenChange={setIsLibraryOpen}
+        onSelect={({ type, url }) =>
+          updateQuestion(currentIndex, { media: { type, url } })
+        }
+        onDeleted={({ url }) => removeMediaReferences(url)}
+      />
 
       {questionMedia?.type && (
         <div className="absolute bottom-4">

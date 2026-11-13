@@ -11,6 +11,7 @@ import {
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
 import { useSocketConnection } from "@razzia/web/features/game/hooks/useSocketConnection"
+import { useBackgroundStore } from "@razzia/web/features/game/stores/background"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import {
@@ -25,6 +26,7 @@ const PlayerGamePage = () => {
   const { gameId: gameIdParam } = useParams({ from: "/party/$gameId" })
   const { status, updatePlayer, resetPlayer } = usePlayerStore()
   const { setQuestionStates } = useQuestionStore()
+  const setBackground = useBackgroundStore((state) => state.setBackground)
   const { t } = useTranslation()
   const syncedRef = useRef(false)
 
@@ -73,9 +75,11 @@ const PlayerGamePage = () => {
       gameId: reconnectGameId,
       gameMode,
       status: reconnectStatus,
+      background,
       player,
       currentQuestion,
     }) => {
+      setBackground(background)
       updatePlayer({
         gameId: reconnectGameId,
         gameMode,
@@ -86,7 +90,9 @@ const PlayerGamePage = () => {
     },
   )
 
-  useEvent(EVENTS.GAME.STATUS, ({ name, data }) => {
+  useEvent(EVENTS.GAME.STATUS, ({ name, data, background }) => {
+    setBackground(background)
+
     if (name in GAME_STATE_COMPONENTS) {
       updatePlayer({ status: createStatus(name, data) })
     }
@@ -98,6 +104,7 @@ const PlayerGamePage = () => {
     navigate({ to: "/" })
     resetPlayer()
     setQuestionStates(null)
+    setBackground(undefined)
     toast.error(t(message))
   })
 

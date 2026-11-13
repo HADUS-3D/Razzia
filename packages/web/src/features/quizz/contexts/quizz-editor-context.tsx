@@ -29,6 +29,7 @@ export interface QuizzFormValues {
   gameMode: QuizzMode
   subject: string
   source?: QuizzSource
+  background?: string
   questions: Question[]
 }
 
@@ -40,6 +41,7 @@ interface QuizzEditorContextType {
   currentIndex: number
   currentQuestion: Question
   currentQuestionId: string
+  quizzBackground: string | undefined
   isRemoving: boolean
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
@@ -47,6 +49,9 @@ interface QuizzEditorContextType {
   removeQuestion: (_index: number) => void
   reorderQuestions: (_from: number, _to: number) => void
   updateQuestion: (_index: number, _updates: Partial<Question>) => void
+  setQuizzBackground: (_background: string | undefined) => void
+  /** Drops a deleted library item from every question and the quizz. */
+  removeMediaReferences: (_url: string) => void
   questionPath: <K extends FieldPath<Question>>(
     _field: K,
   ) => `questions.${number}.${K}`
@@ -80,6 +85,7 @@ export const QuizzEditorProvider = ({
       gameMode: initialData?.gameMode ?? QUIZZ_MODES.QUIZ,
       subject: initialData?.subject ?? "Untitled Quizz",
       source: initialData?.source,
+      background: initialData?.background,
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
   })
@@ -93,6 +99,7 @@ export const QuizzEditorProvider = ({
   const [removingFrom, setRemovingFrom] = useState<Question[] | null>(null)
 
   const questions = useWatch({ control, name: "questions" })
+  const quizzBackground = useWatch({ control, name: "background" })
   const gameMode = useWatch({ control, name: "gameMode" })
   const safeIndex = clampIndex(currentIndex, questions.length)
   const currentQuestion = questions[safeIndex]
@@ -162,6 +169,26 @@ export const QuizzEditorProvider = ({
     )
   }
 
+  const setQuizzBackground = (background: string | undefined) => {
+    setValue("background", background, { shouldDirty: true })
+  }
+
+  const removeMediaReferences = (url: string) => {
+    getValues("questions").forEach((question, index) => {
+      if (question.media?.url === url) {
+        updateQuestion(index, { media: undefined })
+      }
+
+      if (question.background === url) {
+        updateQuestion(index, { background: undefined })
+      }
+    })
+
+    if (getValues("background") === url) {
+      setQuizzBackground(undefined)
+    }
+  }
+
   return (
     <FormProvider {...form}>
       <QuizzEditorContext.Provider
@@ -173,6 +200,7 @@ export const QuizzEditorProvider = ({
           currentIndex,
           currentQuestion,
           currentQuestionId: questionIds[safeIndex],
+          quizzBackground,
           isRemoving: removingFrom === questions,
           setCurrentIndex,
           addQuestion,
@@ -180,6 +208,8 @@ export const QuizzEditorProvider = ({
           removeQuestion,
           reorderQuestions,
           updateQuestion,
+          setQuizzBackground,
+          removeMediaReferences,
           questionPath,
         }}
       >

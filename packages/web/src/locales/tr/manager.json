@@ -145,5 +145,11 @@
     "importSubmit": "Soruları içe aktar",
     "addEnglish": "Bunun yerine İngilizce soruları ekle",
     "added": "{{count}} soru eklendi"
+  },
+  "background": {
+    "title": "Default background",
+    "hint": "Shown behind the game unless a quizz or question sets its own.",
+    "stock": "Standard classroom background",
+    "saved": "Background saved"
   }
 }

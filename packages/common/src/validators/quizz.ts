@@ -12,17 +12,30 @@ import { QUESTION_REFINEMENTS } from "@razzia/common/validators/questions"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
 import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
 
+const mediaUrlValidator = z
+  .string("errors:quizz.invalidMediaUrl")
+  .refine(
+    (url) => url.startsWith(MEDIA_URL_PREFIX) || z.url().safeParse(url).success,
+    "errors:quizz.invalidMediaUrl",
+  )
+
 export const questionMediaValidator = z.object({
   type: z
     .enum([MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO, MEDIA_TYPES.AUDIO])
     .optional(),
-  url: z
-    .string("errors:quizz.invalidMediaUrl")
-    .refine(
-      (url) =>
-        url.startsWith(MEDIA_URL_PREFIX) || z.url().safeParse(url).success,
-      "errors:quizz.invalidMediaUrl",
-    ),
+  url: mediaUrlValidator,
+})
+
+/** URL of an image shown behind the game, per question, quizz or app. */
+export const backgroundValidator = z
+  .string("errors:quizz.invalidMediaUrl")
+  .refine(
+    (url) => url.startsWith(MEDIA_URL_PREFIX) || /^https?:\/\//u.test(url),
+    "errors:quizz.invalidMediaUrl",
+  )
+
+export const appSettingsValidator = z.object({
+  background: backgroundValidator.optional(),
 })
 
 export const mediaUploadValidator = z.object({
@@ -37,6 +50,7 @@ const questionSchema = z.object({
   category: z.string().optional(),
   note: z.string().optional(),
   media: questionMediaValidator.optional(),
+  background: backgroundValidator.optional(),
   answers: z.array(z.string().min(1, "errors:quizz.answerEmpty")),
   solutions: z.array(z.number()).optional(),
   cooldown: z
@@ -67,6 +81,7 @@ export const quizzValidator = z
     gameMode: z.enum(QUIZZ_MODES),
     subject: z.string().min(1, "errors:quizz.subjectEmpty"),
     source: z.enum(QUIZZ_SOURCES).optional(),
+    background: backgroundValidator.optional(),
     questions: z.array(questionValidator).min(1, "errors:quizz.noQuestions"),
   })
   .superRefine((quizz, ctx) => {

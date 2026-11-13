@@ -145,5 +145,11 @@
     "importSubmit": "問題をインポート",
     "addEnglish": "代わりに英語の問題を追加",
     "added": "{{count}}問を追加しました"
+  },
+  "background": {
+    "title": "Default background",
+    "hint": "Shown behind the game unless a quizz or question sets its own.",
+    "stock": "Standard classroom background",
+    "saved": "Background saved"
   }
 }

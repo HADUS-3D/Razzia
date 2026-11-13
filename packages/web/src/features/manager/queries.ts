@@ -4,7 +4,7 @@ import type {
   UserPermissions,
   UserRole,
 } from "@razzia/common/types/auth"
-import type { GameSettings } from "@razzia/common/types/game"
+import type { AppSettings, GameSettings } from "@razzia/common/types/game"
 import type { GeneratorInput } from "@razzia/common/validators/generator"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import { api, unwrap, unwrapEmpty } from "@razzia/web/lib/api"
@@ -164,3 +164,17 @@ export const updateQuizzAccess = ({
 }) => unwrap(api.quizz[":id"].access.$patch({ param: { id }, json }))
 
 export const managerLogout = () => unwrap(api.auth.logout.$post())
+
+export const settingsKeys = {
+  all: ["settings"] as const,
+}
+
+export const settingsQuery = () =>
+  queryOptions({
+    queryKey: settingsKeys.all,
+    queryFn: () => unwrap(api.settings.$get()),
+    staleTime: 60_000,
+  })
+
+export const updateSettings = (json: AppSettings) =>
+  unwrap(api.settings.$put({ json }))

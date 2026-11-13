@@ -41,6 +41,7 @@ export interface ServerToClientEvents {
   [EVENTS.GAME.STATUS]: (_data: {
     name: Status
     data: StatusDataMap[Status]
+    background?: string
   }) => void
   [EVENTS.GAME.SUCCESS_JOIN]: (_data: {
     gameId: string
@@ -63,6 +64,7 @@ export interface ServerToClientEvents {
     gameId: string
     gameMode: QuizzMode
     status: { name: Status; data: StatusDataMap[Status] }
+    background?: string
     player: { username: string; points: number }
     currentQuestion: GameUpdateQuestion | null
   }) => void
@@ -75,6 +77,7 @@ export interface ServerToClientEvents {
     settings: GameSettings
     locked: boolean
     status: { name: Status; data: StatusDataMap[Status] }
+    background?: string
     players: Player[]
     currentQuestion: GameUpdateQuestion | null
   }) => void
