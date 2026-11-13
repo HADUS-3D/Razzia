@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next"
 import Button from "@razzia/web/components/Button"
 
 interface Props {
-  trigger: ReactNode
+  trigger?: ReactNode
+  open?: boolean
+  onOpenChange?: (_open: boolean) => void
   title: string
   description: string
   confirmLabel?: string
@@ -13,6 +15,8 @@ interface Props {
 
 const AlertDialog = ({
   trigger,
+  open,
+  onOpenChange,
   title,
   description,
   confirmLabel,
@@ -21,8 +25,10 @@ const AlertDialog = ({
   const { t } = useTranslation()
 
   return (
-    <RadixAlertDialog.Root>
-      <RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+    <RadixAlertDialog.Root open={open} onOpenChange={onOpenChange}>
+      {trigger && (
+        <RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+      )}
 
       <RadixAlertDialog.Portal>
         <RadixAlertDialog.Overlay className="fixed inset-0 z-50 bg-black/40 data-[state=open]:animate-fade" />

@@ -245,9 +245,11 @@ Full type definitions live in [packages/common/src/types/game/socket.ts](../pack
 
 ## Manager events
 
-Out of scope for a buzzer client, but worth knowing they are guarded: `manager:startGame`, `manager:advance`, `manager:kickPlayer` and `manager:setLock` are **refused unless your token's `clientId` is the one that created that game** through `POST /api/games` — the refusal is `game:errorMessage errors:auth.unauthorized`. Creating a game, quiz CRUD, game settings and results are HTTP-only; see [HTTP API](http-api.md).
+Out of scope for a buzzer client, but worth knowing they are guarded: `manager:startGame`, `manager:advance`, `manager:endGame`, `manager:kickPlayer` and `manager:setLock` are **refused unless your token's `clientId` is the one that created that game** through `POST /api/games` — the refusal is `game:errorMessage errors:auth.unauthorized`. Creating a game, quiz CRUD, game settings and results are HTTP-only; see [HTTP API](http-api.md).
 
 `manager:advance { gameId }` is the single "move the game forward" action: it cuts the answer window short while a question is open, and otherwise steps to whatever comes next — the answer reveal, the leaderboard, the following question or the end screen. The manager client does not decide that order; the server holds it, which is how survey mode can skip the leaderboard without any client change.
+
+`manager:endGame { gameId }` ends a running game early: the question being asked is dropped, the result of the questions already scored is saved (nothing is saved if none was scored), and everyone gets the final status (`FINISHED`, or `SUMMARY` in a survey). It does nothing in the lobby or once the game is over.
 
 While the host has auto-advance enabled, the server ticks `manager:autoAdvance { seconds, total } | null` to the manager only, so the UI can show the countdown. `null` means the countdown was cleared.
 

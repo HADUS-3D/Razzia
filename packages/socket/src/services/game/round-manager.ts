@@ -247,6 +247,10 @@ export class RoundManager {
 
     await sleep(3)
 
+    if (!this.started) {
+      return
+    }
+
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
     await this.opts.cooldown.start(3)
 
@@ -268,6 +272,26 @@ export class RoundManager {
     }
 
     this.runStep(this.currentStep + 1)
+  }
+
+  /**
+   * Ends a running game before the last question. The question that is being
+   * asked is dropped; the standings of the questions already scored count.
+   */
+  endEarly(): void {
+    if (!this.started) {
+      return
+    }
+
+    this.acceptingAnswers = false
+    this.playersAnswers = []
+    this.opts.cooldown.abort()
+
+    if (!this.isSurvey() && this.leaderboard.length === 0) {
+      this.leaderboard = this.opts.players.getAll()
+    }
+
+    this.finish()
   }
 
   private runStep(index: number): void {
@@ -492,18 +516,20 @@ export class RoundManager {
       ? this.opts.players.getAll()
       : this.leaderboard
 
-    this.opts.onGameFinished({
-      id: `${Date.now()}-${nanoid(8)}`,
-      gameMode: this.opts.quizz.gameMode,
-      subject: this.opts.quizz.subject,
-      date: new Date().toISOString(),
-      players: finalPlayers.map((player, index) => ({
-        username: player.username,
-        points: player.points,
-        rank: index + 1,
-      })),
-      questions: this.questionsHistory,
-    })
+    if (this.questionsHistory.length > 0) {
+      this.opts.onGameFinished({
+        id: `${Date.now()}-${nanoid(8)}`,
+        gameMode: this.opts.quizz.gameMode,
+        subject: this.opts.quizz.subject,
+        date: new Date().toISOString(),
+        players: finalPlayers.map((player, index) => ({
+          username: player.username,
+          points: player.points,
+          rank: index + 1,
+        })),
+        questions: this.questionsHistory,
+      })
+    }
 
     if (this.isSurvey()) {
       this.finishSurvey()

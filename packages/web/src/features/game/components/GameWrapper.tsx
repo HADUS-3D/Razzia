@@ -14,6 +14,7 @@ import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
+import GameMenu from "@razzia/web/features/game/components/GameMenu"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import {
@@ -26,6 +27,12 @@ import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
+
+const NOT_RUNNING: Status[] = [
+  STATUS.SHOW_ROOM,
+  STATUS.FINISHED,
+  STATUS.SUMMARY,
+]
 
 type Props = PropsWithChildren & {
   statusName: Status | undefined
@@ -177,6 +184,10 @@ const GameWrapper = ({
                 </Tooltip>
 
                 {statusName === STATUS.SHOW_ROOM && <GameSettingsModal />}
+
+                {statusName && !NOT_RUNNING.includes(statusName) && (
+                  <GameMenu />
+                )}
 
                 <Tooltip
                   content={t(

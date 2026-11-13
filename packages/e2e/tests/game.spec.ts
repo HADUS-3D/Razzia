@@ -160,3 +160,52 @@ test("lets a player rejoin from the home page after closing the tab", async ({
   await answer(home, "Paris")
   await expect(home.getByText(t("game:correct"))).toBeVisible()
 })
+
+test("lets the host end the quiz early from the menu", async ({
+  page: manager,
+  newPage,
+}) => {
+  const pin = await createGame(manager)
+  const alice = await newPage()
+  const bob = await newPage()
+
+  await joinGame(alice, pin, "Alice")
+  await joinGame(bob, pin, "Bob")
+  await expect(manager.getByText("Bob")).toBeVisible()
+
+  await expect(
+    manager.getByRole("button", { name: t("game:menu.title") }),
+  ).toBeHidden()
+
+  await startGame(manager)
+  await answer(alice, "Paris")
+  await answer(bob, "Lyon")
+  await expect(alice.getByText(t("game:correct"))).toBeVisible()
+
+  await next(manager)
+  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+
+  await manager.getByRole("button", { name: t("game:menu.title") }).click()
+  await manager.getByRole("menuitem", { name: t("game:menu.endQuizz") }).click()
+
+  // Cancelling keeps the quiz running.
+  await manager.getByRole("button", { name: t("common:cancel") }).click()
+  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+
+  await manager.getByRole("button", { name: t("game:menu.title") }).click()
+  await manager.getByRole("menuitem", { name: t("game:menu.endQuizz") }).click()
+  await manager.getByRole("button", { name: t("game:menu.endConfirm") }).click()
+
+  await expect(
+    manager.getByRole("button", { name: t("common:exit") }),
+  ).toBeVisible()
+  await expect(
+    alice.getByText(t("game:rank", { count: 1, ordinal: true })),
+  ).toBeVisible()
+  await expect(
+    bob.getByText(t("game:rank", { count: 2, ordinal: true })),
+  ).toBeVisible()
+  await expect(
+    manager.getByRole("button", { name: t("game:menu.title") }),
+  ).toBeHidden()
+})

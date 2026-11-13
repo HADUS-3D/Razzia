@@ -16,6 +16,7 @@ export const clientEventValidators = {
   }),
   [EVENTS.MANAGER.START_GAME]: gameMessageValidator,
   [EVENTS.MANAGER.ADVANCE]: gameMessageValidator,
+  [EVENTS.MANAGER.END_GAME]: gameMessageValidator,
   [EVENTS.MANAGER.SET_LOCK]: gameMessageValidator.extend({
     locked: z.boolean(),
   }),
