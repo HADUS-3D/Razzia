@@ -88,10 +88,33 @@ Replace the address and the token. In a Unix shell you may split it over lines w
 - **Claude Desktop:** start a new chat and open the tools menu below the message box. `razzia` should be listed, with tools such as `create_quiz` and `generate_questions`. If not, see the logs in `%APPDATA%\Claude\logs` (the file `mcp-server-razzia.log`).
 - **Claude Code:** run `claude mcp list` and look for `razzia` as connected, then start `claude` and type `/mcp`.
 
+**Test the token on its own first.** This tells you whether the problem is the token or the AI tool. In PowerShell, with your own address and token:
+
+```powershell
+$h = @{ Authorization = "Bearer razzia_PASTE_YOUR_TOKEN_HERE"; Accept = "application/json, text/event-stream" }
+Invoke-RestMethod -Method Post -Uri "https://razzia.example.com/api/mcp" -Headers $h -ContentType "application/json" -Body '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+If the token is fine, the answer lists the tools. If not, PowerShell prints the HTTP status and the body names the problem (in PowerShell 7 the body is shown with the error; in Windows PowerShell 5 add `-ErrorVariable e` and read `$e`, or use `curl.exe` below). On macOS or Linux, or with `curl.exe` on Windows:
+
+```sh
+curl -i -X POST https://razzia.example.com/api/mcp -H "Authorization: Bearer razzia_PASTE_YOUR_TOKEN_HERE" -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+The MCP endpoint explains why it refuses a token:
+
+| Status | Body `error`                | Meaning                                                                                            |
+| ------ | --------------------------- | -------------------------------------------------------------------------------------------------- |
+| `401`  | `errors:tokens.missing`     | No `Authorization: Bearer ...` header arrived. A proxy may strip it, or the client did not send it |
+| `403`  | `errors:tokens.wrongFormat` | What follows `Bearer ` is not an API token: it must start with `razzia_`                           |
+| `403`  | `errors:tokens.invalid`     | The token is unknown or revoked, for example copied incompletely, or created on another server     |
+| `403`  | `errors:tokens.expired`     | The token has expired: create a new one                                                            |
+
 If it does not work:
 
 | Problem                                                                                                                                   | Likely cause                                                                                                                                                                                                                                                                                                          |
 | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Dynamic Client Registration rejected (HTTP 405)` or other OAuth errors in the log                                                        | The client got a `401`, concluded that Razzia wants OAuth and tried to register. Razzia has no OAuth: the real cause is that the token did not arrive. Run the test above, it shows the `errors:tokens.*` reason                                                                                                      |
 | `401` or "failed to connect"                                                                                                              | The token is wrong, expired or revoked: create a new one. The header must read `Bearer ` followed by the token                                                                                                                                                                                                        |
 | `Unexpected token '<', "<!doctype "... is not valid JSON` in the Claude Desktop log, right after "Discovering OAuth server configuration" | The server or proxy answers `/.well-known/...` with the web page instead of a JSON 404. Update Razzia to a version with the `/.well-known/` rule in `docker/nginx.conf` (rebuild the image). If you put your own proxy in front, let `/.well-known/` reach Razzia like `/api` (see [Reverse proxy](reverse-proxy.md)) |
 | `'npx' is not recognized` / `spawn npx ENOENT` in the Claude Desktop log                                                                  | Node.js is not installed, or Claude Desktop was started before it was. Install Node.js, restart your computer, and if it still fails put the full path in the config: `"command": "C:\\Program Files\\nodejs\\npx.cmd"`                                                                                               |

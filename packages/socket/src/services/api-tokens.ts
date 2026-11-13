@@ -109,26 +109,30 @@ export const revokeUserApiTokens = (userId: string): void => {
   }
 }
 
-/** The owner of a valid, unexpired token, read fresh like a session. */
-export const authenticateApiToken = (secret: string): PublicUser | null => {
+export type ApiTokenCheck =
+  | { status: "ok"; user: PublicUser }
+  | { status: "unknown" | "expired" }
+
+/** Checks a token and says why it is refused, so callers can explain it. */
+export const checkApiToken = (secret: string): ApiTokenCheck => {
   const hash = hashToken(secret)
   const tokens = readTokens()
   const stored = tokens.find((token) => token.hash === hash)
 
   if (!stored) {
-    return null
+    return { status: "unknown" }
   }
 
   const now = Date.now()
 
   if (stored.expiresAt && Date.parse(stored.expiresAt) <= now) {
-    return null
+    return { status: "expired" }
   }
 
   const user = getUserById(stored.userId)
 
   if (!user) {
-    return null
+    return { status: "unknown" }
   }
 
   const lastUsed = stored.lastUsedAt ? Date.parse(stored.lastUsedAt) : 0
@@ -144,5 +148,12 @@ export const authenticateApiToken = (secret: string): PublicUser | null => {
     )
   }
 
-  return user
+  return { status: "ok", user }
+}
+
+/** The owner of a valid, unexpired token, read fresh like a session. */
+export const authenticateApiToken = (secret: string): PublicUser | null => {
+  const result = checkApiToken(secret)
+
+  return result.status === "ok" ? result.user : null
 }

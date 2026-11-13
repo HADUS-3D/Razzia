@@ -33,12 +33,12 @@ vi.mock("@razzia/socket/services/opentdb", () => ({
 }))
 
 interface RpcResult {
+  error?: string | { message: string }
   result?: {
     isError?: boolean
     content?: Array<{ text: string }>
     tools?: Array<{ name: string }>
   }
-  error?: { message: string }
 }
 
 let nextId = 1
@@ -106,23 +106,42 @@ beforeEach(() => {
 })
 
 describe("mcp endpoint", () => {
-  it("needs an API token, not a manager session", async () => {
+  it("explains why a token is refused", async () => {
     const user = await createUser({
       username: "u",
       password: "correct-horse",
       role: USER_ROLES.ADMIN,
     })
     const session = (await mintToken("u", SESSION_ROLES.MANAGER, user.id)).token
+    const expired = createApiToken(user.id, { name: "old", expiresInDays: 1 })
 
-    expect((await rpc(undefined, "tools/list")).status).toBe(
-      StatusCodes.UNAUTHORIZED,
+    const none = await rpc(undefined, "tools/list")
+
+    expect(none.status).toBe(StatusCodes.UNAUTHORIZED)
+    expect(none.body).toEqual({ error: "errors:tokens.missing" })
+
+    const cases: Array<[string, string]> = [
+      [session, "errors:tokens.wrongFormat"],
+      ["razzia_unknown", "errors:tokens.invalid"],
+    ]
+
+    const results = await Promise.all(
+      cases.map(([token]) => rpc(token, "tools/list")),
     )
-    expect((await rpc(session, "tools/list")).status).toBe(
-      StatusCodes.UNAUTHORIZED,
-    )
-    expect((await rpc("razzia_unknown", "tools/list")).status).toBe(
-      StatusCodes.UNAUTHORIZED,
-    )
+
+    results.forEach((result, index) => {
+      expect(result.status).toBe(StatusCodes.FORBIDDEN)
+      expect(result.body).toEqual({ error: cases[index][1] })
+    })
+
+    vi.useFakeTimers()
+    vi.setSystemTime(Date.now() + 2 * 24 * 60 * 60 * 1000)
+
+    const late = await rpc(expired.token, "tools/list")
+
+    vi.useRealTimers()
+    expect(late.status).toBe(StatusCodes.FORBIDDEN)
+    expect(late.body).toEqual({ error: "errors:tokens.expired" })
   })
 
   it("answers OAuth discovery with a JSON 404, so clients skip OAuth", async () => {

@@ -107,6 +107,10 @@
     "notFound": "Token non trovato",
     "nameEmpty": "Dai un nome al token",
     "nameTooLong": "Il nome non può superare i 64 caratteri",
-    "invalidExpiry": "Scegli una validità tra 1 e 365 giorni"
+    "invalidExpiry": "Scegli una validità tra 1 e 365 giorni",
+    "missing": "Invia il tuo token API come \"Authorization: Bearer razzia_...\"",
+    "wrongFormat": "Questo non è un token API: deve iniziare con razzia_",
+    "invalid": "Token API sconosciuto o revocato, creane uno nuovo",
+    "expired": "Questo token API è scaduto, creane uno nuovo"
   }
 }

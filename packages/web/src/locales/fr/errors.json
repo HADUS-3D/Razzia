@@ -107,6 +107,10 @@
     "notFound": "Jeton introuvable",
     "nameEmpty": "Donne un nom au jeton",
     "nameTooLong": "Le nom ne peut pas dépasser 64 caractères",
-    "invalidExpiry": "Choisis une validité entre 1 et 365 jours"
+    "invalidExpiry": "Choisis une validité entre 1 et 365 jours",
+    "missing": "Envoie ton jeton d'API sous la forme « Authorization: Bearer razzia_... »",
+    "wrongFormat": "Ce n'est pas un jeton d'API : il doit commencer par razzia_",
+    "invalid": "Jeton d'API inconnu ou révoqué, crées-en un nouveau",
+    "expired": "Ce jeton d'API a expiré, crées-en un nouveau"
   }
 }
