@@ -113,6 +113,7 @@
     "imageIsBackground": "The question image is shown as the background instead of above the question.",
     "remove": "Remove background",
     "preview": "Background preview",
-    "imageOnly": "Pick an image to use as a background"
+    "imageOnly": "Pick an image to use as a background",
+    "pickFromLibrary": "Pick background from library"
   }
 }

@@ -284,7 +284,7 @@ test("attaches an uploaded image to a question", async ({ page }) => {
   await answerInput(page, 0).fill("A pixel")
   await answerInput(page, 1).fill("A cat")
 
-  await page.locator("input[type=file]").setInputFiles({
+  await page.locator("main input[type=file]").setInputFiles({
     name: "pixel.png",
     mimeType: "image/png",
     buffer: PNG,

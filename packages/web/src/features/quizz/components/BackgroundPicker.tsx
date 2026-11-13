@@ -98,6 +98,7 @@ const BackgroundPicker = ({
         <button
           type="button"
           onClick={() => setIsLibraryOpen(true)}
+          aria-label={t("quizz:background.pickFromLibrary")}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-accent px-2 py-1.5 text-sm font-semibold text-accent-foreground hover:brightness-[0.97]"
         >
           <Library className="size-4" />
