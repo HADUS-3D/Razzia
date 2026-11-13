@@ -145,5 +145,11 @@
     "importSubmit": "Nhập câu hỏi",
     "addEnglish": "Thay vào đó, thêm câu hỏi tiếng Anh",
     "added": "Đã thêm {{count}} câu hỏi"
+  },
+  "background": {
+    "title": "Default background",
+    "hint": "Shown behind the game unless a quizz or question sets its own.",
+    "stock": "Standard classroom background",
+    "saved": "Background saved"
   }
 }

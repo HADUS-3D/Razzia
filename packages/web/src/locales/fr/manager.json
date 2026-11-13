@@ -145,5 +145,11 @@
     "importSubmit": "Importer les questions",
     "addEnglish": "Ajouter plutôt les questions en anglais",
     "added": "{{count}} question(s) ajoutée(s)"
+  },
+  "background": {
+    "title": "Default background",
+    "hint": "Shown behind the game unless a quizz or question sets its own.",
+    "stock": "Standard classroom background",
+    "saved": "Background saved"
   }
 }

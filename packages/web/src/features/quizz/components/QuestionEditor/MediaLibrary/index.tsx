@@ -15,7 +15,6 @@ import MediaLibraryToolbar, {
   type MediaView,
 } from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar"
 import MediaRow from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaRow"
-import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { useUploadMedia } from "@razzia/web/features/quizz/hooks/useUploadMedia"
 import {
   deleteMedia,
@@ -27,16 +26,25 @@ import { ApiError } from "@razzia/web/lib/api"
 interface Props {
   open: boolean
   onOpenChange: (_open: boolean) => void
+  onSelect: (_item: UploadedMedia) => void
+  /** Called after a library item was deleted, so users can drop references. */
+  onDeleted?: (_item: UploadedMedia) => void
+  initialFilter?: MediaFilter
 }
 
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
-const MediaLibrary = ({ open, onOpenChange }: Props) => {
-  const { questions, updateQuestion, currentIndex } = useQuizzEditor()
+const MediaLibrary = ({
+  open,
+  onOpenChange,
+  onSelect,
+  onDeleted,
+  initialFilter = "all",
+}: Props) => {
   const { data, isPending } = useQuery({ ...mediaListQuery(), enabled: open })
   const { upload, pendingCount } = useUploadMedia()
   const [search, setSearch] = useState("")
-  const [filter, setFilter] = useState<MediaFilter>("all")
+  const [filter, setFilter] = useState<MediaFilter>(initialFilter)
   const [view, setView] = useState<MediaView>("grid")
   const [isDragging, setIsDragging] = useState(false)
   const queryClient = useQueryClient()
@@ -45,11 +53,7 @@ const MediaLibrary = ({ open, onOpenChange }: Props) => {
   const { mutate: remove } = useMutation({
     mutationFn: (item: UploadedMedia) => deleteMedia(item.name),
     onSuccess: (_, item) => {
-      questions.forEach((question, index) => {
-        if (question.media?.url === item.url) {
-          updateQuestion(index, { media: undefined })
-        }
-      })
+      onDeleted?.(item)
       queryClient.invalidateQueries({ queryKey: mediaKeys.all })
     },
     onError: (error) =>
@@ -67,7 +71,7 @@ const MediaLibrary = ({ open, onOpenChange }: Props) => {
   )
 
   const handleSelect = (item: UploadedMedia) => () => {
-    updateQuestion(currentIndex, { media: { type: item.type, url: item.url } })
+    onSelect(item)
     onOpenChange(false)
   }
 

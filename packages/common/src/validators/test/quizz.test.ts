@@ -7,6 +7,7 @@ import {
   SCORING_MODES,
 } from "@razzia/common/constants"
 import {
+  backgroundValidator,
   normalizeLegacyQuizz,
   questionMediaValidator,
   quizzValidator,
@@ -188,5 +189,29 @@ describe("normalizeLegacyQuizz", () => {
 
   it("returns unknown data as is", () => {
     expect(normalizeLegacyQuizz("not a quizz")).toBe("not a quizz")
+  })
+})
+
+describe("backgrounds", () => {
+  it("accepts library and external image URLs", () => {
+    expect(backgroundValidator.safeParse("/media/a.png").success).toBe(true)
+    expect(backgroundValidator.safeParse("https://x.nl/a.png").success).toBe(
+      true,
+    )
+    expect(backgroundValidator.safeParse("data:text/html,x").success).toBe(
+      false,
+    )
+  })
+
+  it("keeps question and quizz backgrounds through validation", () => {
+    const result = quizzValidator.parse({
+      gameMode: QUIZZ_MODES.QUIZ,
+      subject: "S",
+      background: "/media/quizz.png",
+      questions: [choiceQuestion({ background: "/media/q.png" })],
+    })
+
+    expect(result.background).toBe("/media/quizz.png")
+    expect(result.questions[0].background).toBe("/media/q.png")
   })
 })

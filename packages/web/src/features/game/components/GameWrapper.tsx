@@ -20,6 +20,7 @@ import {
   useEvent,
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
+import { useBackgroundStore } from "@razzia/web/features/game/stores/background"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
@@ -44,6 +45,7 @@ const GameWrapper = ({
   const { player, gameMode } = usePlayerStore()
   const { players, inviteCode, locked, status } = useManagerStore()
   const { questionStates, setQuestionStates } = useQuestionStore()
+  const background = useBackgroundStore((state) => state.background)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { t } = useTranslation()
   const [skippedStatus, setSkippedStatus] =
@@ -90,7 +92,7 @@ const GameWrapper = ({
 
   return (
     <section className="relative flex min-h-dvh">
-      <GameBackground />
+      <GameBackground background={background} />
 
       <div className="z-10 flex w-full flex-1 flex-col justify-between">
         {!isConnected && !statusName ? (

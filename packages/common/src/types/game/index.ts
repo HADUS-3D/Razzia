@@ -73,6 +73,8 @@ export interface Question {
   category?: string
   note?: string
   media?: QuestionMedia
+  /** Image shown behind this question; falls back to the quizz background. */
+  background?: string
   answers: string[]
   solutions?: number[]
   cooldown: number
@@ -87,7 +89,13 @@ export interface Quizz {
   subject: string
   /** Set on quizzes whose questions come from an external database. */
   source?: QuizzSource
+  /** Image shown behind the game; falls back to the app background. */
+  background?: string
   questions: Question[]
+}
+
+export interface AppSettings {
+  background?: string
 }
 
 export type QuizzWithId = Quizz & { id: string }

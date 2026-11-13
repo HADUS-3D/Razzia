@@ -8,7 +8,8 @@ import QuestionEditorTitle from "@razzia/web/features/quizz/components/QuestionE
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 
 const QuestionEditor = () => {
-  const { currentQuestion, currentQuestionId, isRemoving } = useQuizzEditor()
+  const { currentQuestion, currentQuestionId, isRemoving, quizzBackground } =
+    useQuizzEditor()
   const AnswersEditor =
     QUESTION_REGISTRY[currentQuestion.type].AnswersEditor ??
     QuestionEditorAnswers
@@ -25,7 +26,9 @@ const QuestionEditor = () => {
         <QuestionEditorNote />
         <AnswersEditor key={currentQuestionId} />
 
-        <GameBackground />
+        <GameBackground
+          background={currentQuestion.background ?? quizzBackground}
+        />
       </main>
       <QuestionEditorConfig />
     </div>

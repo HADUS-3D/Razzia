@@ -11,6 +11,7 @@ import {
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
 import { useSocketConnection } from "@razzia/web/features/game/hooks/useSocketConnection"
+import { useBackgroundStore } from "@razzia/web/features/game/stores/background"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import {
@@ -25,11 +26,14 @@ const ManagerGamePage = () => {
   const { socket, isConnected } = useSocket()
   const { gameId, status, updateManager, resetManager } = useManagerStore()
   const { setQuestionStates } = useQuestionStore()
+  const setBackground = useBackgroundStore((state) => state.setBackground)
   const { t } = useTranslation()
 
   useSocketConnection()
 
-  useEvent(EVENTS.GAME.STATUS, ({ name, data }) => {
+  useEvent(EVENTS.GAME.STATUS, ({ name, data, background }) => {
+    setBackground(background)
+
     if (name in GAME_STATE_COMPONENTS_MANAGER) {
       updateManager({ status: createStatus(name, data) })
     }
@@ -49,9 +53,11 @@ const ManagerGamePage = () => {
       settings,
       locked,
       status: reconnectStatus,
+      background,
       players,
       currentQuestion,
     }) => {
+      setBackground(background)
       updateManager({
         gameId: reconnectGameId,
         inviteCode,
@@ -72,6 +78,7 @@ const ManagerGamePage = () => {
     navigate({ to: "/manager/config" })
     resetManager()
     setQuestionStates(null)
+    setBackground(undefined)
     toast.error(t(message))
   })
 

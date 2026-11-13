@@ -668,3 +668,65 @@ describe("manager grace period", () => {
     expect(onTimeout).not.toHaveBeenCalled()
   })
 })
+
+describe("backgrounds", () => {
+  const photo = { type: "image", url: "/media/photo.png" } as const
+
+  it("prefers the question background over the quizz background", async () => {
+    const quizz = {
+      ...createQuizz([
+        createQuestion({ background: "/media/q1.png" }),
+        createQuestion(),
+      ]),
+      background: "/media/quizz.png",
+    }
+    const { start, lastEvent, game, reachAnswers } = setup(quizz)
+
+    await start()
+
+    expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+      background: "/media/q1.png",
+    })
+
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+    game.advance()
+    await reachAnswers(quizz.questions[1], false)
+
+    expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+      background: "/media/quizz.png",
+    })
+  })
+
+  it("hides the small image when it is the background", async () => {
+    const { start, lastEvent, game } = setup(
+      createQuizz([createQuestion({ media: photo, background: photo.url })]),
+    )
+
+    await start()
+
+    const data = lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data as {
+      data: { media?: unknown }
+    }
+
+    expect(data.data.media).toBeUndefined()
+  })
+
+  it("keeps the small image when the background is another image", async () => {
+    const { start, lastEvent, game } = setup(
+      createQuizz([
+        createQuestion({ media: photo, background: "/media/other.png" }),
+      ]),
+    )
+
+    await start()
+
+    const data = lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data as {
+      data: { media?: unknown }
+    }
+
+    expect(data.data.media).toEqual(photo)
+  })
+})

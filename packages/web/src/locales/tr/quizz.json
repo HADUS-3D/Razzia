@@ -101,5 +101,19 @@
   },
   "addAnswer": "Cevap ekle",
   "removeAnswer": "Cevabı kaldır",
-  "markCorrect": "{{label}} seçeneğini doğru olarak işaretle"
+  "markCorrect": "{{label}} seçeneğini doğru olarak işaretle",
+  "background": {
+    "question": "Background of this question",
+    "questionHint": "Shown behind this question, answers and results.",
+    "quizz": "Background of this quizz",
+    "quizzHint": "Used for every question without its own background.",
+    "inherit": "Uses the quizz or app background",
+    "appDefault": "Uses the app background",
+    "useQuestionImage": "Use question image as background",
+    "imageIsBackground": "The question image is shown as the background instead of above the question.",
+    "remove": "Remove background",
+    "preview": "Background preview",
+    "imageOnly": "Pick an image to use as a background",
+    "pickFromLibrary": "Pick background from library"
+  }
 }

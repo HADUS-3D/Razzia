@@ -5,6 +5,7 @@ import { generator } from "@razzia/socket/api/routes/generator"
 import { media } from "@razzia/socket/api/routes/media"
 import { quizz } from "@razzia/socket/api/routes/quizz"
 import { results } from "@razzia/socket/api/routes/results"
+import { settings } from "@razzia/socket/api/routes/settings"
 import { users } from "@razzia/socket/api/routes/users"
 
 const routes = new Hono()
@@ -16,6 +17,7 @@ const routes = new Hono()
   .route("/users", users)
   .route("/games", games)
   .route("/media", media)
+  .route("/settings", settings)
 
 export const api = routes
 

@@ -13,6 +13,7 @@ import {
   QUESTION_REGISTRY,
   QUESTION_TYPE_LIST,
 } from "@razzia/web/features/questions"
+import BackgroundField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/BackgroundField"
 import CategoryField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CategoryField"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
@@ -69,6 +70,8 @@ const QuestionEditorConfig = () => {
       {gameMode === QUIZZ_MODES.QUIZ && <CategoryField />}
 
       <ConfigComponent key={currentQuestionId} />
+
+      <BackgroundField />
     </aside>
   )
 }

@@ -144,7 +144,10 @@ class Game {
   private broadcastStatus<T extends Status>(status: T, data: StatusDataMap[T]) {
     const statusData = { name: status, data }
     this.lastBroadcastStatus = statusData
-    this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, statusData)
+    this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, {
+      ...statusData,
+      background: this.round.backgroundFor(status),
+    })
   }
 
   private sendStatus<T extends Status>(
@@ -160,7 +163,10 @@ class Game {
       this.playerStatus.set(target, statusData)
     }
 
-    this.io.to(target).emit(EVENTS.GAME.STATUS, statusData)
+    this.io.to(target).emit(EVENTS.GAME.STATUS, {
+      ...statusData,
+      background: this.round.backgroundFor(status),
+    })
   }
 
   // Player actions
@@ -267,6 +273,7 @@ class Game {
       locked: this._locked,
       currentQuestion: this.round.getReconnectInfo(),
       status,
+      background: this.round.backgroundFor(status.name),
       players: this.playerManager.getAll(),
     })
     socket.emit(EVENTS.GAME.TOTAL_PLAYERS, this.playerManager.joinedCount())
@@ -314,6 +321,7 @@ class Game {
       gameMode: this.gameMode,
       currentQuestion: this.round.getReconnectInfo(),
       status,
+      background: this.round.backgroundFor(status.name),
       player: { username: player.username, points: player.points },
     })
     this.playerManager.broadcastCount()
