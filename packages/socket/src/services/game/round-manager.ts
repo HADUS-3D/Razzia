@@ -441,6 +441,7 @@ export class RoundManager {
         myPoints: player.points,
         rank: index + 1,
         aheadOfMe: aheadPlayer ? aheadPlayer.username : null,
+        note: this.question.note,
       })
     })
 
