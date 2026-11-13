@@ -14,7 +14,8 @@ import { createStatus } from "@razzia/web/features/game/utils/createStatus"
 import { ApiError } from "@razzia/web/lib/api"
 
 const Username = () => {
-  const { inviteCode, generatedUsernames, updatePlayer } = usePlayerStore()
+  const { inviteCode, subject, generatedUsernames, updatePlayer } =
+    usePlayerStore()
   const navigate = useNavigate()
   const [username, setUsername] = useState("")
   const { t } = useTranslation()
@@ -42,7 +43,11 @@ const Username = () => {
       )
 
       if (error instanceof ApiError && error.status === StatusCodes.NOT_FOUND) {
-        updatePlayer({ inviteCode: null, generatedUsernames: false })
+        updatePlayer({
+          inviteCode: null,
+          subject: null,
+          generatedUsernames: false,
+        })
       }
     },
   })
@@ -64,9 +69,16 @@ const Username = () => {
     }
   }
 
+  const title = subject && (
+    <h1 className="mb-4 text-center text-2xl font-bold break-words">
+      {subject}
+    </h1>
+  )
+
   if (generatedUsernames) {
     return (
       <Card>
+        {title}
         <p className="mb-4 text-center text-lg font-semibold">
           {t("game:generatedUsernameNotice")}
         </p>
@@ -79,6 +91,7 @@ const Username = () => {
 
   return (
     <Card>
+      {title}
       <Input
         className="text-center"
         onChange={(e) => setUsername(e.target.value)}

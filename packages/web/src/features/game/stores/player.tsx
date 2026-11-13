@@ -12,6 +12,8 @@ interface PlayerInfo {
 interface PlayerState<T> {
   gameId: string | null
   inviteCode: string | null
+  /** Name of the quizz that is being hosted, shown while joining. */
+  subject: string | null
   gameMode: QuizzMode
   generatedUsernames: boolean
   joinTicket: string | null
@@ -31,6 +33,7 @@ type PlayerStore<T> = PlayerState<T> & {
 const initialState: PlayerState<StatusDataMap> = {
   gameId: null,
   inviteCode: null,
+  subject: null,
   gameMode: QUIZZ_MODES.QUIZ,
   generatedUsernames: false,
   joinTicket: null,

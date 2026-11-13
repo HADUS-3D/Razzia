@@ -1,5 +1,4 @@
 import type { Question } from "@razzia/common/types/game"
-import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
 import { seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
@@ -79,7 +78,6 @@ test("reveals the answers without waiting for a player who left", async ({
   await joinGame(bob, pin, "Bob")
   await expect(manager.getByText("Bob")).toBeVisible()
   await startGame(manager)
-  await expect(alice.getByText(BASIC_QUIZZ)).toBeVisible()
 
   await bob.goto("/")
   await expect(bob.getByText(t("game:reconnectTitle"))).toBeVisible()

@@ -182,6 +182,12 @@ export const QuizzEditorProvider = ({
       if (question.background === url) {
         updateQuestion(index, { background: undefined })
       }
+
+      if (question.round?.background === url) {
+        updateQuestion(index, {
+          round: { ...question.round, background: undefined },
+        })
+      }
     })
 
     if (getValues("background") === url) {

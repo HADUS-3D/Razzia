@@ -62,6 +62,7 @@
     "penaltyNegative": "Strafpunten mogen niet negatief zijn",
     "questionEmpty": "De vraag mag niet leeg zijn",
     "subjectEmpty": "Het onderwerp mag niet leeg zijn",
+    "roundNameEmpty": "Een ronde heeft een naam nodig",
     "tooFewAnswers": "Een vraag moet minstens 2 antwoorden hebben",
     "tooManyAnswers": "Een vraag mag maximaal 4 antwoorden hebben",
     "estimationInvalidRange": "Het maximum moet groter zijn dan het minimum",

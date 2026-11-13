@@ -9,6 +9,7 @@ import type {
 export const STATUS = {
   SHOW_ROOM: "SHOW_ROOM",
   SHOW_START: "SHOW_START",
+  SHOW_ROUND: "SHOW_ROUND",
   SHOW_PREPARED: "SHOW_PREPARED",
   SHOW_QUESTION: "SHOW_QUESTION",
   SELECT_ANSWER: "SELECT_ANSWER",
@@ -23,7 +24,8 @@ export const STATUS = {
 export type Status = (typeof STATUS)[keyof typeof STATUS]
 
 export interface CommonStatusDataMap {
-  SHOW_START: { time: number; subject: string }
+  SHOW_START: { time: number }
+  SHOW_ROUND: { name: string; number: number; total: number }
   SHOW_PREPARED: {
     totalAnswers: number
     questionNumber: number
@@ -64,7 +66,7 @@ export interface CommonStatusDataMap {
 }
 
 interface ManagerExtraStatus {
-  SHOW_ROOM: { text: string; inviteCode?: string }
+  SHOW_ROOM: { text: string; inviteCode?: string; subject?: string }
   SHOW_RESPONSES: {
     question: string
     responses: Record<number, number>
@@ -75,7 +77,12 @@ interface ManagerExtraStatus {
     options?: QuestionOptions
     note?: string
   }
-  SHOW_LEADERBOARD: { oldLeaderboard: Player[]; leaderboard: Player[] }
+  SHOW_LEADERBOARD: {
+    oldLeaderboard: Player[]
+    leaderboard: Player[]
+    /** Set when a round has ended: the full ranking with every best streak. */
+    round?: { name: string }
+  }
 }
 
 export type PlayerStatusDataMap = CommonStatusDataMap

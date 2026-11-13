@@ -40,7 +40,10 @@ export interface Player {
   connected: boolean
   username: string
   points: number
+  /** Correct answers in a row, up to the last question. */
   streak: number
+  /** Longest run of correct answers in a row so far in this quiz. */
+  bestStreak: number
 }
 
 export interface Answer {
@@ -67,10 +70,19 @@ export interface UploadedMedia {
   type: UploadedMediaType
 }
 
+/** A round that starts with the question it is set on. */
+export interface QuestionRound {
+  name: string
+  /** Image behind the round's title slide; falls back to the quizz background. */
+  background?: string
+}
+
 export interface Question {
   type: QuestionType
   question: string
   category?: string
+  /** Starts a new round at this question: a title slide, and a full leaderboard once the round is over. */
+  round?: QuestionRound
   note?: string
   media?: QuestionMedia
   /** Image shown behind this question; falls back to the quizz background. */

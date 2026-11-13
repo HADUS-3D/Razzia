@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { CircleAlert, Music, Trash2, Video } from "lucide-react"
+import { CircleAlert, Flag, Music, Trash2, Video } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { twMerge } from "tailwind-merge"
 import type { Question, QuestionMedia } from "@razzia/common/types/game"
@@ -58,6 +58,15 @@ const QuizzEditorCard = ({
         ),
       )}
     >
+      {question.round && (
+        <p
+          title={t("quizz:round.badge", { name: question.round.name })}
+          className="absolute -top-2.5 left-3 z-10 flex max-w-[85%] items-center gap-1 truncate rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-white"
+        >
+          <Flag className="size-3 shrink-0" />
+          <span className="truncate">{question.round.name}</span>
+        </p>
+      )}
       <div className="absolute top-2 left-2 flex items-center gap-1">
         <span className="text-xs font-semibold text-muted-foreground">
           {index + 1}

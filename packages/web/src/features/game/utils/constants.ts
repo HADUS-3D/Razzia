@@ -8,6 +8,7 @@ import Question from "@razzia/web/features/game/components/states/Question"
 import Responses from "@razzia/web/features/game/components/states/Responses"
 import Result from "@razzia/web/features/game/components/states/Result"
 import Room from "@razzia/web/features/game/components/states/Room"
+import Round from "@razzia/web/features/game/components/states/Round"
 import Start from "@razzia/web/features/game/components/states/Start"
 import Summary from "@razzia/web/features/game/components/states/Summary"
 import Wait from "@razzia/web/features/game/components/states/Wait"
@@ -37,6 +38,7 @@ export const GAME_STATE_COMPONENTS = {
   [STATUS.SHOW_QUESTION]: Question,
   [STATUS.WAIT]: Wait,
   [STATUS.SHOW_START]: Start,
+  [STATUS.SHOW_ROUND]: Round,
   [STATUS.SHOW_RESULT]: Result,
   [STATUS.SHOW_PREPARED]: Prepared,
   [STATUS.FINISHED]: PlayerFinished,
@@ -77,6 +79,7 @@ export function isKeyOf<T extends object>(
 export const MANAGER_SKIP_BTN = {
   [STATUS.SHOW_ROOM]: "game:startGame",
   [STATUS.SHOW_START]: null,
+  [STATUS.SHOW_ROUND]: null,
   [STATUS.SHOW_PREPARED]: null,
   [STATUS.SHOW_QUESTION]: null,
   [STATUS.SELECT_ANSWER]: "common:skip",

@@ -46,5 +46,6 @@ export const createPlayer = (overrides: Partial<Player> = {}): Player => ({
   username: "Player",
   points: 0,
   streak: 0,
+  bestStreak: 0,
   ...overrides,
 })

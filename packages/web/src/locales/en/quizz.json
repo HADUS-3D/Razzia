@@ -115,5 +115,13 @@
     "preview": "Background preview",
     "imageOnly": "Pick an image to use as a background",
     "pickFromLibrary": "Pick background from library"
+  },
+  "round": {
+    "label": "Round",
+    "placeholder": "e.g. Geography",
+    "hint": "Starts a new round with this question: a title slide with the name, and a full leaderboard when the round is over.",
+    "background": "Round background",
+    "backgroundHint": "Image behind the title slide of this round.",
+    "badge": "Round: {{name}}"
   }
 }

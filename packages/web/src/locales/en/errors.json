@@ -62,6 +62,7 @@
     "penaltyNegative": "Penalty cannot be negative",
     "questionEmpty": "Question cannot be empty",
     "subjectEmpty": "Subject cannot be empty",
+    "roundNameEmpty": "A round needs a name",
     "tooFewAnswers": "A question must have at least 2 answers",
     "tooManyAnswers": "A question cannot have more than 4 answers",
     "estimationInvalidRange": "The maximum must be greater than the minimum",

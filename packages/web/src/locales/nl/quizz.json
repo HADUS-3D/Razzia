@@ -115,5 +115,13 @@
     "preview": "Voorbeeld van de achtergrond",
     "imageOnly": "Kies een afbeelding om als achtergrond te gebruiken",
     "pickFromLibrary": "Kies een achtergrond uit de bibliotheek"
+  },
+  "round": {
+    "label": "Ronde",
+    "placeholder": "bijv. Aardrijkskunde",
+    "hint": "Start met deze vraag een nieuwe ronde: een titelslide met de naam, en een volledig klassement als de ronde voorbij is.",
+    "background": "Achtergrond van de ronde",
+    "backgroundHint": "Afbeelding achter de titelslide van deze ronde.",
+    "badge": "Ronde: {{name}}"
   }
 }

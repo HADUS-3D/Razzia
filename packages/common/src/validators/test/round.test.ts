@@ -55,4 +55,13 @@ describe("round", () => {
       ),
     ).toBeNull()
   })
+
+  it("carries a round name through the translation format", () => {
+    const withRound = { ...question, round: { name: "Round 1" } }
+
+    expect(toRound([withRound]).questions[0].round).toEqual({ name: "Round 1" })
+    expect(parseRound(JSON.stringify(toRound([withRound])))?.[0].round).toEqual(
+      { name: "Round 1" },
+    )
+  })
 })

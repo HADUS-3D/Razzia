@@ -9,7 +9,7 @@ I attached a JSON file with a round of quiz questions. Translate the questions i
 
 Rules for the file you create:
 - It must have exactly the same structure as the file I gave you: the same keys, the same order and the same number of questions.
-- Only translate the text values of "question", "answers" and "category".
+- Only translate the text values of "question", "answers", "category" and the "name" inside "round".
 - Keep the order of the "answers". The numbers in "solutions" are positions in "answers", so they must not change.
 - Translate the answers "True" and "False" as well.
 - The file must contain valid JSON only, nothing else.`

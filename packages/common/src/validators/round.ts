@@ -5,6 +5,7 @@ import {
   MIN_ANSWERS,
   QUESTION_TYPES,
 } from "@razzia/common/constants"
+import { questionRoundValidator } from "@razzia/common/validators/quizz"
 
 const INVALID_ROUND = "errors:generator.invalidImport"
 
@@ -17,6 +18,7 @@ const roundQuestionValidator = z
       .max(MAX_ANSWERS, INVALID_ROUND),
     solutions: z.array(z.number().int().min(0)).min(1, INVALID_ROUND),
     category: z.string().trim().min(1).optional(),
+    round: questionRoundValidator.optional(),
   })
   .refine(
     ({ answers, solutions }) =>
@@ -38,12 +40,15 @@ export type Round = z.infer<typeof roundValidator>
 export const ROUND_DEFAULTS = { cooldown: 5, time: 20 } as const
 
 export const toRound = (questions: Question[]): Round => ({
-  questions: questions.map(({ question, answers, solutions, category }) => ({
-    question,
-    answers,
-    solutions: solutions ?? [],
-    ...(category ? { category } : {}),
-  })),
+  questions: questions.map(
+    ({ question, answers, solutions, category, round }) => ({
+      question,
+      answers,
+      solutions: solutions ?? [],
+      ...(category ? { category } : {}),
+      ...(round ? { round } : {}),
+    }),
+  ),
 })
 
 export const fromRound = (round: Round): Question[] =>
