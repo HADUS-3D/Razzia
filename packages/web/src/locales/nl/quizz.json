@@ -1,0 +1,119 @@
+{
+  "addAnswerPlaceholder": "Voeg een antwoord toe...",
+  "addQuestion": "Vraag toevoegen",
+  "answersCountSuffix": " antwoorden",
+  "deleteQuestion": "Vraag verwijderen",
+  "gameMode": {
+    "quiz": "Quiz",
+    "survey": "Enquête"
+  },
+  "noQuestionYet": "Nog geen vraag",
+  "question": {
+    "addMediaHint": "Voeg een afbeelding, video of audio toe aan je vraag",
+    "config": {
+      "answerTime": "Antwoordtijd",
+      "answerTimeHint": "Tijd die spelers hebben om te antwoorden",
+      "noTimeLimit": "Geen tijdslimiet",
+      "noTimeLimitHint": "Punten worden toegekend op volgorde van antwoorden. Er is geen tijdslimiet om te antwoorden.",
+      "questionDisplay": "Weergave van de vraag",
+      "questionDisplayHint": "Duur voordat de antwoorden verschijnen",
+      "timings": "Timing",
+      "answerMode": "Antwoordmodus",
+      "category": "Categorie",
+      "categoryPlaceholder": "bijv. Aardrijkskunde",
+      "categoryHint": "Opeenvolgende vragen met dezelfde categorie vormen een ronde. Het scorebord wordt alleen getoond als de categorie verandert.",
+      "scoring": "Puntentelling",
+      "maxPoints": "Maximumpunten",
+      "maxPointsHint": "Maximaal aantal punten voor een goed antwoord",
+      "penalty": "Strafpunten",
+      "penaltyHint": "Punten die worden afgetrokken voor een fout antwoord (het totaal gaat niet onder 0)",
+      "scoringMode": "Telmodus",
+      "scoringMode.strict": "Streng",
+      "scoringMode.balanced": "Gebalanceerd",
+      "scoringMode.lenient": "Soepel",
+      "scoringModeHint.strict": "Alleen volle punten als alle goede antwoorden zijn gekozen en geen foute",
+      "scoringModeHint.balanced": "Deelpunten: goede keuzes min foute keuzes",
+      "scoringModeHint.lenient": "Punten per goed antwoord, geen straf voor foute",
+      "estimation": {
+        "title": "Schatting",
+        "inputMode": "Invoertype",
+        "inputModes": {
+          "slider": "Schuifbalk",
+          "input": "Vrije invoer"
+        },
+        "inputModeHint": {
+          "slider": "Spelers kiezen een waarde met een schuifbalk tussen de grenzen",
+          "input": "Spelers typen een getal tussen de grenzen"
+        },
+        "min": "Minimum",
+        "max": "Maximum",
+        "step": "Stapgrootte",
+        "stepHint": "Precisie van de schuifbalk en het verwachte antwoord",
+        "margin": "Marge",
+        "marginHint": "Antwoorden binnen deze afstand van het juiste antwoord scoren van 100% (exact) tot 50%. Antwoorden daarbuiten scoren niets."
+      }
+    },
+    "deleteQuestion": "Vraag verwijderen",
+    "deleteQuestionConfirm": "Weet je zeker dat je deze vraag wilt verwijderen?",
+    "media": {
+      "audio": "Audio",
+      "image": "Afbeelding",
+      "video": "Video"
+    },
+    "mediaUrlPlaceholder": "Voer URL in...",
+    "placeholder": "Begin met het typen van je vraag...",
+    "note": "Uitleg",
+    "notePlaceholder": "Voeg een uitleg toe die getoond wordt als het antwoord wordt onthuld",
+    "estimation": {
+      "correctAnswer": "Juiste antwoord"
+    }
+  },
+  "questionHasErrors": "Deze vraag bevat fouten",
+  "questionType": {
+    "single": "Enkele keuze",
+    "multi": "Meerkeuze",
+    "estimation": "Schatting"
+  },
+  "quizzSaved": "Quiz succesvol opgeslagen",
+  "quizzUpdated": "Quiz succesvol bijgewerkt",
+  "titleQuizzPlaceholder": "Quiztitel...",
+  "media": {
+    "delete": "Media verwijderen",
+    "deleteConfirm": "\"{{name}}\" verwijderen? Het wordt uit deze quiz gehaald, en andere quizzen die het gebruiken kunnen het niet meer tonen.",
+    "library": "Mediabibliotheek",
+    "libraryEmpty": "Je bibliotheek is leeg",
+    "upload": "Uploaden",
+    "uploadHint": "Afbeeldingen, audio of video, tot {{size}} MB",
+    "search": "Media zoeken...",
+    "filter": {
+      "all": "Alles"
+    },
+    "use": "Gebruiken",
+    "dropHint": "Sleep je afbeeldingen, audio- en videobestanden hierheen, of gebruik de knop Uploaden",
+    "dropHere": "Loslaten om te uploaden",
+    "noResults": "Geen media gevonden voor je zoekopdracht",
+    "fromUrl": "Toevoegen via een URL",
+    "view": {
+      "grid": "Rasterweergave",
+      "list": "Lijstweergave"
+    },
+    "filterByType": "Filteren op type"
+  },
+  "addAnswer": "Antwoord toevoegen",
+  "removeAnswer": "Antwoord verwijderen",
+  "markCorrect": "Markeer {{label}} als goed",
+  "background": {
+    "question": "Achtergrond van deze vraag",
+    "questionHint": "Getoond achter deze vraag, de antwoorden en de resultaten.",
+    "quizz": "Achtergrond van deze quiz",
+    "quizzHint": "Gebruikt voor elke vraag zonder eigen achtergrond.",
+    "inherit": "Gebruikt de achtergrond van de quiz of de app",
+    "appDefault": "Gebruikt de achtergrond van de app",
+    "useQuestionImage": "Vraagafbeelding als achtergrond gebruiken",
+    "imageIsBackground": "De afbeelding van de vraag wordt als achtergrond getoond in plaats van boven de vraag.",
+    "remove": "Achtergrond verwijderen",
+    "preview": "Voorbeeld van de achtergrond",
+    "imageOnly": "Kies een afbeelding om als achtergrond te gebruiken",
+    "pickFromLibrary": "Kies een achtergrond uit de bibliotheek"
+  }
+}

@@ -48,14 +48,14 @@ test("logs the manager out", async ({ page }) => {
 test("switches the language and keeps it after a reload", async ({ page }) => {
   await page.goto("/")
   await page.getByRole("combobox", { name: t("common:changeLanguage") }).click()
-  await page.getByRole("option", { name: t("common:language.fr") }).click()
+  await page.getByRole("option", { name: t("common:language.nl") }).click()
 
-  await expect(page.getByText(t("game:pinLabel", { lng: "fr" }))).toBeVisible()
+  await expect(page.getByText(t("game:pinLabel", { lng: "nl" }))).toBeVisible()
   await expect(
-    page.getByRole("button", { name: t("common:submit", { lng: "fr" }) }),
+    page.getByRole("button", { name: t("common:submit", { lng: "nl" }) }),
   ).toBeVisible()
 
   await page.reload()
 
-  await expect(page.getByText(t("game:pinLabel", { lng: "fr" }))).toBeVisible()
+  await expect(page.getByText(t("game:pinLabel", { lng: "nl" }))).toBeVisible()
 })

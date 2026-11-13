@@ -92,6 +92,10 @@ const languages = fs
   .map((entry) => entry.name)
 
 describe("translations", () => {
+  it("ships only english and dutch", () => {
+    expect([REFERENCE, ...languages].sort()).toEqual(["en", "nl"])
+  })
+
   it.each(languages)("%s has every english key", (lang) => {
     const keys = baseKeys(lang)
 
