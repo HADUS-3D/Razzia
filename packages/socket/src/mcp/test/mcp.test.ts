@@ -125,6 +125,19 @@ describe("mcp endpoint", () => {
     )
   })
 
+  it("answers OAuth discovery with a JSON 404, so clients skip OAuth", async () => {
+    for (const path of [
+      "/.well-known/oauth-authorization-server",
+      "/.well-known/oauth-protected-resource/api/mcp",
+    ]) {
+      // oxlint-disable-next-line eslint/no-await-in-loop
+      const response = await app.request(path)
+
+      expect(response.status).toBe(StatusCodes.NOT_FOUND)
+      expect(response.headers.get("Content-Type")).toContain("application/json")
+    }
+  })
+
   it("lists the quiz tools", async () => {
     const token = await tokenFor("author", { createQuizz: true })
     const { body } = await rpc(token, "tools/list")
