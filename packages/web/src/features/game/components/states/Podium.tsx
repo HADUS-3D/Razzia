@@ -1,10 +1,16 @@
-import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
-import { SFX } from "@razzia/web/features/game/utils/constants"
-import useScreenSize from "@razzia/web/hooks/useScreenSize"
 import clsx from "clsx"
 import { useEffect, useState } from "react"
 import ReactConfetti from "react-confetti"
+import { Trans } from "react-i18next"
 import useSound from "use-sound"
+import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
+import {
+  OPENTDB_LICENSE_URL,
+  OPENTDB_URL,
+  QUIZZ_SOURCES,
+} from "@razzia/common/constants"
+import { SFX } from "@razzia/web/features/game/utils/constants"
+import useScreenSize from "@razzia/web/hooks/useScreenSize"
 
 interface Props {
   data: ManagerStatusDataMap["FINISHED"]
@@ -93,7 +99,33 @@ const Medal = ({ rank }: { rank: number }) => {
   )
 }
 
-const Podium = ({ data: { subject, top } }: Props) => {
+const SourceCredit = () => (
+  <p className="mt-4 text-center text-xs text-white/80 drop-shadow-sm">
+    <Trans
+      i18nKey="game:source"
+      components={{
+        odb: (
+          <a
+            href={OPENTDB_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          />
+        ),
+        cc: (
+          <a
+            href={OPENTDB_LICENSE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          />
+        ),
+      }}
+    />
+  </p>
+)
+
+const Podium = ({ data: { subject, top, source } }: Props) => {
   const { apparition, hasSuspense } = usePodiumAnimation(top.length)
 
   const { width, height } = useScreenSize()
@@ -139,7 +171,7 @@ const Podium = ({ data: { subject, top } }: Props) => {
               >
                 {top[1].username}
               </p>
-              <div className="bg-primary flex h-full w-full flex-col items-center gap-4 rounded-t-xl pt-6 text-center shadow-2xl">
+              <div className="flex h-full w-full flex-col items-center gap-4 rounded-t-xl bg-primary pt-6 text-center shadow-2xl">
                 <Medal rank={2} />
                 <p className="text-3xl font-bold text-white drop-shadow-sm md:text-4xl">
                   {top[1].points}
@@ -167,7 +199,7 @@ const Podium = ({ data: { subject, top } }: Props) => {
             >
               {top[0].username}
             </p>
-            <div className="bg-primary flex h-full w-full flex-col items-center gap-4 rounded-t-xl pt-6 text-center shadow-2xl">
+            <div className="flex h-full w-full flex-col items-center gap-4 rounded-t-xl bg-primary pt-6 text-center shadow-2xl">
               <Medal rank={1} />
               <p className="text-3xl font-bold text-white drop-shadow-sm md:text-4xl">
                 {top[0].points}
@@ -194,7 +226,7 @@ const Podium = ({ data: { subject, top } }: Props) => {
               >
                 {top[2].username}
               </p>
-              <div className="bg-primary flex h-full w-full flex-col items-center gap-4 rounded-t-xl pt-6 text-center shadow-2xl">
+              <div className="flex h-full w-full flex-col items-center gap-4 rounded-t-xl bg-primary pt-6 text-center shadow-2xl">
                 <Medal rank={3} />
 
                 <p className="text-3xl font-bold text-white drop-shadow-sm md:text-4xl">
@@ -204,6 +236,8 @@ const Podium = ({ data: { subject, top } }: Props) => {
             </div>
           )}
         </div>
+
+        {source === QUIZZ_SOURCES.OPENTDB && <SourceCredit />}
       </section>
     </>
   )

@@ -1,61 +1,34 @@
 import type { ServerType } from "@hono/node-server"
-import { EVENTS } from "@razzia/common/constants"
-import type { Server } from "@razzia/common/types/game/socket"
-import { clientEventValidators } from "@razzia/common/validators/socket"
-import { api } from "@razzia/socket/api"
-import { gameSocketHandlers } from "@razzia/socket/handlers/game"
-import type { SocketHandler } from "@razzia/socket/handlers/types"
-import { verifyToken } from "@razzia/socket/services/auth"
-import { DomainError } from "@razzia/socket/services/errors"
-import { setIo } from "@razzia/socket/services/io"
+import type { z } from "zod"
 import { Hono } from "hono"
-import { HTTPException } from "hono/http-exception"
 import { JwtTokenExpired } from "hono/utils/jwt/types"
 import { StatusCodes } from "http-status-codes"
 import { Server as ServerIO } from "socket.io"
-import type { z } from "zod"
+import type { Server } from "@razzia/common/types/game/socket"
+import type { SocketHandler } from "@razzia/socket/handlers/types"
+import { EVENTS } from "@razzia/common/constants"
+import { clientEventValidators } from "@razzia/common/validators/socket"
+import { api } from "@razzia/socket/api"
+import { handleApiError } from "@razzia/socket/api/error-handler"
+import { gameSocketHandlers } from "@razzia/socket/handlers/game"
+import { mcp } from "@razzia/socket/mcp/route"
+import { verifyToken } from "@razzia/socket/services/auth"
+import { setIo } from "@razzia/socket/services/io"
 
 const eventValidators: Partial<Record<string, z.ZodType>> =
   clientEventValidators
 
 export const app = new Hono()
 
+// Before /api, so the MCP endpoint is not shadowed by the API routes.
+app.route("/api/mcp", mcp)
 app.route("/api", api)
 
 app.notFound((c) =>
   c.json({ error: "errors:api.notFound" }, StatusCodes.NOT_FOUND),
 )
 
-const HTTP_ERROR_KEYS: Partial<Record<number, string>> = {
-  [StatusCodes.BAD_REQUEST]: "errors:invalidRequest",
-  [StatusCodes.UNAUTHORIZED]: "errors:auth.unauthorized",
-  [StatusCodes.FORBIDDEN]: "errors:auth.unauthorized",
-  [StatusCodes.NOT_FOUND]: "errors:api.notFound",
-}
-
-app.onError((error, c) => {
-  if (error instanceof DomainError) {
-    if (error.status >= StatusCodes.INTERNAL_SERVER_ERROR) {
-      console.error("API error:", error)
-    }
-
-    return c.json({ error: error.key }, error.status)
-  }
-
-  if (error instanceof HTTPException) {
-    return c.json(
-      { error: HTTP_ERROR_KEYS[error.status] ?? "errors:api.serverError" },
-      error.status,
-    )
-  }
-
-  console.error("Unhandled API error:", error)
-
-  return c.json(
-    { error: "errors:api.serverError" },
-    StatusCodes.INTERNAL_SERVER_ERROR,
-  )
-})
+app.onError(handleApiError)
 
 const socketHandlers: SocketHandler[] = [gameSocketHandlers]
 

@@ -1,4 +1,6 @@
 import { zValidator } from "@hono/zod-validator"
+import { StatusCodes } from "http-status-codes"
+import { canViewQuizz } from "@razzia/common/permissions"
 import {
   checkGameValidator,
   createGameValidator,
@@ -9,11 +11,10 @@ import { apiFactory } from "@razzia/socket/api/factory"
 import { requireManager, requireSession } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { mintJoinTicket } from "@razzia/socket/services/auth"
-import { getQuizz } from "@razzia/socket/services/config"
+import { getQuizzEntries } from "@razzia/socket/services/config"
 import Game from "@razzia/socket/services/game"
 import { getIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
-import { StatusCodes } from "http-status-codes"
 
 const routes = apiFactory
   .createApp()
@@ -23,14 +24,18 @@ const routes = apiFactory
     zValidator("json", createGameValidator, i18nHook),
     (c) => {
       const { quizzId } = c.req.valid("json")
-      const quizz = getQuizz().find((q) => q.id === quizzId)
+      const user = c.get("user")
+      const entry = getQuizzEntries().find((q) => q.id === quizzId)
 
-      if (!quizz) {
+      if (!entry || !canViewQuizz(user, entry.access)) {
         return c.json({ error: "errors:quizz.notFound" }, StatusCodes.NOT_FOUND)
       }
 
       const registry = Registry.getInstance()
+      const { access: _access, ...quizz } = entry
       const game = new Game(getIo(), c.get("claims").sub, quizz)
+
+      game.hostUserId = user.id
 
       registry.addGame(game)
       registry.markGameAsEmpty(game)

@@ -22,6 +22,29 @@ test("shows the answer explanation when revealing the answer", async ({
   await expect(manager.getByText(note)).toBeVisible()
 })
 
+test("shows the answer explanation on the player's device after the result shrinks", async ({
+  page: manager,
+  newPage,
+}) => {
+  const pin = await createGame(manager, REVEAL_QUIZZ)
+  const player = await newPage({
+    viewport: { width: 390, height: 664 },
+    isMobile: true,
+  })
+
+  await joinGame(player, pin, "Alice")
+  await expect(manager.getByText("Alice")).toBeVisible()
+  await startGame(manager)
+
+  const note = "Paris has been the capital of France since 987."
+
+  await answer(player, "Paris")
+  await expect(player.getByText(t("game:correct"))).toBeInViewport()
+  await expect(player.getByText(note)).toHaveCount(0)
+  await expect(player.getByText(note)).toBeInViewport({ timeout: 4000 })
+  await expect(player.getByText(t("game:correct"))).toBeInViewport()
+})
+
 test("keeps the answers reachable on phones when the question has an image", async ({
   page: manager,
   newPage,

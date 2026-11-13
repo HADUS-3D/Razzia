@@ -1,3 +1,7 @@
+import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
+import { useEffect } from "react"
+import toast from "react-hot-toast"
+import { useTranslation } from "react-i18next"
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
 import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
@@ -7,17 +11,14 @@ import {
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
 import { useSocketConnection } from "@razzia/web/features/game/hooks/useSocketConnection"
+import { useBackgroundStore } from "@razzia/web/features/game/stores/background"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
-import { createStatus } from "@razzia/web/features/game/utils/createStatus"
 import {
   GAME_STATE_COMPONENTS_MANAGER,
   isKeyOf,
 } from "@razzia/web/features/game/utils/constants"
-import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router"
-import { useEffect } from "react"
-import toast from "react-hot-toast"
-import { useTranslation } from "react-i18next"
+import { createStatus } from "@razzia/web/features/game/utils/createStatus"
 
 const ManagerGamePage = () => {
   const navigate = useNavigate()
@@ -25,11 +26,14 @@ const ManagerGamePage = () => {
   const { socket, isConnected } = useSocket()
   const { gameId, status, updateManager, resetManager } = useManagerStore()
   const { setQuestionStates } = useQuestionStore()
+  const setBackground = useBackgroundStore((state) => state.setBackground)
   const { t } = useTranslation()
 
   useSocketConnection()
 
-  useEvent(EVENTS.GAME.STATUS, ({ name, data }) => {
+  useEvent(EVENTS.GAME.STATUS, ({ name, data, background }) => {
+    setBackground(background)
+
     if (name in GAME_STATE_COMPONENTS_MANAGER) {
       updateManager({ status: createStatus(name, data) })
     }
@@ -49,9 +53,11 @@ const ManagerGamePage = () => {
       settings,
       locked,
       status: reconnectStatus,
+      background,
       players,
       currentQuestion,
     }) => {
+      setBackground(background)
       updateManager({
         gameId: reconnectGameId,
         inviteCode,
@@ -72,6 +78,7 @@ const ManagerGamePage = () => {
     navigate({ to: "/manager/config" })
     resetManager()
     setQuestionStates(null)
+    setBackground(undefined)
     toast.error(t(message))
   })
 

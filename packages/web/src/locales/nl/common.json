@@ -1,0 +1,23 @@
+{
+  "cancel": "Annuleren",
+  "confirm": "Bevestigen",
+  "connecting": "Verbinden...",
+  "delete": "Verwijderen",
+  "exit": "Afsluiten",
+  "exitFullscreen": "Volledig scherm verlaten",
+  "fullscreen": "Volledig scherm",
+  "language": {
+    "en": "English - Engels",
+    "nl": "Nederlands - Nederlands"
+  },
+  "loading": "Laden...",
+  "next": "Volgende",
+  "save": "Opslaan",
+  "seconds": "sec",
+  "skip": "Overslaan",
+  "submit": "Verzenden",
+  "close": "Sluiten",
+  "previous": "Vorige",
+  "changeLanguage": "Taal wijzigen",
+  "back": "Terug"
+}

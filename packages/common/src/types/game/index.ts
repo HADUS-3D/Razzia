@@ -4,10 +4,14 @@ import type {
   MEDIA_TYPES,
   QUESTION_TYPES,
   QUIZZ_MODES,
+  QUIZZ_SOURCES,
   SCORING_MODES,
 } from "@razzia/common/constants"
+import type { QuizzVisibility } from "@razzia/common/types/auth"
 
 export type QuizzMode = (typeof QUIZZ_MODES)[keyof typeof QUIZZ_MODES]
+
+export type QuizzSource = (typeof QUIZZ_SOURCES)[keyof typeof QUIZZ_SOURCES]
 
 export type QuestionType = (typeof QUESTION_TYPES)[keyof typeof QUESTION_TYPES]
 
@@ -46,7 +50,8 @@ export interface Answer {
 }
 
 export type QuestionMediaType =
-  (typeof MEDIA_TYPES)[keyof typeof MEDIA_TYPES] | undefined
+  | (typeof MEDIA_TYPES)[keyof typeof MEDIA_TYPES]
+  | undefined
 
 export interface QuestionMedia {
   type?: QuestionMediaType
@@ -68,6 +73,8 @@ export interface Question {
   category?: string
   note?: string
   media?: QuestionMedia
+  /** Image shown behind this question; falls back to the quizz background. */
+  background?: string
   answers: string[]
   solutions?: number[]
   cooldown: number
@@ -80,7 +87,15 @@ export interface Question {
 export interface Quizz {
   gameMode: QuizzMode
   subject: string
+  /** Set on quizzes whose questions come from an external database. */
+  source?: QuizzSource
+  /** Image shown behind the game; falls back to the app background. */
+  background?: string
   questions: Question[]
+}
+
+export interface AppSettings {
+  background?: string
 }
 
 export type QuizzWithId = Quizz & { id: string }
@@ -88,6 +103,10 @@ export type QuizzWithId = Quizz & { id: string }
 export interface QuizzMeta {
   id: string
   subject: string
+  ownerId: string | null
+  visibility: QuizzVisibility
+  canEdit: boolean
+  canDelete: boolean
 }
 
 export interface AutoAdvanceSettings {
@@ -131,6 +150,8 @@ export interface GameResult {
   date: string
   players: GameResultPlayer[]
   questions: QuestionResult[]
+  /** User id of the host. Results without it are visible to admins only. */
+  hostId?: string
 }
 
 export interface GameResultMeta {

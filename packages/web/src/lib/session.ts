@@ -1,9 +1,9 @@
-import { SESSION_ROLES } from "@razzia/common/constants"
 import type {
   SessionClaims,
   SessionResponse,
   SessionRole,
 } from "@razzia/common/types/auth"
+import { SESSION_ROLES } from "@razzia/common/constants"
 
 const TOKEN_KEY = "token"
 
@@ -87,7 +87,14 @@ export const getRole = (): SessionRole => {
     return SESSION_ROLES.PLAYER
   }
 
-  return getClaims()?.role ?? SESSION_ROLES.PLAYER
+  const claims = getClaims()
+
+  // Manager tokens from before accounts existed carry no user id.
+  if (claims?.role === SESSION_ROLES.MANAGER && !claims.userId) {
+    return SESSION_ROLES.PLAYER
+  }
+
+  return claims?.role ?? SESSION_ROLES.PLAYER
 }
 
 const requestSession = async (token: string | null) => {

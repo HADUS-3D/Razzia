@@ -1,3 +1,17 @@
+import { nanoid } from "nanoid"
+import type {
+  Answer,
+  GameResult,
+  GameSettings,
+  GameUpdateQuestion,
+  Player,
+  Question,
+  QuestionMedia,
+  QuestionResult,
+  Quizz,
+  QuizzMode,
+} from "@razzia/common/types/game"
+import type { Server, Socket } from "@razzia/common/types/game/socket"
 // oxlint-disable typescript/no-unnecessary-condition
 import {
   EVENTS,
@@ -7,18 +21,6 @@ import {
   QUIZZ_MODES,
 } from "@razzia/common/constants"
 import { isEstimationOptions } from "@razzia/common/questions/options"
-import type {
-  Answer,
-  GameResult,
-  GameSettings,
-  GameUpdateQuestion,
-  Player,
-  Question,
-  QuestionResult,
-  Quizz,
-  QuizzMode,
-} from "@razzia/common/types/game"
-import type { Server, Socket } from "@razzia/common/types/game/socket"
 import {
   type Status,
   STATUS,
@@ -33,7 +35,6 @@ import {
 } from "@razzia/socket/services/scoring/round"
 import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
 import sleep, { SECOND_MS } from "@razzia/socket/utils/sleep"
-import { nanoid } from "nanoid"
 
 type BroadcastFn = <T extends Status>(
   _status: T,
@@ -115,6 +116,40 @@ export class RoundManager {
 
   private get question(): Question {
     return this.opts.quizz.questions[this.currentQuestion]
+  }
+
+  /**
+   * Background for the current moment: the question's own, else the quizz's.
+   * Before the game starts only the quizz background applies.
+   */
+  get background(): string | undefined {
+    if (!this.started) {
+      return this.opts.quizz.background
+    }
+
+    return this.question.background ?? this.opts.quizz.background
+  }
+
+  /** The ranking screens fall back to the quizz background. */
+  backgroundFor(status: Status): string | undefined {
+    const ranking: Status[] = [
+      STATUS.SHOW_LEADERBOARD,
+      STATUS.FINISHED,
+      STATUS.SUMMARY,
+    ]
+
+    return ranking.includes(status)
+      ? this.opts.quizz.background
+      : this.background
+  }
+
+  /** An image that already serves as the background needs no small copy. */
+  private get questionImage(): QuestionMedia | undefined {
+    const { media, background } = this.question
+
+    return media?.type === MEDIA_TYPES.IMAGE && media.url === background
+      ? undefined
+      : media
   }
 
   private isAskingQuestion(): boolean {
@@ -212,6 +247,10 @@ export class RoundManager {
 
     await sleep(3)
 
+    if (!this.started) {
+      return
+    }
+
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
     await this.opts.cooldown.start(3)
 
@@ -233,6 +272,26 @@ export class RoundManager {
     }
 
     this.runStep(this.currentStep + 1)
+  }
+
+  /**
+   * Ends a running game before the last question. The question that is being
+   * asked is dropped; the standings of the questions already scored count.
+   */
+  endEarly(): void {
+    if (!this.started) {
+      return
+    }
+
+    this.acceptingAnswers = false
+    this.playersAnswers = []
+    this.opts.cooldown.abort()
+
+    if (!this.isSurvey() && this.leaderboard.length === 0) {
+      this.leaderboard = this.opts.players.getAll()
+    }
+
+    this.finish()
   }
 
   private runStep(index: number): void {
@@ -292,13 +351,10 @@ export class RoundManager {
       return
     }
 
-    const imageMedia = (() => {
-      if (this.question.media?.type !== MEDIA_TYPES.IMAGE) {
-        return undefined
-      }
-
-      return this.question.media
-    })()
+    const imageMedia =
+      this.questionImage?.type === MEDIA_TYPES.IMAGE
+        ? this.questionImage
+        : undefined
 
     this.opts.broadcast(STATUS.SHOW_QUESTION, {
       question: this.question.question,
@@ -318,7 +374,7 @@ export class RoundManager {
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
       question: this.question.question,
       answers: this.question.answers,
-      media: this.question.media,
+      media: this.questionImage,
       time: this.question.time,
       totalPlayer: this.opts.players.count(),
       questionType: this.question.type,
@@ -409,6 +465,7 @@ export class RoundManager {
         myPoints: player.points,
         rank: index + 1,
         aheadOfMe: aheadPlayer ? aheadPlayer.username : null,
+        note: this.question.note,
       })
     })
 
@@ -459,18 +516,20 @@ export class RoundManager {
       ? this.opts.players.getAll()
       : this.leaderboard
 
-    this.opts.onGameFinished({
-      id: `${Date.now()}-${nanoid(8)}`,
-      gameMode: this.opts.quizz.gameMode,
-      subject: this.opts.quizz.subject,
-      date: new Date().toISOString(),
-      players: finalPlayers.map((player, index) => ({
-        username: player.username,
-        points: player.points,
-        rank: index + 1,
-      })),
-      questions: this.questionsHistory,
-    })
+    if (this.questionsHistory.length > 0) {
+      this.opts.onGameFinished({
+        id: `${Date.now()}-${nanoid(8)}`,
+        gameMode: this.opts.quizz.gameMode,
+        subject: this.opts.quizz.subject,
+        date: new Date().toISOString(),
+        players: finalPlayers.map((player, index) => ({
+          username: player.username,
+          points: player.points,
+          rank: index + 1,
+        })),
+        questions: this.questionsHistory,
+      })
+    }
 
     if (this.isSurvey()) {
       this.finishSurvey()
@@ -484,12 +543,14 @@ export class RoundManager {
 
     this.opts.send(this.opts.getManagerId(), STATUS.FINISHED, {
       subject: this.opts.quizz.subject,
+      source: this.opts.quizz.source,
       top,
     })
 
     this.leaderboard.forEach((player, index) => {
       this.opts.send(player.id, STATUS.FINISHED, {
         subject: this.opts.quizz.subject,
+        source: this.opts.quizz.source,
         top,
         rank: index + 1,
       })

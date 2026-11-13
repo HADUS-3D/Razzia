@@ -1,0 +1,77 @@
+{
+  "answerNoted": "Bedankt, je antwoord is genoteerd",
+  "confirm": "Bevestigen",
+  "correct": "Goed zo!",
+  "gamePinLabel": "Spel-PIN:",
+  "generatedUsernameNotice": "Je krijgt een willekeurige bijnaam zodra je meedoet.",
+  "hud": {
+    "answers": "Antwoorden",
+    "time": "Tijd"
+  },
+  "media": {
+    "showImage": "Afbeelding tonen",
+    "showVideo": "Video tonen"
+  },
+  "question": {
+    "show": "Toon de vraag"
+  },
+  "joinInstruction": "Doe mee aan het spel via",
+  "leaderboard": "Scorebord",
+  "lock": {
+    "lock": "Vergrendel de ruimte",
+    "unlock": "Ontgrendel de ruimte"
+  },
+  "pinLabel": "PIN-code",
+  "playerConnectionLost": "Verbinding verbroken",
+  "playerReconnecting": "Wachten op herverbinding",
+  "playersJoined": "Spelers die meedoen",
+  "questionPrefix": "Vraag #",
+  "rank_ordinal_one": "{{count}}e plaats",
+  "rank_ordinal_other": "{{count}}e plaats",
+  "reconnect": "Opnieuw verbinden",
+  "reconnectTitle": "Je zat in een spel",
+  "resultBehind": ", achter ",
+  "resultTop": "Je eindigde als ",
+  "settings": {
+    "autoAdvance": {
+      "hint": "Ga vanzelf verder na het onthullen van het antwoord en het scorebord.",
+      "label": "Automatisch doorgaan",
+      "leaderboardDelay": "Scorebord",
+      "responsesDelay": "Resultaat"
+    },
+    "generatedUsernames": {
+      "label": "Bijnamen genereren",
+      "hint": "Spelers kiezen uit gegenereerde namen in plaats van er zelf een te typen."
+    },
+    "answersOnly": {
+      "label": "Alleen antwoorden",
+      "hint": "Spelers zien alleen de antwoordknoppen, met een knop om de vraag nog eens te lezen."
+    },
+    "title": "Spelinstellingen"
+  },
+  "startGame": "Starten",
+  "summary": {
+    "title": "Enquête voltooid",
+    "participants": "Deelnemers",
+    "questions": "Vragen"
+  },
+  "usernamePlaceholder": "Gebruikersnaam",
+  "waitingForAnswers": "Wachten tot de spelers antwoorden",
+  "waitingForPlayers": "Wachten op spelers",
+  "wrong": "Helaas",
+  "estimation": {
+    "yourAnswer": "Jouw antwoord",
+    "rangeHint": "Tussen {{min}} en {{max}}"
+  },
+  "showQrCode": "QR-code tonen",
+  "streak": "Reeks goede antwoorden",
+  "pinDigit": "PIN-cijfer {{position}}",
+  "source": "Vragen van <odb>Open Trivia Database</odb> (<cc>CC BY-SA 4.0</cc>)",
+  "menu": {
+    "title": "Menu",
+    "endQuizz": "Quiz beëindigen",
+    "endTitle": "De quiz nu beëindigen?",
+    "endDescription": "De resterende vragen worden overgeslagen. Iedereen gaat naar het eindscherm met de scores tot nu toe.",
+    "endConfirm": "Quiz beëindigen"
+  }
+}

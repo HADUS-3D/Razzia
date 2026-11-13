@@ -1,17 +1,17 @@
-import { SESSION_ROLES } from "@razzia/common/constants"
+import { sign, verify } from "hono/jwt"
+import { v7 as uuid } from "uuid"
 import type {
   JoinTicketClaims,
   SessionClaims,
   SessionResponse,
   SessionRole,
 } from "@razzia/common/types/auth"
+import { SESSION_ROLES } from "@razzia/common/constants"
 import {
   joinTicketClaimsValidator,
   sessionClaimsValidator,
 } from "@razzia/common/validators/auth"
 import { jwtSecret } from "@razzia/socket/env"
-import { sign, verify } from "hono/jwt"
-import { v7 as uuid } from "uuid"
 
 const ALGORITHM = "HS256"
 const PLAYER_TTL = 60 * 60 * 24 * 30
@@ -32,11 +32,16 @@ const parseClaims = (payload: unknown): SessionClaims => {
 export const mintToken = async (
   sub: string,
   role: SessionRole,
+  userId?: string,
 ): Promise<SessionResponse> => {
   const iat = Math.floor(Date.now() / 1000)
   const exp = iat + (role === SESSION_ROLES.MANAGER ? MANAGER_TTL : PLAYER_TTL)
 
-  const token = await sign({ sub, role, iat, exp }, jwtSecret, ALGORITHM)
+  const token = await sign(
+    { sub, role, iat, exp, ...(userId ? { userId } : {}) },
+    jwtSecret,
+    ALGORITHM,
+  )
 
   return { token, clientId: sub, role, expiresAt: exp }
 }

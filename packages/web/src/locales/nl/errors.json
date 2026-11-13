@@ -1,0 +1,116 @@
+{
+  "api": {
+    "notFound": "De opgevraagde bron bestaat niet",
+    "serverError": "Er is een fout opgetreden op de server, probeer het opnieuw"
+  },
+  "auth": {
+    "invalidInviteCode": "Ongeldige uitnodigingscode",
+    "joinTicketInvalid": "Je verzoek om mee te doen is verlopen, voer de PIN opnieuw in",
+    "sessionFailed": "Kon geen sessie starten, laad de pagina opnieuw",
+    "tokenInvalid": "Ongeldig sessietoken",
+    "tokenMissing": "Sessietoken ontbreekt",
+    "unauthorized": "Je hebt hier geen toestemming voor",
+    "usernameTooLong": "De gebruikersnaam mag maximaal 24 tekens bevatten",
+    "usernameTooShort": "De gebruikersnaam mag niet leeg zijn",
+    "accountNameTooShort": "De gebruikersnaam moet minimaal 3 tekens bevatten",
+    "accountNameTooLong": "De gebruikersnaam mag maximaal 32 tekens bevatten",
+    "accountNameInvalid": "De gebruikersnaam mag alleen letters, cijfers, punten, streepjes en underscores bevatten",
+    "passwordTooShort": "Het wachtwoord moet minimaal 8 tekens bevatten",
+    "passwordTooLong": "Het wachtwoord mag maximaal 128 tekens bevatten",
+    "invalidCredentials": "Ongeldige gebruikersnaam of wachtwoord",
+    "tooManyAttempts": "Te veel pogingen, probeer het later opnieuw",
+    "setupDone": "De installatie is al voltooid",
+    "passwordChangeRequired": "Je moet eerst je wachtwoord wijzigen",
+    "forbidden": "Je mag dit niet doen"
+  },
+  "game": {
+    "alreadyStarted": "Het spel is al gestart",
+    "expired": "Het spel is verlopen",
+    "invalidAutoAdvanceDelay": "De wachttijd moet tussen 3 en 600 seconden liggen",
+    "kickedByManager": "Je bent verwijderd door de beheerder",
+    "locked": "Het spel is vergrendeld",
+    "managerAlreadyConnected": "De beheerder is al verbonden",
+    "managerCannotJoin": "Je kunt niet meedoen aan je eigen spel",
+    "managerDisconnected": "De beheerder is losgekoppeld",
+    "noPlayersConnected": "Geen spelers verbonden",
+    "notFound": "Spel niet gevonden",
+    "playerAlreadyConnected": "Speler is al verbonden"
+  },
+  "invalidRequest": "Ongeldig verzoek",
+  "manager": {
+    "failedToReadConfig": "Kon de spelconfiguratie niet lezen",
+    "invalidPassword": "Ongeldig wachtwoord",
+    "passwordNotConfigured": "Het beheerderswachtwoord is niet ingesteld"
+  },
+  "notFound": {
+    "back": "Terug naar start",
+    "description": "De pagina die je zoekt bestaat niet.",
+    "title": "Pagina niet gevonden"
+  },
+  "quizz": {
+    "answerEmpty": "Een antwoord mag niet leeg zijn",
+    "cooldownTooLong": "De weergavetijd van de vraag mag maximaal 15 seconden zijn",
+    "cooldownTooShort": "De weergavetijd van de vraag moet minimaal 3 seconden zijn",
+    "failedToDelete": "Kon de quiz niet verwijderen",
+    "failedToSave": "De quiz is onvolledig, controleer of alle vragen een titel en minstens één goed antwoord hebben",
+    "failedToUpdate": "Kon de quiz niet bijwerken",
+    "invalidMediaUrl": "De media-URL moet een geldige URL zijn",
+    "maxPointsNegative": "Punten mogen niet negatief zijn",
+    "noQuestions": "Een quiz moet minstens één vraag hebben",
+    "noSolution": "Kies minstens één goed antwoord",
+    "notFound": "Quiz niet gevonden",
+    "penaltyNegative": "Strafpunten mogen niet negatief zijn",
+    "questionEmpty": "De vraag mag niet leeg zijn",
+    "subjectEmpty": "Het onderwerp mag niet leeg zijn",
+    "tooFewAnswers": "Een vraag moet minstens 2 antwoorden hebben",
+    "tooManyAnswers": "Een vraag mag maximaal 4 antwoorden hebben",
+    "estimationInvalidRange": "Het maximum moet groter zijn dan het minimum",
+    "estimationSolutionOutOfRange": "Het juiste antwoord moet tussen het minimum en het maximum liggen",
+    "estimationStepInvalid": "De stapgrootte moet groter zijn dan 0",
+    "estimationMarginNegative": "De marge mag niet negatief zijn",
+    "estimationInvalidOptions": "De schattingsinstellingen ontbreken of zijn ongeldig"
+  },
+  "result": {
+    "notFound": "Resultaat niet gevonden"
+  },
+  "route": {
+    "back": "Terug naar start",
+    "description": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
+    "title": "Er ging iets mis"
+  },
+  "media": {
+    "invalidName": "Ongeldige medianaam",
+    "invalidType": "Niet-ondersteund bestand, upload een afbeelding, audio- of videobestand",
+    "missingFile": "Er is geen bestand verstuurd",
+    "notFound": "Media niet gevonden",
+    "tooLarge": "Het bestand is te groot",
+    "uploadFailed": "Uploaden van het bestand is mislukt"
+  },
+  "users": {
+    "notFound": "Gebruiker niet gevonden",
+    "usernameTaken": "Deze gebruikersnaam is al in gebruik",
+    "lastAdmin": "Er moet altijd minstens één beheerder zijn",
+    "cannotDeleteSelf": "Je kunt je eigen account niet verwijderen"
+  },
+  "generator": {
+    "invalidAmount": "Kies tussen 1 en 50 vragen",
+    "invalidParameter": "De vragenservice heeft deze instellingen geweigerd",
+    "noResults": "Geen vragen gevonden voor deze instellingen, probeer minder vragen of andere instellingen",
+    "exhausted": "Je hebt al alle vragen voor deze instellingen ontvangen, probeer andere instellingen",
+    "rateLimited": "De vragenservice is druk, probeer het over een paar seconden opnieuw",
+    "busy": "Er worden op dit moment te veel quizzen gegenereerd, probeer het zo opnieuw",
+    "unavailable": "De vragenservice is op dit moment niet bereikbaar, probeer het later opnieuw",
+    "failed": "Kon de quiz niet genereren",
+    "invalidImport": "Dit is geen geldige ronde, controleer of de AI de JSON in hetzelfde formaat heeft teruggegeven"
+  },
+  "tokens": {
+    "notFound": "Token niet gevonden",
+    "nameEmpty": "Geef het token een naam",
+    "nameTooLong": "De naam mag maximaal 64 tekens bevatten",
+    "invalidExpiry": "Kies een geldigheid tussen 1 en 365 dagen",
+    "missing": "Stuur je API-token als \"Authorization: Bearer razzia_...\"",
+    "wrongFormat": "Dit is geen API-token: het moet beginnen met razzia_",
+    "invalid": "Onbekend of ingetrokken API-token, maak een nieuw token aan",
+    "expired": "Dit API-token is verlopen, maak een nieuw token aan"
+  }
+}

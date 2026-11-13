@@ -48,5 +48,131 @@
     "play": "Play",
     "quizz": "Quizz",
     "results": "Results"
+  },
+  "login": {
+    "title": "Manager login",
+    "submit": "Log in",
+    "link": "Manager login"
+  },
+  "setup": {
+    "title": "Create the first admin",
+    "description": "Choose an account for the first admin. Enter the manager password from the server configuration as setup code.",
+    "code": "Setup code (MANAGER_PASSWORD)",
+    "submit": "Create admin"
+  },
+  "account": {
+    "username": "Username",
+    "confirmPassword": "Repeat password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed",
+    "passwordMismatch": "The passwords do not match",
+    "mustChange": "Choose a new password before you continue."
+  },
+  "users": {
+    "title": "Users",
+    "add": "Add user",
+    "created": "User created",
+    "deleted": "User deleted",
+    "temporaryPassword": "Temporary password",
+    "temporaryPasswordIs": "Temporary password (share it with the user, it is shown only once):",
+    "pendingPassword": "(must change password)",
+    "admin": "Admin",
+    "resetPassword": "Reset password",
+    "resetConfirm": "Reset the password of \"{{name}}\"? A temporary password is generated that must be changed at the next login.",
+    "reset": "Reset",
+    "delete": "Delete user",
+    "deleteConfirm": "Delete \"{{name}}\"? Their quizzes are handed over to you. This cannot be undone.",
+    "newHint": "New users must change the temporary password at their first login. Checked boxes are the rights of the user.",
+    "permissions": {
+      "createQuizz": "Create",
+      "editQuizz": "Edit",
+      "deleteQuizz": "Delete own"
+    }
+  },
+  "access": {
+    "title": "Who can see and edit this quizz",
+    "secret": "Secret quizz",
+    "secretHint": "Only the owner, admins and the people selected below can see it.",
+    "owner": "Owner",
+    "user": "User",
+    "canView": "View",
+    "canEdit": "Edit",
+    "editHint": "Editing also requires the edit right of the user. Everyone can host the quizzes they can see.",
+    "saved": "Access saved"
+  },
+  "generator": {
+    "button": "Generate a round",
+    "title": "Generate a round",
+    "description": "Add a round of questions from the Open Trivia Database to this quizz.",
+    "category": "Category",
+    "anyCategory": "Any category",
+    "difficulty": "Difficulty",
+    "anyDifficulty": "Any difficulty",
+    "difficulties": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "type": "Question type",
+    "anyType": "Any type",
+    "types": {
+      "multiple": "Multiple choice",
+      "boolean": "True / False"
+    },
+    "amount": "Number of questions (1-50)",
+    "englishNote": "Questions are generated in English. You can translate them afterwards.",
+    "attribution": "Questions provided by <odb>Open Trivia Database</odb>, licensed under <cc>CC BY-SA 4.0</cc>.",
+    "wait": "This can take up to 15 seconds, the question service allows one request every 5 seconds.",
+    "generating": "Generating...",
+    "submit": "Generate",
+    "createdTitle": "Questions ready",
+    "created": "{{count}} question(s) generated, in English.",
+    "keepOrTranslate": "Add them as they are, or translate them first?",
+    "targetLanguage": "Translate to",
+    "keepEnglish": "Add in English",
+    "translate": "Translate",
+    "translateSteps": "The questions were downloaded as a JSON file. Give that file to an AI tool together with the instruction below, then import the JSON the AI returns here.",
+    "instruction": "Instruction for the AI tool",
+    "downloadAgain": "Download JSON again",
+    "copy": "Copy instruction",
+    "copied": "Instruction copied",
+    "copyFailed": "Could not copy, select the text and copy it manually",
+    "importTitle": "Import the translated JSON",
+    "importFile": "Choose JSON file",
+    "importPaste": "Or paste the JSON from the AI here",
+    "importSubmit": "Import questions",
+    "addEnglish": "Add the English questions instead",
+    "added": "{{count}} question(s) added"
+  },
+  "background": {
+    "title": "Default background",
+    "hint": "Shown behind the game unless a quizz or question sets its own.",
+    "stock": "Standard classroom background",
+    "saved": "Background saved"
+  },
+  "tokens": {
+    "title": "API tokens",
+    "description": "Tokens let an external tool, such as an AI assistant, create and edit quizzes with your rights. They cannot manage users or settings.",
+    "namePlaceholder": "Name, e.g. AI assistant",
+    "create": "Create token",
+    "shownOnce": "Copy this token now, it is shown only once:",
+    "copy": "Copy token",
+    "copied": "Token copied",
+    "empty": "You have no API tokens yet.",
+    "lastUsed": "Last used: {{date}}",
+    "neverUsed": "never",
+    "expires": "Expires: {{date}}",
+    "revoke": "Revoke token",
+    "revokeConfirm": "Revoke \"{{name}}\"? Tools that use it lose access immediately.",
+    "revoked": "Token revoked",
+    "expiry": {
+      "label": "Validity",
+      "never": "Never expires",
+      "days30": "30 days",
+      "days90": "90 days",
+      "year": "1 year"
+    }
   }
 }

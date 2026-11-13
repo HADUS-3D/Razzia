@@ -1,17 +1,20 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
+import { KeyRound, LogOut, Plug, Users } from "lucide-react"
+import { useState } from "react"
+import { useTranslation } from "react-i18next"
+import { isAdmin } from "@razzia/common/permissions"
 import Card from "@razzia/web/components/Card"
 import LanguageSwitcher from "@razzia/web/components/LanguageSwitcher"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
+import AppBackgroundDialog from "@razzia/web/features/manager/components/AppBackgroundDialog"
+import ChangePasswordForm from "@razzia/web/features/manager/components/ChangePasswordForm"
 import ConfigManageQuizz from "@razzia/web/features/manager/components/configurations/ConfigManageQuizz"
 import ConfigResults from "@razzia/web/features/manager/components/configurations/ConfigResults"
 import ConfigSelectQuizz from "@razzia/web/features/manager/components/configurations/ConfigSelectQuizz"
 import ConfigTabButton from "@razzia/web/features/manager/components/configurations/ConfigTabButton"
-import { managerLogout } from "@razzia/web/features/manager/queries"
+import { managerLogout, meQuery } from "@razzia/web/features/manager/queries"
 import { setToken } from "@razzia/web/lib/session"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
-import { LogOut } from "lucide-react"
-import { useState } from "react"
-import { useTranslation } from "react-i18next"
 
 const tabs = [
   {
@@ -30,6 +33,8 @@ const tabs = [
 
 const Configurations = () => {
   const [selectedTab, setSelectedTab] = useState(0)
+  const [changingPassword, setChangingPassword] = useState(false)
+  const { data: me } = useQuery(meQuery())
   const { resetManager } = useManagerStore()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -50,6 +55,17 @@ const Configurations = () => {
     },
   })
 
+  if (me?.mustChangePassword || changingPassword) {
+    return (
+      <Card>
+        <ChangePasswordForm
+          forced={me?.mustChangePassword ?? false}
+          onDone={() => setChangingPassword(false)}
+        />
+      </Card>
+    )
+  }
+
   return (
     <Card className="max-h-128 w-full max-w-md">
       <div className="mb-4 flex items-center justify-between">
@@ -58,8 +74,32 @@ const Configurations = () => {
         </p>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
+          {me && isAdmin(me) && <AppBackgroundDialog />}
+          {me && isAdmin(me) && (
+            <button
+              className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              onClick={() => navigate({ to: "/manager/users" })}
+              title={t("manager:users.title")}
+            >
+              <Users className="size-4" />
+            </button>
+          )}
           <button
-            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-sm p-1.5"
+            className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            onClick={() => navigate({ to: "/manager/tokens" })}
+            title={t("manager:tokens.title")}
+          >
+            <Plug className="size-4" />
+          </button>
+          <button
+            className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            onClick={() => setChangingPassword(true)}
+            title={t("manager:account.changePassword")}
+          >
+            <KeyRound className="size-4" />
+          </button>
+          <button
+            className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             onClick={() => logout()}
             title={t("manager:logout")}
           >
@@ -67,7 +107,7 @@ const Configurations = () => {
           </button>
         </div>
       </div>
-      <div className="bg-muted flex shrink-0 overflow-hidden rounded-lg">
+      <div className="flex shrink-0 overflow-hidden rounded-lg bg-muted">
         {tabs.map((tab, index) => (
           <ConfigTabButton
             key={tab.nameKey}
@@ -78,7 +118,7 @@ const Configurations = () => {
           </ConfigTabButton>
         ))}
       </div>
-      <hr className="text-muted my-4 border" />
+      <hr className="my-4 border text-muted" />
       <div className="flex min-h-0 flex-1 flex-col">
         <TabComponent />
       </div>

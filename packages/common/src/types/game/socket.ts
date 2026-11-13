@@ -1,4 +1,9 @@
-import { EVENTS } from "@razzia/common/constants"
+import type { z } from "zod"
+import {
+  Server as ServerIO,
+  Socket as SocketIO,
+  type DefaultEventsMap,
+} from "socket.io"
 import type { SessionRole } from "@razzia/common/types/auth"
 import type {
   GameSettings,
@@ -8,12 +13,7 @@ import type {
 } from "@razzia/common/types/game"
 import type { Status, StatusDataMap } from "@razzia/common/types/game/status"
 import type { clientEventValidators } from "@razzia/common/validators/socket"
-import {
-  Server as ServerIO,
-  Socket as SocketIO,
-  type DefaultEventsMap,
-} from "socket.io"
-import type { z } from "zod"
+import { EVENTS } from "@razzia/common/constants"
 
 export interface SocketData {
   clientId: string
@@ -41,6 +41,7 @@ export interface ServerToClientEvents {
   [EVENTS.GAME.STATUS]: (_data: {
     name: Status
     data: StatusDataMap[Status]
+    background?: string
   }) => void
   [EVENTS.GAME.SUCCESS_JOIN]: (_data: {
     gameId: string
@@ -63,6 +64,7 @@ export interface ServerToClientEvents {
     gameId: string
     gameMode: QuizzMode
     status: { name: Status; data: StatusDataMap[Status] }
+    background?: string
     player: { username: string; points: number }
     currentQuestion: GameUpdateQuestion | null
   }) => void
@@ -75,6 +77,7 @@ export interface ServerToClientEvents {
     settings: GameSettings
     locked: boolean
     status: { name: Status; data: StatusDataMap[Status] }
+    background?: string
     players: Player[]
     currentQuestion: GameUpdateQuestion | null
   }) => void

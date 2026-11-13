@@ -1,5 +1,5 @@
-import { EVENTS, MAX_ANSWERS } from "@razzia/common/constants"
 import { z } from "zod"
+import { EVENTS, MAX_ANSWERS } from "@razzia/common/constants"
 
 const gameMessageValidator = z.object({ gameId: z.string().min(1) })
 
@@ -16,6 +16,7 @@ export const clientEventValidators = {
   }),
   [EVENTS.MANAGER.START_GAME]: gameMessageValidator,
   [EVENTS.MANAGER.ADVANCE]: gameMessageValidator,
+  [EVENTS.MANAGER.END_GAME]: gameMessageValidator,
   [EVENTS.MANAGER.SET_LOCK]: gameMessageValidator.extend({
     locked: z.boolean(),
   }),

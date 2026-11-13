@@ -1,3 +1,9 @@
+import clsx from "clsx"
+import { Maximize, Minimize, Users } from "lucide-react"
+import { type PropsWithChildren, useState } from "react"
+import toast from "react-hot-toast"
+import { useTranslation } from "react-i18next"
+import type { Status as GameStatus } from "@razzia/web/features/game/utils/createStatus"
 import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
 import {
   STATUS,
@@ -8,23 +14,25 @@ import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
+import GameMenu from "@razzia/web/features/game/components/GameMenu"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import {
   useEvent,
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
+import { useBackgroundStore } from "@razzia/web/features/game/stores/background"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
-import type { Status as GameStatus } from "@razzia/web/features/game/utils/createStatus"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
-import clsx from "clsx"
-import { Maximize, Minimize, Users } from "lucide-react"
-import { type PropsWithChildren, useState } from "react"
-import toast from "react-hot-toast"
-import { useTranslation } from "react-i18next"
+
+const NOT_RUNNING: Status[] = [
+  STATUS.SHOW_ROOM,
+  STATUS.FINISHED,
+  STATUS.SUMMARY,
+]
 
 type Props = PropsWithChildren & {
   statusName: Status | undefined
@@ -44,6 +52,7 @@ const GameWrapper = ({
   const { player, gameMode } = usePlayerStore()
   const { players, inviteCode, locked, status } = useManagerStore()
   const { questionStates, setQuestionStates } = useQuestionStore()
+  const background = useBackgroundStore((state) => state.background)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { t } = useTranslation()
   const [skippedStatus, setSkippedStatus] =
@@ -90,7 +99,7 @@ const GameWrapper = ({
 
   return (
     <section className="relative flex min-h-dvh">
-      <GameBackground />
+      <GameBackground background={background} />
 
       <div className="z-10 flex w-full flex-1 flex-col justify-between">
         {!isConnected && !statusName ? (
@@ -112,7 +121,7 @@ const GameWrapper = ({
               {manager && onBack && (
                 <Button
                   onClick={onBack}
-                  className="hover:bg-accent bg-white px-4 text-black"
+                  className="bg-white px-4 text-black hover:bg-accent"
                 >
                   {t("common:exit")}
                 </Button>
@@ -121,19 +130,19 @@ const GameWrapper = ({
               {manager && next && (
                 <div className="ml-auto flex gap-2">
                   {statusName === STATUS.SHOW_ROOM && (
-                    <RoomLockButton className="hover:bg-accent rounded-lg bg-white px-3 text-black" />
+                    <RoomLockButton className="rounded-lg bg-white px-3 text-black hover:bg-accent" />
                   )}
 
                   <Button
                     className={clsx(
-                      "hover:bg-accent relative overflow-hidden bg-white px-4 text-black",
+                      "relative overflow-hidden bg-white px-4 text-black hover:bg-accent",
                       { "pointer-events-none": isDisabled },
                     )}
                     onClick={handleNext}
                   >
                     {countdown && (
                       <span
-                        className="bg-primary/40 absolute inset-y-0 left-0"
+                        className="absolute inset-y-0 left-0 bg-primary/40"
                         style={{
                           animation: `progressBar ${countdown.total}s linear forwards`,
                         }}
@@ -175,6 +184,10 @@ const GameWrapper = ({
                 </Tooltip>
 
                 {statusName === STATUS.SHOW_ROOM && <GameSettingsModal />}
+
+                {statusName && !NOT_RUNNING.includes(statusName) && (
+                  <GameMenu />
+                )}
 
                 <Tooltip
                   content={t(

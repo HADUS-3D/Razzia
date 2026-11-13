@@ -67,5 +67,13 @@
   },
   "showQrCode": "Show QR code",
   "streak": "Answer streak",
-  "pinDigit": "PIN digit {{position}}"
+  "pinDigit": "PIN digit {{position}}",
+  "source": "Questions from <odb>Open Trivia Database</odb> (<cc>CC BY-SA 4.0</cc>)",
+  "menu": {
+    "title": "Menu",
+    "endQuizz": "End quiz",
+    "endTitle": "End the quiz now?",
+    "endDescription": "The remaining questions are skipped. Everyone goes to the final screen with the scores so far.",
+    "endConfirm": "End quiz"
+  }
 }

@@ -1,4 +1,4 @@
-import { createDefaultGameSettings, EVENTS } from "@razzia/common/constants"
+import { v7 as uuid } from "uuid"
 import type {
   GameSettings,
   Player,
@@ -6,6 +6,7 @@ import type {
   QuizzMode,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
+import { createDefaultGameSettings, EVENTS } from "@razzia/common/constants"
 import {
   STATUS,
   type Status,
@@ -20,7 +21,6 @@ import { createInviteCode } from "@razzia/socket/utils/game"
 import { createNickname } from "@razzia/socket/utils/nickname"
 import { SECOND_MS } from "@razzia/socket/utils/sleep"
 import { getClientId } from "@razzia/socket/utils/socket"
-import { v7 as uuid } from "uuid"
 
 const registry = Registry.getInstance()
 
@@ -43,6 +43,8 @@ class Game {
   private readonly playerManager: PlayerManager
   private readonly round: RoundManager
   private readonly cooldown: CooldownTimer
+  /** Account of the host; stored with the result to scope who may read it. */
+  hostUserId?: string
   private managerGraceTimer: NodeJS.Timeout | null = null
 
   private lastBroadcastStatus: {
@@ -92,7 +94,8 @@ class Game {
         this.playerStatus.clear()
         this.managerStatus = null
       },
-      onGameFinished: saveResult,
+      onGameFinished: (result) =>
+        saveResult({ ...result, hostId: this.hostUserId }),
       getSettings: () => this._settings,
     })
 
@@ -141,7 +144,10 @@ class Game {
   private broadcastStatus<T extends Status>(status: T, data: StatusDataMap[T]) {
     const statusData = { name: status, data }
     this.lastBroadcastStatus = statusData
-    this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, statusData)
+    this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, {
+      ...statusData,
+      background: this.round.backgroundFor(status),
+    })
   }
 
   private sendStatus<T extends Status>(
@@ -157,7 +163,10 @@ class Game {
       this.playerStatus.set(target, statusData)
     }
 
-    this.io.to(target).emit(EVENTS.GAME.STATUS, statusData)
+    this.io.to(target).emit(EVENTS.GAME.STATUS, {
+      ...statusData,
+      background: this.round.backgroundFor(status),
+    })
   }
 
   // Player actions
@@ -264,6 +273,7 @@ class Game {
       locked: this._locked,
       currentQuestion: this.round.getReconnectInfo(),
       status,
+      background: this.round.backgroundFor(status.name),
       players: this.playerManager.getAll(),
     })
     socket.emit(EVENTS.GAME.TOTAL_PLAYERS, this.playerManager.joinedCount())
@@ -311,6 +321,7 @@ class Game {
       gameMode: this.gameMode,
       currentQuestion: this.round.getReconnectInfo(),
       status,
+      background: this.round.backgroundFor(status.name),
       player: { username: player.username, points: player.points },
     })
     this.playerManager.broadcastCount()
@@ -383,6 +394,11 @@ class Game {
 
   advance() {
     this.round.advance()
+  }
+
+  /** The host ends a running game: everyone goes to the final screen. */
+  endEarly() {
+    this.round.endEarly()
   }
 }
 

@@ -53,14 +53,19 @@ Body `{ "token"?: string }` (an empty or absent body is fine). Always answers `2
 
 Keeping `clientId` on expiry is what preserves a player's seat across a refresh; forcing `player` is what downgrades a stale manager.
 
-### `POST /api/auth/manager`
+### Accounts
 
-Body `{ "password": string }`. Upgrades the caller's session to `manager`, keeping the same `clientId` when a bearer is sent. Returns the same shape as `/api/auth/session`.
+Manager access uses accounts stored in `config/users.json` (passwords hashed with scrypt). The `manager` role on a token means "signed in as a user"; the token carries the account's `userId`, and the account is read again on every request, so deleted users and changed rights apply immediately.
 
-- `401 errors:manager.invalidPassword` — wrong password
-- `403 errors:manager.passwordNotConfigured` — `MANAGER_PASSWORD` is not set
+| Route                      | What it does                                                                                                                                                      |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /api/auth/status`     | `{ needsSetup }`, true while no user exists                                                                                                                       |
+| `POST /api/auth/setup`     | Body `{ username, password, setupCode }`. Creates the first admin and signs in. `setupCode` is `MANAGER_PASSWORD`. `409 errors:auth.setupDone` once a user exists |
+| `POST /api/auth/login`     | Body `{ username, password }`. Returns the session shape of `/api/auth/session`. `403 errors:auth.invalidCredentials`, `429 errors:auth.tooManyAttempts`          |
+| `GET /api/auth/me`         | The signed-in user `{ id, username, role, permissions, mustChangePassword }`                                                                                      |
+| `PATCH /api/auth/password` | Body `{ currentPassword, newPassword }`                                                                                                                           |
 
-There is **no rate limit**, matching the previous socket behaviour.
+Five failed logins for the same username block further attempts for 15 minutes. Users whose password was reset get `mustChangePassword`: every manager route answers `403 errors:auth.passwordChangeRequired` until they change it.
 
 ### `POST /api/auth/logout`
 
@@ -70,24 +75,45 @@ Logout is **stateless**: the old manager token stays cryptographically valid unt
 
 ## Manager routes
 
-All of these require a bearer whose role is `manager`, and answer `401 errors:auth.unauthorized` otherwise.
+All of these require a bearer whose role is `manager` (a signed-in user), and answer `401 errors:auth.unauthorized` otherwise. See [Accounts and permissions](configuration.md#accounts-and-permissions) for who may do what.
 
-| Route                     | Success                            | Errors                       |
-| ------------------------- | ---------------------------------- | ---------------------------- |
-| `GET /api/quizz`          | `200 { quizz: [{ id, subject }] }` | —                            |
-| `GET /api/quizz/:id`      | `200` the full quiz                | `404 errors:quizz.notFound`  |
-| `POST /api/quizz`         | `201 { id }`                       | `400` validation key         |
-| `PATCH /api/quizz/:id`    | `200 { id }`                       | `400` validation key, `404`  |
-| `DELETE /api/quizz/:id`   | `204`                              | `404 errors:quizz.notFound`  |
-| `GET /api/results`        | `200 { results: [meta] }`          | —                            |
-| `GET /api/results/:id`    | `200` the full result              | `404 errors:result.notFound` |
-| `DELETE /api/results/:id` | `204`                              | `404 errors:result.notFound` |
-| `POST /api/games`         | `201 { gameId, inviteCode }`       | `404 errors:quizz.notFound`  |
-| `GET /api/media`          | `200 { media: [media] }`           | —                            |
-| `POST /api/media`         | `201` the stored media             | `400`, `413`, `415`          |
-| `DELETE /api/media/:name` | `204`                              | `400`, `404`                 |
+| Route                     | Success                                                | Errors                       |
+| ------------------------- | ------------------------------------------------------ | ---------------------------- |
+| `GET /api/quizz`          | `200 { quizz: [meta] }`, only quizzes the user may see | —                            |
+| `GET /api/quizz/:id`      | `200` the full quiz                                    | `404 errors:quizz.notFound`  |
+| `POST /api/quizz`         | `201 { id }`                                           | `400` validation key         |
+| `PATCH /api/quizz/:id`    | `200 { id }`                                           | `400` validation key, `404`  |
+| `DELETE /api/quizz/:id`   | `204`                                                  | `404 errors:quizz.notFound`  |
+| `GET /api/results`        | `200 { results: [meta] }`                              | —                            |
+| `GET /api/results/:id`    | `200` the full result                                  | `404 errors:result.notFound` |
+| `DELETE /api/results/:id` | `204`                                                  | `404 errors:result.notFound` |
+| `POST /api/games`         | `201 { gameId, inviteCode }`                           | `404 errors:quizz.notFound`  |
+| `GET /api/media`          | `200 { media: [media] }`                               | —                            |
+| `POST /api/media`         | `201` the stored media                                 | `400`, `413`, `415`          |
+| `DELETE /api/media/:name` | `204`                                                  | `400`, `404`                 |
 
 The quiz body is validated against the same schema as the files in `config/quizz` — see [Quiz](quiz.md).
+
+### Users and sharing
+
+| Route                                | Who          | What it does                                                                                   |
+| ------------------------------------ | ------------ | ---------------------------------------------------------------------------------------------- |
+| `GET /api/users/directory`           | user         | `{ users: [{ id, username }] }`, to pick people to share a quiz with                           |
+| `GET /api/users`                     | admin        | all users with role and permissions                                                            |
+| `POST /api/users`                    | admin        | `{ username, password, role, permissions }`; the user must change the password at login        |
+| `PATCH /api/users/:id`               | admin        | `{ role?, permissions? }`; `409 errors:users.lastAdmin` when it would remove the last admin    |
+| `POST /api/users/:id/reset-password` | admin        | `{ password? }`, returns `{ password }` (generated when omitted)                               |
+| `DELETE /api/users/:id`              | admin        | quizzes of the user go to the deleting admin                                                   |
+| `PATCH /api/quizz/:id/access`        | owner, admin | `{ visibility: "all" \| "secret", viewers, editors, ownerId? }`; `ownerId` hands the quiz over |
+
+### Question generator
+
+| Route                           | Who                | Notes                                                                                                          |
+| ------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `GET /api/generator/categories` | create-quiz rights | `200 { categories: [{ id, name }] }`, cached for 24 hours                                                      |
+| `POST /api/generator`           | create-quiz rights | `{ amount (1-50), category?, difficulty?, type? }`, returns `200 { questions }`; nothing is saved by the route |
+
+Failures use `errors:generator.*` keys: `noResults`, `exhausted` (all questions already served to this user), `invalidParameter`, `rateLimited` and `busy` (`429`), `unavailable` (`500`).
 
 ### Media
 
@@ -120,6 +146,51 @@ Answers `200 { settings }` with the full settings after the change.
 - `400` — validation key, e.g. `errors:game.invalidAutoAdvanceDelay`
 
 The `autoAdvance` object is nested, so sending it replaces all three of its fields at once.
+
+## API tokens (for scripts and AI tools)
+
+Logging in with a username and password gives a 12-hour token, which is awkward for a script or an AI assistant. For those, create an **API token** in the manager (plug icon on the manager configuration screen, or `/manager/tokens`). A token:
+
+- starts with `razzia_` and is shown **once** when you create it; only its SHA-256 hash is stored in `config/api-tokens.json`;
+- belongs to your account and has exactly your rights: it can create a quiz only if you may, and edit or delete only what you may edit or delete;
+- works on the **quiz routes only** (`/api/quizz/*` and `/api/generator/*`), as a normal bearer. It cannot reach accounts, tokens, results, media, games or settings;
+- can have an expiry (1 to 365 days) and can be revoked at any time; it stops working at once when the account is deleted or has to change its password.
+
+```
+Authorization: Bearer razzia_...
+```
+
+Example: create a quiz.
+
+```sh
+curl -X POST https://razzia.example.com/api/quizz \
+  -H "Authorization: Bearer razzia_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "gameMode": "quiz",
+    "subject": "Capitals",
+    "questions": [
+      {
+        "type": "single",
+        "question": "What is the capital of France?",
+        "answers": ["Paris", "Lyon", "Nice", "Lille"],
+        "solutions": [0],
+        "cooldown": 5,
+        "time": 20
+      }
+    ]
+  }'
+```
+
+Answers `201 { "id": "..." }`. The full format of a quiz is described in [Quiz](quiz.md); a `400` names the first failing rule, for example `errors:quizz.noSolution`.
+
+Tokens are managed with a normal manager session (not with a token):
+
+| Route                    | Success                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------ |
+| `GET /api/tokens`        | `200 { tokens: [{ id, name, prefix, createdAt, expiresAt, lastUsedAt }] }`, your own |
+| `POST /api/tokens`       | Body `{ name, expiresInDays? }`, `201` with the same fields plus the secret `token`  |
+| `DELETE /api/tokens/:id` | `204`; `404 errors:tokens.notFound` for a token that is not yours                    |
 
 ## Public routes
 

@@ -32,6 +32,7 @@ export const EVENTS = {
     KICK_PLAYER: "manager:kickPlayer",
     START_GAME: "manager:startGame",
     ADVANCE: "manager:advance",
+    END_GAME: "manager:endGame",
     AUTO_ADVANCE: "manager:autoAdvance",
     SET_LOCK: "manager:setLock",
     LOCK_UPDATED: "manager:lockUpdated",
@@ -42,6 +43,23 @@ export const SESSION_ROLES = {
   PLAYER: "player",
   MANAGER: "manager",
 } as const
+
+/** Every API token starts with this, so it is recognisable in a bearer header. */
+export const API_TOKEN_PREFIX = "razzia_"
+
+export const MAX_API_TOKEN_DAYS = 365
+
+export const USER_ROLES = {
+  ADMIN: "admin",
+  USER: "user",
+} as const
+
+export const QUIZZ_VISIBILITIES = {
+  ALL: "all",
+  SECRET: "secret",
+} as const
+
+export const MIN_PASSWORD_LENGTH = 8
 
 export const NO_TIME_LIMIT = -1
 
@@ -67,6 +85,21 @@ export const QUIZZ_MODES = {
   QUIZ: "quiz",
   SURVEY: "survey",
 } as const
+
+export const QUIZZ_SOURCES = {
+  OPENTDB: "opentdb",
+} as const
+
+export const OPENTDB_URL = "https://opentdb.com"
+
+export const OPENTDB_LICENSE_URL =
+  "https://creativecommons.org/licenses/by-sa/4.0/"
+
+export const OPENTDB_MAX_AMOUNT = 50
+
+export const OPENTDB_DIFFICULTIES = ["easy", "medium", "hard"] as const
+
+export const OPENTDB_TYPES = ["multiple", "boolean"] as const
 
 export const QUESTION_TYPES = {
   SINGLE: "single",

@@ -1,4 +1,7 @@
-import { EXAMPLE_QUIZZ, QUIZZ_MODES } from "@razzia/common/constants"
+import fs from "fs"
+import { nanoid } from "nanoid"
+import { join, resolve } from "path"
+import type { QuizzAccess } from "@razzia/common/types/auth"
 import type {
   GameResult,
   GameResultMeta,
@@ -6,14 +9,17 @@ import type {
   QuizzWithId,
 } from "@razzia/common/types/game"
 import {
+  EXAMPLE_QUIZZ,
+  QUIZZ_MODES,
+  QUIZZ_VISIBILITIES,
+} from "@razzia/common/constants"
+import { DEFAULT_ACCESS } from "@razzia/common/permissions"
+import {
   normalizeLegacyQuizz,
   quizzValidator,
 } from "@razzia/common/validators/quizz"
 import { invalidInput, notFound } from "@razzia/socket/services/errors"
 import { normalizeFilename } from "@razzia/socket/utils/file"
-import fs from "fs"
-import { nanoid } from "nanoid"
-import { join, resolve } from "path"
 
 const inContainerPath = process.env.CONFIG_PATH
 
@@ -106,8 +112,43 @@ export const getQuizzMeta = () =>
     .map(({ id, subject }) => ({ id, subject }))
     .sort((a, b) => subjectCollator.compare(a.subject, b.subject))
 
-export const getQuizzById = (id: string): QuizzWithId => {
-  const quizz = getQuizz().find((q) => q.id === id)
+export type QuizzEntry = QuizzWithId & { access: QuizzAccess }
+
+const stringList = (value: unknown): string[] =>
+  Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : []
+
+/** Quizzes without (valid) access data stay visible to all and have no owner. */
+export const parseAccess = (data: unknown): QuizzAccess => {
+  if (typeof data !== "object" || data === null) {
+    return { ...DEFAULT_ACCESS, viewers: [], editors: [] }
+  }
+
+  const raw = data as Record<string, unknown>
+
+  return {
+    ownerId: typeof raw.ownerId === "string" ? raw.ownerId : null,
+    visibility:
+      raw.visibility === QUIZZ_VISIBILITIES.SECRET
+        ? QUIZZ_VISIBILITIES.SECRET
+        : QUIZZ_VISIBILITIES.ALL,
+    viewers: stringList(raw.viewers),
+    editors: stringList(raw.editors),
+  }
+}
+
+const serializeQuizz = (
+  id: string,
+  quizz: unknown,
+  access: QuizzAccess,
+): string => JSON.stringify({ id, ...(quizz as object), access }, null, 2)
+
+const stripAccess = ({ access: _access, ...quizz }: QuizzEntry): QuizzWithId =>
+  quizz
+
+export const getQuizzEntryById = (id: string): QuizzEntry => {
+  const quizz = getQuizzEntries().find((q) => q.id === id)
 
   if (!quizz) {
     throw notFound("errors:quizz.notFound")
@@ -116,7 +157,12 @@ export const getQuizzById = (id: string): QuizzWithId => {
   return quizz
 }
 
-export const getQuizz = (): QuizzWithId[] => {
+export const getQuizzById = (id: string): QuizzWithId =>
+  stripAccess(getQuizzEntryById(id))
+
+export const getQuizz = (): QuizzWithId[] => getQuizzEntries().map(stripAccess)
+
+export const getQuizzEntries = (): QuizzEntry[] => {
   const isExists = fs.existsSync(getPath("quizz"))
 
   if (!isExists) {
@@ -126,7 +172,7 @@ export const getQuizz = (): QuizzWithId[] => {
   try {
     const files = listJsonFiles(getPath("quizz"))
 
-    const quizz: QuizzWithId[] = files.flatMap((file) => {
+    const quizz: QuizzEntry[] = files.flatMap((file) => {
       const filePath = getPath(`quizz/${file}`)
       const data = readJson(filePath)
 
@@ -144,18 +190,17 @@ export const getQuizz = (): QuizzWithId[] => {
         return []
       }
 
+      const access = parseAccess(data.access)
+
       if (typeof data.id === "string") {
-        return [{ id: data.id, ...result.data }]
+        return [{ id: data.id, ...result.data, access }]
       }
 
       const id = nanoid()
 
-      fs.writeFileSync(
-        filePath,
-        JSON.stringify({ id, ...result.data }, null, 2),
-      )
+      fs.writeFileSync(filePath, serializeQuizz(id, result.data, access))
 
-      return [{ id, ...result.data }]
+      return [{ id, ...result.data, access }]
     })
 
     return quizz
@@ -174,13 +219,49 @@ export const updateQuizz = (id: string, data: unknown): { id: string } => {
   }
 
   const file = requireFileById("quizz", id, "errors:quizz.notFound")
+  const { access } = getQuizzEntryById(id)
 
   fs.writeFileSync(
     join(getPath("quizz"), file),
-    JSON.stringify({ id, ...result.data }, null, 2),
+    serializeQuizz(id, result.data, access),
   )
 
   return { id }
+}
+
+export const updateQuizzAccess = (id: string, access: QuizzAccess): void => {
+  const file = requireFileById("quizz", id, "errors:quizz.notFound")
+  const { id: _id, access: _old, ...content } = getQuizzEntryById(id)
+
+  fs.writeFileSync(
+    join(getPath("quizz"), file),
+    serializeQuizz(id, content, access),
+  )
+}
+
+/** Gives every quizz without an owner to `ownerId` (first-setup migration). */
+export const assignOrphanQuizzes = (ownerId: string): void => {
+  for (const entry of getQuizzEntries()) {
+    if (entry.access.ownerId === null) {
+      updateQuizzAccess(entry.id, { ...entry.access, ownerId })
+    }
+  }
+}
+
+/** Hands over everything a removed user owned and drops them from sharing. */
+export const reassignUserQuizzes = (userId: string, newOwnerId: string) => {
+  for (const { id, access } of getQuizzEntries()) {
+    const next: QuizzAccess = {
+      ownerId: access.ownerId === userId ? newOwnerId : access.ownerId,
+      visibility: access.visibility,
+      viewers: access.viewers.filter((u) => u !== userId),
+      editors: access.editors.filter((u) => u !== userId),
+    }
+
+    if (JSON.stringify(next) !== JSON.stringify(access)) {
+      updateQuizzAccess(id, next)
+    }
+  }
 }
 
 export const deleteQuizz = (id: string): void => {
@@ -211,7 +292,9 @@ export const saveResult = (data: GameResult): void => {
 /** Results written before survey mode have no `gameMode` field. */
 type StoredResult = Omit<GameResult, "gameMode"> & { gameMode?: QuizzMode }
 
-export const getResultsMeta = (): GameResultMeta[] => {
+export const getResultsMeta = (
+  canSee: (hostId?: string) => boolean = () => true,
+): GameResultMeta[] => {
   const resultsPath = getPath("results")
 
   if (!fs.existsSync(resultsPath)) {
@@ -221,7 +304,7 @@ export const getResultsMeta = (): GameResultMeta[] => {
   const readMeta = (file: string): GameResultMeta | null => {
     const data = readJson(join(resultsPath, file)) as StoredResult | null
 
-    if (!data) {
+    if (!data || !canSee(data.hostId)) {
       return null
     }
 
@@ -267,7 +350,10 @@ export const deleteResult = (id: string): void => {
   fs.unlinkSync(join(getPath("results"), file))
 }
 
-export const saveQuizz = (data: unknown): { id: string } => {
+export const saveQuizz = (
+  data: unknown,
+  ownerId: string | null = null,
+): { id: string } => {
   const result = quizzValidator.safeParse(data)
 
   if (!result.success) {
@@ -279,7 +365,12 @@ export const saveQuizz = (data: unknown): { id: string } => {
 
   fs.writeFileSync(
     getPath(`quizz/${fileName}.json`),
-    JSON.stringify({ id, ...result.data }, null, 2),
+    serializeQuizz(id, result.data, {
+      ...DEFAULT_ACCESS,
+      ownerId,
+      viewers: [],
+      editors: [],
+    }),
   )
 
   return { id }

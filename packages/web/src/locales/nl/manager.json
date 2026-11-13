@@ -1,0 +1,178 @@
+{
+  "configurationsTitle": "Configuraties",
+  "logout": "Uitloggen",
+  "passwordPlaceholder": "Wachtwoord",
+  "quizz": {
+    "create": "Quiz maken",
+    "delete": "Quiz verwijderen",
+    "deleteConfirm": "Weet je zeker dat je \"{{name}}\" wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "deleted": "Quiz verwijderd",
+    "export": "Quiz exporteren als JSON",
+    "import": "Quiz importeren uit JSON",
+    "none": "Nog geen quiz gemaakt",
+    "notFound": "Geen quiz gevonden",
+    "pleaseCreate": "Maak eerst een quiz",
+    "pleaseSelect": "Kies een quiz",
+    "startGame": "Spel starten",
+    "edit": "Quiz bewerken"
+  },
+  "result": {
+    "delete": "Resultaat verwijderen",
+    "deleteConfirm": "Resultaat van \"{{name}}\" verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "deleted": "Resultaat verwijderd",
+    "noAnswer": "Geen antwoord",
+    "none": "Nog geen resultaten, speel een spel uit om hier rapporten te zien",
+    "paginationOf": " van ",
+    "stats": {
+      "correctAnswers": "Goede antwoorden",
+      "playersAnswered": "Spelers die antwoordden"
+    },
+    "table": {
+      "answered": "Beantwoord",
+      "correct": " Goed",
+      "correctIncorrect": "Goed / Fout",
+      "incorrect": " Fout",
+      "player": "Speler",
+      "points": "Punten"
+    },
+    "playerCount": "{{count}} speler(s)",
+    "timeLimitSuffix": "s tijdslimiet",
+    "estimation": {
+      "answered": "Beantwoord",
+      "withinMargin": "{{value}} ± {{margin}}",
+      "outsideMargin": "Buiten de marge",
+      "average": "Gemiddeld antwoord: {{value}}"
+    }
+  },
+  "tabs": {
+    "play": "Spelen",
+    "quizz": "Quiz",
+    "results": "Resultaten"
+  },
+  "login": {
+    "title": "Beheerderslogin",
+    "submit": "Inloggen",
+    "link": "Beheerderslogin"
+  },
+  "setup": {
+    "title": "Maak de eerste beheerder aan",
+    "description": "Kies een account voor de eerste beheerder. Voer het beheerderswachtwoord uit de serverconfiguratie in als installatiecode.",
+    "code": "Installatiecode (MANAGER_PASSWORD)",
+    "submit": "Beheerder aanmaken"
+  },
+  "account": {
+    "username": "Gebruikersnaam",
+    "confirmPassword": "Herhaal wachtwoord",
+    "currentPassword": "Huidig wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "changePassword": "Wachtwoord wijzigen",
+    "passwordChanged": "Wachtwoord gewijzigd",
+    "passwordMismatch": "De wachtwoorden komen niet overeen",
+    "mustChange": "Kies een nieuw wachtwoord voordat je verdergaat."
+  },
+  "users": {
+    "title": "Gebruikers",
+    "add": "Gebruiker toevoegen",
+    "created": "Gebruiker aangemaakt",
+    "deleted": "Gebruiker verwijderd",
+    "temporaryPassword": "Tijdelijk wachtwoord",
+    "temporaryPasswordIs": "Tijdelijk wachtwoord (deel het met de gebruiker, het wordt maar één keer getoond):",
+    "pendingPassword": "(moet wachtwoord wijzigen)",
+    "admin": "Beheerder",
+    "resetPassword": "Wachtwoord resetten",
+    "resetConfirm": "Het wachtwoord van \"{{name}}\" resetten? Er wordt een tijdelijk wachtwoord gemaakt dat bij de volgende login gewijzigd moet worden.",
+    "reset": "Resetten",
+    "delete": "Gebruiker verwijderen",
+    "deleteConfirm": "\"{{name}}\" verwijderen? De quizzen van deze gebruiker worden aan jou overgedragen. Dit kan niet ongedaan worden gemaakt.",
+    "newHint": "Nieuwe gebruikers moeten het tijdelijke wachtwoord bij hun eerste login wijzigen. Aangevinkte vakjes zijn de rechten van de gebruiker.",
+    "permissions": {
+      "createQuizz": "Maken",
+      "editQuizz": "Bewerken",
+      "deleteQuizz": "Eigen verwijderen"
+    }
+  },
+  "access": {
+    "title": "Wie deze quiz mag zien en bewerken",
+    "secret": "Geheime quiz",
+    "secretHint": "Alleen de eigenaar, beheerders en de hieronder geselecteerde mensen kunnen hem zien.",
+    "owner": "Eigenaar",
+    "user": "Gebruiker",
+    "canView": "Bekijken",
+    "canEdit": "Bewerken",
+    "editHint": "Bewerken vereist ook het bewerkrecht van de gebruiker. Iedereen kan de quizzen spelen die hij of zij kan zien.",
+    "saved": "Toegang opgeslagen"
+  },
+  "generator": {
+    "button": "Ronde genereren",
+    "title": "Ronde genereren",
+    "description": "Voeg een ronde vragen uit de Open Trivia Database toe aan deze quiz.",
+    "category": "Categorie",
+    "anyCategory": "Elke categorie",
+    "difficulty": "Moeilijkheid",
+    "anyDifficulty": "Elke moeilijkheid",
+    "difficulties": {
+      "easy": "Makkelijk",
+      "medium": "Gemiddeld",
+      "hard": "Moeilijk"
+    },
+    "type": "Vraagtype",
+    "anyType": "Elk type",
+    "types": {
+      "multiple": "Meerkeuze",
+      "boolean": "Waar / Onwaar"
+    },
+    "amount": "Aantal vragen (1-50)",
+    "englishNote": "Vragen worden in het Engels gegenereerd. Je kunt ze daarna vertalen.",
+    "attribution": "Vragen geleverd door <odb>Open Trivia Database</odb>, onder licentie <cc>CC BY-SA 4.0</cc>.",
+    "wait": "Dit kan tot 15 seconden duren, de vragenservice staat één verzoek per 5 seconden toe.",
+    "generating": "Genereren...",
+    "submit": "Genereren",
+    "createdTitle": "Vragen klaar",
+    "created": "{{count}} vraag/vragen gegenereerd, in het Engels.",
+    "keepOrTranslate": "Voeg ze toe zoals ze zijn, of eerst vertalen?",
+    "targetLanguage": "Vertalen naar",
+    "keepEnglish": "Toevoegen in het Engels",
+    "translate": "Vertalen",
+    "translateSteps": "De vragen zijn gedownload als JSON-bestand. Geef dat bestand samen met de onderstaande instructie aan een AI-tool en importeer hier de JSON die de AI teruggeeft.",
+    "instruction": "Instructie voor de AI-tool",
+    "downloadAgain": "JSON opnieuw downloaden",
+    "copy": "Instructie kopiëren",
+    "copied": "Instructie gekopieerd",
+    "copyFailed": "Kopiëren mislukt, selecteer de tekst en kopieer die handmatig",
+    "importTitle": "Importeer de vertaalde JSON",
+    "importFile": "JSON-bestand kiezen",
+    "importPaste": "Of plak hier de JSON van de AI",
+    "importSubmit": "Vragen importeren",
+    "addEnglish": "Voeg in plaats daarvan de Engelse vragen toe",
+    "added": "{{count}} vraag/vragen toegevoegd"
+  },
+  "background": {
+    "title": "Standaardachtergrond",
+    "hint": "Getoond achter het spel, tenzij een quiz of vraag een eigen achtergrond heeft.",
+    "stock": "Standaard klaslokaalachtergrond",
+    "saved": "Achtergrond opgeslagen"
+  },
+  "tokens": {
+    "title": "API-tokens",
+    "description": "Met tokens kan een externe tool, zoals een AI-assistent, quizzen maken en bewerken met jouw rechten. Ze kunnen geen gebruikers of instellingen beheren.",
+    "namePlaceholder": "Naam, bijv. AI-assistent",
+    "create": "Token aanmaken",
+    "shownOnce": "Kopieer dit token nu, het wordt maar één keer getoond:",
+    "copy": "Token kopiëren",
+    "copied": "Token gekopieerd",
+    "empty": "Je hebt nog geen API-tokens.",
+    "lastUsed": "Laatst gebruikt: {{date}}",
+    "neverUsed": "nooit",
+    "expires": "Verloopt: {{date}}",
+    "revoke": "Token intrekken",
+    "revokeConfirm": "\"{{name}}\" intrekken? Tools die het gebruiken verliezen direct toegang.",
+    "revoked": "Token ingetrokken",
+    "expiry": {
+      "label": "Geldigheid",
+      "never": "Verloopt nooit",
+      "days30": "30 dagen",
+      "days90": "90 dagen",
+      "year": "1 jaar"
+    }
+  }
+}
