@@ -149,7 +149,7 @@ The `autoAdvance` object is nested, so sending it replaces all three of its fiel
 
 ## API tokens (for scripts and AI tools)
 
-Logging in with a username and password gives a 12-hour token, which is awkward for a script or an AI assistant. For those, create an **API token** in the manager (plug icon in the settings, or `/manager/tokens`). A token:
+Logging in with a username and password gives a 12-hour token, which is awkward for a script or an AI assistant. For those, create an **API token** in the manager (plug icon on the manager configuration screen, or `/manager/tokens`). A token:
 
 - starts with `razzia_` and is shown **once** when you create it; only its SHA-256 hash is stored in `config/api-tokens.json`;
 - belongs to your account and has exactly your rights: it can create a quiz only if you may, and edit or delete only what you may edit or delete;
