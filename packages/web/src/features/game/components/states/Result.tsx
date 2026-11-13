@@ -53,9 +53,9 @@ const Result = ({
         )}
       >
         {correct ? (
-          <CricleCheck className="aspect-square w-full" />
+          <CricleCheck className="aspect-square h-auto w-full" />
         ) : (
-          <CricleXmark className="aspect-square w-full" />
+          <CricleXmark className="aspect-square h-auto w-full" />
         )}
       </div>
       <h2
