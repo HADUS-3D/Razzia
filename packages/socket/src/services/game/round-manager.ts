@@ -136,7 +136,13 @@ export class RoundManager {
 
   /** The ranking screens fall back to the quizz background. */
   backgroundFor(status: Status): string | undefined {
-    if (status === STATUS.SHOW_ROUND) {
+    // The countdown that leads into a round already wears the round's
+    // background, so the first question's own image never shows before it.
+    const opensRound =
+      status === STATUS.SHOW_ROUND ||
+      (status === STATUS.SHOW_START && this.question.round)
+
+    if (opensRound) {
       return this.question.round?.background ?? this.opts.quizz.background
     }
 
