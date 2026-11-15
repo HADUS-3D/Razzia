@@ -20,8 +20,8 @@ JWT_SECRET=
 | `JWT_SECRET`       | No       | Signs session tokens. Must be at least 32 characters; a shorter value is ignored.                                                                                                                                  |
 | `WEB_PORT`         | No       | Without Docker only: port the app is served on. Defaults to `3000`.                                                                                                                                                |
 | `SOCKET_PORT`      | No       | Without Docker only: port of the socket server, proxied behind the web port. Defaults to `3001`.                                                                                                                   |
-| `PUID`             | No       | Docker only: user ID the app runs as and owner of the `config` folder. Defaults to `1000`.                             |
-| `PGID`             | No       | Docker only: group ID the app runs as and group of the `config` folder. Defaults to `1000`.                            |
+| `PUID`             | No       | Docker only: user ID the app runs as and owner of the `config` folder. Defaults to `1000`.                                                                                                                         |
+| `PGID`             | No       | Docker only: group ID the app runs as and group of the `config` folder. Defaults to `1000`.                                                                                                                        |
 
 `pnpm dev` and `pnpm start` load `.env` automatically. With Docker, `compose.yml` reads the same file through `env_file`, or you can set the variables inline with `environment:`. With a bare `docker run`, pass them with `-e MANAGER_PASSWORD=...`.
 
