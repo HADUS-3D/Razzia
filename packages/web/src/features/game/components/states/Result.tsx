@@ -6,6 +6,7 @@ import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
 import CricleCheck from "@razzia/web/features/game/components/icons/CricleCheck"
 import CricleXmark from "@razzia/web/features/game/components/icons/CricleXmark"
+import PuzzleSolution from "@razzia/web/features/game/components/PuzzleSolution"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { SFX } from "@razzia/web/features/game/utils/constants"
 
@@ -16,11 +17,11 @@ interface Props {
 const NOTE_DELAY_MS = 1000
 
 const Result = ({
-  data: { correct, message, points, myPoints, rank, aheadOfMe, note },
+  data: { correct, message, points, myPoints, rank, aheadOfMe, note, puzzle },
 }: Props) => {
   const { updatePlayer } = usePlayerStore()
   const { t } = useTranslation()
-  const hasNote = Boolean(note?.trim())
+  const hasNote = Boolean(note?.trim()) || Boolean(puzzle)
   const [compact, setCompact] = useState(false)
 
   useEffect(() => {
@@ -77,7 +78,8 @@ const Result = ({
         </span>
       )}
       {compact && (
-        <div className="mt-4 w-full">
+        <div className="mt-4 flex w-full flex-col gap-3">
+          {puzzle && <PuzzleSolution groups={puzzle.groups} />}
           <AnswerNote note={note} />
         </div>
       )}

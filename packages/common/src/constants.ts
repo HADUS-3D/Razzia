@@ -105,7 +105,15 @@ export const QUESTION_TYPES = {
   SINGLE: "single",
   MULTI: "multi",
   ESTIMATION: "estimation",
+  PUZZLE: "puzzle",
 } as const
+
+/** A puzzle shows 12 words that form 3 groups of 4, each group with a connection. */
+export const PUZZLE_GROUPS = 3
+
+export const PUZZLE_GROUP_SIZE = 4
+
+export const MAX_PUZZLE_ANSWER_LENGTH = 100
 
 export const ESTIMATION_INPUT_MODES = {
   SLIDER: "slider",

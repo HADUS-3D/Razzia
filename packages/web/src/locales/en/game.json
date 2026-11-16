@@ -83,5 +83,11 @@
     "bestStreak": "Longest streak",
     "bestStreakCount_one": "{{count}} in a row",
     "bestStreakCount_other": "{{count}} in a row"
+  },
+  "puzzle": {
+    "connection": "Connection {{number}}",
+    "placeholder": "What do these words have in common?",
+    "found": "{{count}} of {{total}} connections found",
+    "noAnswer": "No answer"
   }
 }

@@ -54,6 +54,15 @@ export interface CommonStatusDataMap {
     rank: number
     aheadOfMe: string | null
     note?: string
+    /** Set for a puzzle: per group its words, the right connection and what the player typed. */
+    puzzle?: {
+      groups: Array<{
+        words: string[]
+        connection: string
+        given: string
+        correct: boolean
+      }>
+    }
   }
   WAIT: { text: string }
   FINISHED: {

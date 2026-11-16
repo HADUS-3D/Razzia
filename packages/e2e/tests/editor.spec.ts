@@ -431,3 +431,72 @@ test("keeps the number settings within their limits", async ({ page }) => {
     maxPoints: 0,
   })
 })
+
+test("saves a puzzle with its words and accepted connections", async ({
+  page,
+}) => {
+  const subject = uniqueSubject("Puzzle quizz")
+  const words = [
+    ["Mars", "Venus", "Saturn", "Mercury"],
+    ["Nile", "Amazon", "Danube", "Rhine"],
+    ["Hamlet", "Macbeth", "Othello", "Tempest"],
+  ]
+
+  await page.getByRole("button", { name: t("manager:quizz.create") }).click()
+  await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
+  await page
+    .getByPlaceholder(t("quizz:question.placeholder"))
+    .fill("What connects each group?")
+  await selectOption(
+    page,
+    t("quizz:question.config.answerMode"),
+    t("quizz:questionType.puzzle"),
+  )
+
+  for (const [index, word] of words.flat().entries()) {
+    // Typing is sequential on purpose: one page has a single focus.
+    // oxlint-disable-next-line no-await-in-loop
+    await page
+      .getByRole("textbox", {
+        name: t("quizz:question.config.puzzle.word", { number: index + 1 }),
+        exact: true,
+      })
+      .fill(word)
+  }
+
+  const connections = page.getByPlaceholder(
+    t("quizz:question.config.puzzle.connectionPlaceholder"),
+  )
+
+  await connections.nth(0).fill("Planets")
+  await connections.nth(1).fill("Rivers")
+  await connections.nth(2).fill("Shakespeare plays")
+  await page
+    .getByRole("button", {
+      name: t("quizz:question.config.puzzle.addAlternative"),
+    })
+    .first()
+    .click()
+  await page
+    .getByPlaceholder(t("quizz:question.config.puzzle.alternativePlaceholder"))
+    .fill("The planets")
+
+  await saveQuizz(page)
+
+  expect(readQuizz(subject)).toMatchObject({
+    gameMode: "quiz",
+    questions: [
+      {
+        type: "puzzle",
+        answers: words.flat(),
+        options: {
+          connections: [
+            ["Planets", "The planets"],
+            ["Rivers"],
+            ["Shakespeare plays"],
+          ],
+        },
+      },
+    ],
+  })
+})

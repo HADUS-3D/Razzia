@@ -1,7 +1,7 @@
 import { LayoutList } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import type { QuestionType } from "@razzia/common/types/game"
-import { QUIZZ_MODES } from "@razzia/common/constants"
+import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import {
   Select,
   SelectContent,
@@ -42,7 +42,10 @@ const QuestionEditorConfig = () => {
 
   const { ConfigComponent } = QUESTION_REGISTRY[questionType]
 
-  const typeOptions = QUESTION_TYPE_LIST.map((type) => ({
+  // A puzzle has no survey variant: there are no right answers to find.
+  const typeOptions = QUESTION_TYPE_LIST.filter(
+    (type) => type !== QUESTION_TYPES.PUZZLE || gameMode === QUIZZ_MODES.QUIZ,
+  ).map((type) => ({
     value: type,
     label: t(QUESTION_REGISTRY[type].labelKey),
   }))

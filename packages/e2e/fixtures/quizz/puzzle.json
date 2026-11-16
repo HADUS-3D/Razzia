@@ -1,0 +1,35 @@
+{
+  "id": "e2e-puzzle",
+  "gameMode": "quiz",
+  "subject": "E2E Puzzle",
+  "questions": [
+    {
+      "type": "puzzle",
+      "question": "What do the words in each group have in common?",
+      "answers": [
+        "Mars",
+        "Venus",
+        "Saturn",
+        "Mercury",
+        "Nile",
+        "Amazon",
+        "Danube",
+        "Rhine",
+        "Hamlet",
+        "Macbeth",
+        "Othello",
+        "Tempest"
+      ],
+      "options": {
+        "connections": [
+          ["Planets", "The planets"],
+          ["Rivers"],
+          ["Shakespeare plays"]
+        ]
+      },
+      "cooldown": 3,
+      "time": -1,
+      "maxPoints": 900
+    }
+  ]
+}

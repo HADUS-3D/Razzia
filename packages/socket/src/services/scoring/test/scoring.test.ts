@@ -4,6 +4,7 @@ import { QUESTION_TYPES, SCORING_MODES } from "@razzia/common/constants"
 import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
 import {
   createEstimationQuestion,
+  createPuzzleQuestion,
   createQuestion,
 } from "@razzia/socket/test/fixtures"
 
@@ -63,5 +64,21 @@ describe("estimation scoring", () => {
 
   it("scores nothing without an answer", () => {
     expect(score(question, [])).toBe(0)
+  })
+})
+
+describe("puzzle scoring", () => {
+  const score = QUESTION_SCORING[QUESTION_TYPES.PUZZLE]
+  const question = createPuzzleQuestion()
+
+  it("gives every solved group an equal share", () => {
+    expect(score(question, [])).toBe(0)
+    expect(score(question, [1])).toBeCloseTo(1 / 3)
+    expect(score(question, [0, 2])).toBeCloseTo(2 / 3)
+    expect(score(question, [0, 1, 2])).toBe(1)
+  })
+
+  it("counts a group only once", () => {
+    expect(score(question, [1, 1, 1])).toBeCloseTo(1 / 3)
   })
 })

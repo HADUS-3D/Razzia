@@ -391,8 +391,8 @@ class Game {
     await this.round.start(socket)
   }
 
-  selectAnswer(socket: Socket, answerIds: number[]) {
-    this.round.selectAnswer(socket, answerIds)
+  selectAnswer(socket: Socket, answerIds: number[], answerTexts?: string[]) {
+    this.round.selectAnswer(socket, answerIds, answerTexts)
   }
 
   advance() {

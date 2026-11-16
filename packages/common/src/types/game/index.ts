@@ -32,7 +32,19 @@ export interface EstimationQuestionOptions {
   margin: number
 }
 
-export type QuestionOptions = MultiQuestionOptions | EstimationQuestionOptions
+/**
+ * A puzzle keeps its 12 words in `Question.answers`: group 0 is words 0-3,
+ * group 1 is words 4-7 and group 2 is words 8-11.
+ */
+export interface PuzzleQuestionOptions {
+  /** Per group, every answer that counts as the connection. The first is shown as the solution. */
+  connections: string[][]
+}
+
+export type QuestionOptions =
+  | MultiQuestionOptions
+  | EstimationQuestionOptions
+  | PuzzleQuestionOptions
 
 export interface Player {
   id: string
@@ -48,7 +60,10 @@ export interface Player {
 
 export interface Answer {
   playerId: string
+  /** For a puzzle: the groups the player got right. */
   answerIds: number[]
+  /** For a puzzle: what the player typed, one text per group. */
+  answerTexts?: string[]
   points: number
 }
 
@@ -141,6 +156,7 @@ export interface GameUpdateQuestion {
 export interface PlayerAnswerRecord {
   playerName: string
   answerIds: number[] | null
+  answerTexts?: string[]
   correct?: boolean
   points?: number
 }

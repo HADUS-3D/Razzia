@@ -42,6 +42,9 @@
       "withinMargin": "{{value}} ± {{margin}}",
       "outsideMargin": "Buiten de marge",
       "average": "Gemiddeld antwoord: {{value}}"
+    },
+    "puzzle": {
+      "group": "Groep {{number}}"
     }
   },
   "tabs": {

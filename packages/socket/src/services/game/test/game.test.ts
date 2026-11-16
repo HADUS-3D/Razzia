@@ -18,10 +18,11 @@ import Game from "@razzia/socket/services/game"
 import { createFakeIo } from "@razzia/socket/test/fake-io"
 import {
   createEstimationQuestion,
+  createPuzzleQuestion,
   createQuestion,
   createQuizz,
+  PUZZLE_WORDS,
 } from "@razzia/socket/test/fixtures"
-
 const FIRST_QUESTION_DELAY_MS = 5000
 const NEXT_QUESTION_DELAY_MS = 2000
 const TICK_MS = 1000
@@ -725,6 +726,53 @@ describe("quiz flow", () => {
     await vi.advanceTimersByTimeAsync(TICK_MS)
 
     expect(status(MANAGER)?.data).toMatchObject({ responses: { 100: 1 } })
+  })
+
+  it("scores a puzzle per solved group, regardless of speed", async () => {
+    const { game, sockets, status, start } = setup(
+      createQuizz([createPuzzleQuestion()]),
+      ["Alice", "Bob", "Carol"],
+    )
+    const [alice, bob, carol] = sockets
+
+    await start()
+
+    const select = status(game.gameId)?.data as {
+      answers: string[]
+      options?: unknown
+    }
+
+    expect([...select.answers].sort()).toEqual([...PUZZLE_WORDS].sort())
+    expect(select.options).toBeUndefined()
+
+    game.selectAnswer(alice, [], ["PLANETS", "rivers", "Shakespeare plays"])
+    game.selectAnswer(bob, [0, 1, 2], ["planets", "", "wrong"])
+    game.selectAnswer(carol, [], ["planeten", "", ""])
+
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    expect(status("alice")?.data).toMatchObject({
+      correct: true,
+      points: 1000,
+      puzzle: {
+        groups: [{ correct: true }, { correct: true }, { correct: true }],
+      },
+    })
+    expect(status("bob")?.data).toMatchObject({
+      correct: true,
+      points: 333,
+      puzzle: {
+        groups: [
+          { correct: true, connection: "Planets", given: "planets" },
+          { correct: false },
+          { correct: false, given: "wrong" },
+        ],
+      },
+    })
+    expect(status("carol")?.data).toMatchObject({ correct: false })
+    expect(status(MANAGER)?.data).toMatchObject({
+      responses: { 0: 2, 1: 1, 2: 1 },
+    })
   })
 
   it("advances automatically when enabled", async () => {

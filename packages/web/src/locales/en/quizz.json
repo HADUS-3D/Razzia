@@ -51,6 +51,19 @@
         "stepHint": "Precision of the slider and the expected answer",
         "margin": "Margin",
         "marginHint": "Answers within this distance of the correct answer score from 100% (exact) down to 50%. Answers outside score nothing."
+      },
+      "puzzle": {
+        "title": "Puzzle",
+        "hint": "12 words form 3 groups of 4. Players type the connection of each group. Every group found earns an equal share of the points, whoever is first.",
+        "groupTitle": "Group {{number}}",
+        "word": "Word {{number}}",
+        "connection": "Connection",
+        "connectionPlaceholder": "What the 4 words have in common",
+        "alternative": "Also accepted",
+        "alternativePlaceholder": "Another accepted answer",
+        "addAlternative": "Add accepted answer",
+        "removeAlternative": "Remove accepted answer",
+        "spellingHint": "Capitals, accents and extra spaces are ignored. Typos are not, so add spelling variants as accepted answers."
       }
     },
     "deleteQuestion": "Delete question",
@@ -72,7 +85,8 @@
   "questionType": {
     "single": "Single choice",
     "multi": "Multiple choice",
-    "estimation": "Estimation"
+    "estimation": "Estimation",
+    "puzzle": "Puzzle"
   },
   "quizzSaved": "Quizz saved successfully",
   "quizzUpdated": "Quizz updated successfully",

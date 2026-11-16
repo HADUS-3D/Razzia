@@ -18,6 +18,7 @@ import {
 } from "@razzia/web/features/game/utils/constants"
 import { useResultModal } from "@razzia/web/features/manager/contexts/result-modal-context"
 import { formatValue } from "@razzia/web/features/questions/estimation/utils"
+import { getPuzzleConnections } from "@razzia/web/features/questions/puzzle/utils"
 
 interface AnswerRow {
   label: string
@@ -117,7 +118,22 @@ const ResultModalAnswers = () => {
     ]
   }
 
+  const puzzleRows = (): AnswerRow[] =>
+    getPuzzleConnections(options).map((accepted, group) => ({
+      label: accepted.find((connection) => connection.trim() !== "") ?? "",
+      count: questionResult.playerAnswers.filter((pa) =>
+        pa.answerIds?.includes(group),
+      ).length,
+      isCorrect: true,
+      color: ANSWERS_COLORS[group % 4],
+      answerLabel: String(group + 1),
+    }))
+
   const answerRows: AnswerRow[] = (() => {
+    if (questionResult.type === QUESTION_TYPES.PUZZLE) {
+      return puzzleRows()
+    }
+
     if (questionResult.type === QUESTION_TYPES.ESTIMATION) {
       return estimationRows()
     }

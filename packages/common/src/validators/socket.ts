@@ -1,5 +1,10 @@
 import { z } from "zod"
-import { EVENTS, MAX_ANSWERS } from "@razzia/common/constants"
+import {
+  EVENTS,
+  MAX_ANSWERS,
+  MAX_PUZZLE_ANSWER_LENGTH,
+  PUZZLE_GROUPS,
+} from "@razzia/common/constants"
 
 const gameMessageValidator = z.object({ gameId: z.string().min(1) })
 
@@ -24,6 +29,13 @@ export const clientEventValidators = {
   [EVENTS.PLAYER.RECONNECT]: gameMessageValidator,
   [EVENTS.PLAYER.LEAVE]: gameMessageValidator,
   [EVENTS.PLAYER.SELECTED_ANSWER]: gameMessageValidator.extend({
-    data: z.object({ answerKeys: answerKeysValidator }),
+    data: z.object({
+      answerKeys: answerKeysValidator.optional(),
+      /** The typed connections of a puzzle, one per group. */
+      answerTexts: z
+        .array(z.string().max(MAX_PUZZLE_ANSWER_LENGTH))
+        .max(PUZZLE_GROUPS)
+        .optional(),
+    }),
   }),
 }

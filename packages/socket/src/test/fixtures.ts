@@ -49,3 +49,35 @@ export const createPlayer = (overrides: Partial<Player> = {}): Player => ({
   bestStreak: 0,
   ...overrides,
 })
+
+export const PUZZLE_WORDS = [
+  "Mars",
+  "Venus",
+  "Saturn",
+  "Mercury",
+  "Nile",
+  "Amazon",
+  "Danube",
+  "Rhine",
+  "Hamlet",
+  "Macbeth",
+  "Othello",
+  "Tempest",
+]
+
+export const createPuzzleQuestion = (
+  overrides: Partial<Question> = {},
+): Question =>
+  createQuestion({
+    type: QUESTION_TYPES.PUZZLE,
+    answers: PUZZLE_WORDS,
+    solutions: undefined,
+    options: {
+      connections: [
+        ["Planets", "The planets"],
+        ["Rivers"],
+        ["Shakespeare plays"],
+      ],
+    },
+    ...overrides,
+  })

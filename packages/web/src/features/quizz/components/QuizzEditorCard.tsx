@@ -24,6 +24,43 @@ const SlideMedia = ({ media }: { media?: QuestionMedia }) => {
   return null
 }
 
+const AnswersPreview = ({ question }: { question: Question }) => {
+  if (question.type === QUESTION_TYPES.ESTIMATION) {
+    return (
+      <div className="flex h-4 items-center rounded-md border border-accent px-1.5">
+        <div className="relative h-1 w-full rounded-full bg-accent">
+          <div className="absolute top-1/2 left-1/2 size-1.5 -translate-1/2 rounded-full bg-correct" />
+        </div>
+      </div>
+    )
+  }
+
+  if (question.type === QUESTION_TYPES.PUZZLE) {
+    return (
+      <div className="grid grid-cols-4 gap-0.5">
+        {question.answers.map((_, i) => (
+          <div key={i} className="h-2 rounded-sm border border-accent" />
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-2 gap-1">
+      {question.answers.map((_, i) => (
+        <div
+          key={i}
+          className="flex h-4 flex-1 items-center rounded-md border border-accent px-0.5"
+        >
+          {question.solutions?.includes(i) && (
+            <div className="ml-auto size-1.5 rounded-full bg-correct" />
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 interface Props {
   question: Question
   index: number
@@ -85,26 +122,7 @@ const QuizzEditorCard = ({
 
       <SlideMedia media={question.media} />
 
-      {question.type === QUESTION_TYPES.ESTIMATION ? (
-        <div className="flex h-4 items-center rounded-md border border-accent px-1.5">
-          <div className="relative h-1 w-full rounded-full bg-accent">
-            <div className="absolute top-1/2 left-1/2 size-1.5 -translate-1/2 rounded-full bg-correct" />
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-1">
-          {question.answers.map((_, i) => (
-            <div
-              key={i}
-              className="flex h-4 flex-1 items-center rounded-md border border-accent px-0.5"
-            >
-              {question.solutions?.includes(i) && (
-                <div className="ml-auto size-1.5 rounded-full bg-correct" />
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <AnswersPreview question={question} />
 
       {canDelete && (
         <AlertDialog

@@ -69,7 +69,12 @@
     "estimationSolutionOutOfRange": "Het juiste antwoord moet tussen het minimum en het maximum liggen",
     "estimationStepInvalid": "De stapgrootte moet groter zijn dan 0",
     "estimationMarginNegative": "De marge mag niet negatief zijn",
-    "estimationInvalidOptions": "De schattingsinstellingen ontbreken of zijn ongeldig"
+    "estimationInvalidOptions": "De schattingsinstellingen ontbreken of zijn ongeldig",
+    "puzzleWordCount": "Een puzzel heeft precies 12 woorden nodig",
+    "puzzleInvalidOptions": "Een puzzel heeft de verbanden van de 3 groepen nodig",
+    "puzzleConnectionEmpty": "Geef minstens één verband voor deze groep",
+    "puzzleConnectionTooLong": "Een verband mag maximaal 100 tekens bevatten",
+    "puzzleNeedsQuiz": "Puzzels kunnen alleen in een quiz, niet in een enquête"
   },
   "result": {
     "notFound": "Resultaat niet gevonden"

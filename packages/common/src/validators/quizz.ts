@@ -11,6 +11,7 @@ import {
 import { QUESTION_REFINEMENTS } from "@razzia/common/validators/questions"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
 import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
+import { puzzleOptionsValidator } from "@razzia/common/validators/questions/puzzle"
 
 const mediaUrlValidator = z
   .string("errors:quizz.invalidMediaUrl")
@@ -72,7 +73,11 @@ const questionSchema = z.object({
     .optional(),
   penalty: z.number().int().min(0, "errors:quizz.penaltyNegative").optional(),
   options: z
-    .union([multiOptionsValidator, estimationOptionsValidator])
+    .union([
+      multiOptionsValidator,
+      estimationOptionsValidator,
+      puzzleOptionsValidator,
+    ])
     .optional(),
 })
 
@@ -92,11 +97,25 @@ export const quizzValidator = z
   })
   .superRefine((quizz, ctx) => {
     if (quizz.gameMode !== QUIZZ_MODES.QUIZ) {
+      quizz.questions.forEach((question, index) => {
+        if (question.type === QUESTION_TYPES.PUZZLE) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["questions", index, "type"],
+            message: "errors:quizz.puzzleNeedsQuiz",
+          })
+        }
+      })
+
       return
     }
 
     quizz.questions.forEach((question, index) => {
-      if (question.solutions && question.solutions.length > 0) {
+      // A puzzle's solutions are the connections in its options.
+      if (
+        question.type === QUESTION_TYPES.PUZZLE ||
+        (question.solutions && question.solutions.length > 0)
+      ) {
         return
       }
 
@@ -139,7 +158,8 @@ export const normalizeLegacyQuizz = (data: unknown): unknown => {
             ? question.solutions
             : [question.solutions],
         ...(isRecord(question.options) &&
-        question.type !== QUESTION_TYPES.ESTIMATION
+        question.type !== QUESTION_TYPES.ESTIMATION &&
+        question.type !== QUESTION_TYPES.PUZZLE
           ? {
               options: {
                 scoringMode: SCORING_MODES.BALANCED,
