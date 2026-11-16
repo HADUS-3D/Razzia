@@ -18,9 +18,17 @@ import {
   MAX_POINTS,
   MEDIA_TYPES,
   NO_TIME_LIMIT,
+  PUZZLE_GROUPS,
   QUIZZ_MODES,
 } from "@razzia/common/constants"
-import { isEstimationOptions } from "@razzia/common/questions/options"
+import {
+  isEstimationOptions,
+  isPuzzleOptions,
+} from "@razzia/common/questions/options"
+import {
+  puzzleGroupWords,
+  solvedPuzzleGroups,
+} from "@razzia/common/questions/puzzle"
 import {
   type Status,
   STATUS,
@@ -33,7 +41,7 @@ import {
   scoreQuestion,
   type ScoredPlayer,
 } from "@razzia/socket/services/scoring/round"
-import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
+import { orderToPoint, shuffle, timeToPoint } from "@razzia/socket/utils/game"
 import sleep, { SECOND_MS } from "@razzia/socket/utils/sleep"
 
 type BroadcastFn = <T extends Status>(
@@ -61,6 +69,8 @@ export interface RoundManagerOptions {
 }
 
 const ROUND_INTRO_SECONDS = 4
+
+type PuzzleResult = NonNullable<StatusDataMap["SHOW_RESULT"]["puzzle"]>
 
 interface RoundStep {
   name: string
@@ -415,14 +425,19 @@ export class RoundManager {
     this.startTime = Date.now()
     this.acceptingAnswers = true
 
+    // A puzzle's words are shuffled and its connections stay on the server.
+    const isPuzzle = isPuzzleOptions(this.question.options)
+
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
       question: this.question.question,
-      answers: this.question.answers,
+      answers: isPuzzle
+        ? shuffle(this.question.answers)
+        : this.question.answers,
       media: this.questionImage,
       time: this.question.time,
       totalPlayer: this.opts.players.count(),
       questionType: this.question.type,
-      options: this.question.options,
+      options: isPuzzle ? undefined : this.question.options,
       answersOnly: this.opts.getSettings().answersOnly,
     })
 
@@ -451,6 +466,8 @@ export class RoundManager {
           answerIds:
             this.playersAnswers.find((a) => a.playerId === player.id)
               ?.answerIds ?? null,
+          answerTexts: this.playersAnswers.find((a) => a.playerId === player.id)
+            ?.answerTexts,
           ...(score && {
             correct: score.lastCorrect,
             points: score.lastPoints,
@@ -510,6 +527,7 @@ export class RoundManager {
         rank: index + 1,
         aheadOfMe: aheadPlayer ? aheadPlayer.username : null,
         note: this.question.note,
+        puzzle: this.puzzleResult(player.id),
       })
     })
 
@@ -523,6 +541,26 @@ export class RoundManager {
     this.leaderboard = sortedPlayers
     this.tempOldLeaderboard ??= oldLeaderboard
     this.playersAnswers = []
+  }
+
+  /** What a player typed per group next to the right connection, for the result screen. */
+  private puzzleResult(playerId: string): PuzzleResult | undefined {
+    const { options, answers } = this.question
+
+    if (!isPuzzleOptions(options)) {
+      return undefined
+    }
+
+    const answer = this.playersAnswers.find((a) => a.playerId === playerId)
+
+    return {
+      groups: options.connections.map((accepted, group) => ({
+        words: puzzleGroupWords(answers, group),
+        connection: accepted.find((c) => c.trim() !== "") ?? "",
+        given: answer?.answerTexts?.at(group) ?? "",
+        correct: answer?.answerIds.includes(group) ?? false,
+      })),
+    }
   }
 
   private showLeaderboard(): void {
@@ -608,6 +646,10 @@ export class RoundManager {
   private normalizeAnswer(answerIds: number[]): number[] | null {
     const { options } = this.question
 
+    if (isPuzzleOptions(options)) {
+      return []
+    }
+
     if (!isEstimationOptions(options)) {
       return answerIds
     }
@@ -625,7 +667,11 @@ export class RoundManager {
     return [Math.min(options.max, Math.max(options.min, value))]
   }
 
-  selectAnswer(socket: Socket, answerIds: number[]): void {
+  selectAnswer(
+    socket: Socket,
+    answerIds: number[],
+    answerTexts?: string[],
+  ): void {
     const player = this.opts.players.findById(socket.id)
 
     if (!player || !this.acceptingAnswers) {
@@ -642,8 +688,22 @@ export class RoundManager {
       return
     }
 
+    const { options } = this.question
+    const texts = isPuzzleOptions(options)
+      ? Array.from({ length: PUZZLE_GROUPS }, (_, group) =>
+          (answerTexts?.at(group) ?? "").trim(),
+        )
+      : undefined
+
+    if (isPuzzleOptions(options) && texts) {
+      submitted.push(...solvedPuzzleGroups(texts, options.connections))
+    }
+
     const points = (() => {
-      if (isEstimationOptions(this.question.options)) {
+      if (
+        isEstimationOptions(this.question.options) ||
+        isPuzzleOptions(this.question.options)
+      ) {
         return this.question.maxPoints ?? MAX_POINTS
       }
 
@@ -661,6 +721,7 @@ export class RoundManager {
     this.playersAnswers.push({
       playerId: player.id,
       answerIds: submitted,
+      ...(texts && { answerTexts: texts }),
       points,
     })
 

@@ -81,5 +81,11 @@
     "bestStreak": "Langste reeks",
     "bestStreakCount_one": "{{count}} op rij",
     "bestStreakCount_other": "{{count}} op rij"
+  },
+  "puzzle": {
+    "connection": "Verband {{number}}",
+    "placeholder": "Wat hebben deze woorden gemeen?",
+    "found": "{{count}} van {{total}} verbanden gevonden",
+    "noAnswer": "Geen antwoord"
   }
 }

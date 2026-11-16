@@ -69,7 +69,12 @@
     "estimationSolutionOutOfRange": "The correct answer must be between the minimum and the maximum",
     "estimationStepInvalid": "The step must be greater than 0",
     "estimationMarginNegative": "The margin cannot be negative",
-    "estimationInvalidOptions": "Estimation settings are missing or invalid"
+    "estimationInvalidOptions": "Estimation settings are missing or invalid",
+    "puzzleWordCount": "A puzzle needs exactly 12 words",
+    "puzzleInvalidOptions": "A puzzle needs the connections of its 3 groups",
+    "puzzleConnectionEmpty": "Give at least one connection for this group",
+    "puzzleConnectionTooLong": "A connection can be at most 100 characters",
+    "puzzleNeedsQuiz": "Puzzles are only available in a quiz, not in a survey"
   },
   "result": {
     "notFound": "Result not found"

@@ -51,6 +51,19 @@
         "stepHint": "Precisie van de schuifbalk en het verwachte antwoord",
         "margin": "Marge",
         "marginHint": "Antwoorden binnen deze afstand van het juiste antwoord scoren van 100% (exact) tot 50%. Antwoorden daarbuiten scoren niets."
+      },
+      "puzzle": {
+        "title": "Puzzel",
+        "hint": "12 woorden vormen 3 groepen van 4. Spelers typen het verband van elke groep. Elke gevonden groep levert evenveel punten op, ongeacht wie het eerst is.",
+        "groupTitle": "Groep {{number}}",
+        "word": "Woord {{number}}",
+        "connection": "Verband",
+        "connectionPlaceholder": "Wat de 4 woorden gemeen hebben",
+        "alternative": "Ook goed",
+        "alternativePlaceholder": "Nog een goedgekeurd antwoord",
+        "addAlternative": "Goedgekeurd antwoord toevoegen",
+        "removeAlternative": "Goedgekeurd antwoord verwijderen",
+        "spellingHint": "Hoofdletters, accenten en extra spaties worden genegeerd. Typefouten niet, voeg daarom spellingvarianten toe als goedgekeurd antwoord."
       }
     },
     "deleteQuestion": "Vraag verwijderen",
@@ -72,7 +85,8 @@
   "questionType": {
     "single": "Enkele keuze",
     "multi": "Meerkeuze",
-    "estimation": "Schatting"
+    "estimation": "Schatting",
+    "puzzle": "Puzzel"
   },
   "quizzSaved": "Quiz succesvol opgeslagen",
   "quizzUpdated": "Quiz succesvol bijgewerkt",

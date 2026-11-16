@@ -242,3 +242,52 @@ describe("backgrounds", () => {
     expect(result.questions[0].background).toBe("/media/q.png")
   })
 })
+
+describe("puzzle question", () => {
+  const puzzleQuestion = (overrides: Partial<Question> = {}): Question => ({
+    type: QUESTION_TYPES.PUZZLE,
+    question: "Connections ?",
+    answers: Array.from({ length: 12 }, (_, i) => `Word ${i}`),
+    cooldown: 5,
+    time: 60,
+    options: { connections: [["A"], ["B", "b"], ["C"]] },
+    ...overrides,
+  })
+
+  it("is valid without solutions", () => {
+    expect(issues(quizz([puzzleQuestion()]))).toEqual([])
+  })
+
+  it("needs exactly 12 words", () => {
+    expect(
+      issues(quizz([puzzleQuestion({ answers: ["A", "B", "C", "D"] })])),
+    ).toContain("errors:quizz.puzzleWordCount")
+  })
+
+  it("needs a connection for every group", () => {
+    expect(
+      issues(
+        quizz([
+          puzzleQuestion({ options: { connections: [["A"], [" "], ["C"]] } }),
+        ]),
+      ),
+    ).toContain("errors:quizz.puzzleConnectionEmpty")
+    expect(
+      issues(quizz([puzzleQuestion({ options: { connections: [["A"]] } })])),
+    ).toContain("errors:quizz.puzzleInvalidOptions")
+  })
+
+  it("is not allowed in a survey", () => {
+    expect(issues(quizz([puzzleQuestion()], QUIZZ_MODES.SURVEY))).toContain(
+      "errors:quizz.puzzleNeedsQuiz",
+    )
+  })
+
+  it("keeps its options when parsed", () => {
+    const parsed = quizzValidator.safeParse(quizz([puzzleQuestion()]))
+
+    expect(parsed.data?.questions[0].options).toEqual({
+      connections: [["A"], ["B", "b"], ["C"]],
+    })
+  })
+})

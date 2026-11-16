@@ -50,7 +50,7 @@ Quiz Options:
 - `gameMode`: `"quiz"` (default) or `"survey"`, see [Survey mode](#survey-mode)
 - `subject`: Title/topic of the quiz
 - `questions`: Array of question objects containing:
-  - `type`: `"single"` (exactly one answer), `"multi"` (one or more) or `"estimation"` (a number, see [Estimation questions](#estimation-questions)). Defaults to `"single"` when omitted
+  - `type`: `"single"` (exactly one answer), `"multi"` (one or more), `"estimation"` (a number, see [Estimation questions](#estimation-questions)) or `"puzzle"` (12 words in 3 groups, see [Puzzle questions](#puzzle-questions)). Defaults to `"single"` when omitted
   - `question`: The question text
   - `category`: Optional category, see [Categories](#categories)
   - `round`: Optional `{ "name": string, "background"?: url }` that starts a new round with this question, see [Rounds](#rounds)
@@ -94,6 +94,45 @@ An `"estimation"` question asks for a number instead of offering answers to pick
 - `options.min` / `options.max`: Bounds of the accepted values, `max` must be greater than `min`
 - `options.step`: Precision of the slider (must be greater than 0)
 - `options.margin`: How far from the expected value an answer still counts as correct. An exact answer earns `maxPoints`, an answer at the edge of the margin earns half of it, and anything further away earns nothing (and the `penalty`, if any). A margin of `0` only accepts the exact value
+
+## Puzzle questions
+
+A `"puzzle"` question, inspired by De Slimste Mens ter Wereld, shows 12 words that form 3 groups of 4. Every group has a connection, e.g. "Planets" for Mars, Venus, Saturn and Mercury. Players type the connection of each group as an open answer. Puzzles are only available in `"quiz"` mode:
+
+```json
+{
+  "type": "puzzle",
+  "question": "What do the words in each group have in common?",
+  "answers": [
+    "Mars",
+    "Venus",
+    "Saturn",
+    "Mercury",
+    "Nile",
+    "Amazon",
+    "Danube",
+    "Rhine",
+    "Hamlet",
+    "Macbeth",
+    "Othello",
+    "Tempest"
+  ],
+  "options": {
+    "connections": [
+      ["Planets", "The planets"],
+      ["Rivers"],
+      ["Shakespeare plays", "Shakespeare"]
+    ]
+  },
+  "cooldown": 5,
+  "time": 60
+}
+```
+
+- `answers`: Exactly 12 words. Words 1-4 are group 1, words 5-8 group 2 and words 9-12 group 3. Players see the words shuffled
+- `options.connections`: Three arrays, one per group, with every answer that is accepted for that group. The first is shown as the solution. `solutions` is not used
+- Capitals, accents and extra spaces are ignored when answers are checked. Typos are **not** forgiven, so list spelling variants as accepted answers
+- Points do not depend on speed. Every group found earns an equal share of `maxPoints` (a third each, so all three groups earn `maxPoints`). A question counts as answered correctly, for the streak and the `penalty`, when at least one group is found
 
 ## Rounds
 

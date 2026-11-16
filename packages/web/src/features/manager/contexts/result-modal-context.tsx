@@ -37,8 +37,10 @@ export const ResultModalProvider = ({ children, result, onClose }: Props) => {
   const total = result.questions.length
   const totalPlayers = result.players.length
 
-  const answeredCount = questionResult.playerAnswers.filter(
-    (pa) => pa.answerIds !== null && pa.answerIds.length > 0,
+  const answeredCount = questionResult.playerAnswers.filter((pa) =>
+    pa.answerTexts
+      ? pa.answerTexts.some((text) => text.trim() !== "")
+      : pa.answerIds !== null && pa.answerIds.length > 0,
   ).length
 
   const correctCount = questionResult.playerAnswers.filter(

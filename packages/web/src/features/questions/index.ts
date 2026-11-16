@@ -13,6 +13,7 @@ import type {
 } from "@razzia/web/features/questions/types"
 import * as estimation from "@razzia/web/features/questions/estimation"
 import * as multi from "@razzia/web/features/questions/multi"
+import * as puzzle from "@razzia/web/features/questions/puzzle"
 import * as single from "@razzia/web/features/questions/single"
 
 interface QuestionRegistryEntry {
@@ -32,6 +33,7 @@ export const QUESTION_REGISTRY: Record<QuestionType, QuestionRegistryEntry> = {
   single,
   multi,
   estimation,
+  puzzle,
 }
 
 export const QUESTION_TYPE_LIST = Object.keys(

@@ -42,6 +42,9 @@
       "withinMargin": "{{value}} ± {{margin}}",
       "outsideMargin": "Outside the margin",
       "average": "Average answer: {{value}}"
+    },
+    "puzzle": {
+      "group": "Group {{number}}"
     }
   },
   "tabs": {

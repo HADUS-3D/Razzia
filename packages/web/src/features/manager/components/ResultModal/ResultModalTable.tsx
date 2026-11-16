@@ -3,7 +3,10 @@ import { Check, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import type { PlayerAnswerRecord } from "@razzia/common/types/game"
 import { QUIZZ_MODES } from "@razzia/common/constants"
-import { isEstimationOptions } from "@razzia/common/questions/options"
+import {
+  isEstimationOptions,
+  isPuzzleOptions,
+} from "@razzia/common/questions/options"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
@@ -20,8 +23,11 @@ const ResultModalTableRow = ({ playerAnswer }: RowProps) => {
   const { result, questionResult, getPlayerPoints } = useResultModal()
   const { t } = useTranslation()
 
-  const { playerName, answerIds, correct, points } = playerAnswer
-  const hasAnswer = answerIds !== null && answerIds.length > 0
+  const { playerName, answerIds, answerTexts, correct, points } = playerAnswer
+  const isPuzzle = isPuzzleOptions(questionResult.options)
+  const hasAnswer = isPuzzle
+    ? Boolean(answerTexts?.some((text) => text.trim() !== ""))
+    : answerIds !== null && answerIds.length > 0
 
   const isCorrect = correct ?? isAnswerCorrect(questionResult, answerIds)
   const isEstimation = isEstimationOptions(questionResult.options)
@@ -30,14 +36,31 @@ const ResultModalTableRow = ({ playerAnswer }: RowProps) => {
     <tr>
       <td className="px-5 py-2.5 font-medium">{playerName}</td>
       <td className="px-4 py-2.5">
-        {hasAnswer && isEstimation && (
+        {hasAnswer && isPuzzle && (
+          <div className="flex flex-wrap gap-1">
+            {answerTexts?.map((text, group) => (
+              <span
+                key={group}
+                className={clsx(
+                  "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-white",
+                  answerIds?.includes(group) ? "bg-correct" : "bg-red-500",
+                  text.trim() === "" && "opacity-50",
+                )}
+              >
+                <span className="font-bold">{group + 1}</span>
+                <span className="max-w-30 truncate">{text || "-"}</span>
+              </span>
+            ))}
+          </div>
+        )}
+        {hasAnswer && !isPuzzle && isEstimation && (
           <span className="inline-flex rounded-md bg-accent px-2 py-1 text-xs font-bold text-accent-foreground">
-            {formatValue(answerIds[0])}
+            {formatValue(answerIds?.[0] ?? 0)}
           </span>
         )}
-        {hasAnswer && !isEstimation && (
+        {hasAnswer && !isPuzzle && !isEstimation && (
           <div className="flex flex-wrap gap-1">
-            {answerIds.map((id) => (
+            {answerIds?.map((id) => (
               <span
                 key={id}
                 className={clsx(

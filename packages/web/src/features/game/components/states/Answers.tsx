@@ -60,7 +60,7 @@ const Answers = ({
     loop: true,
   })
 
-  const handleSubmit = (answerKeys: number[]) => {
+  const handleSubmit = (answerKeys: number[], answerTexts?: string[]) => {
     if (!player || !gameId) {
       return
     }
@@ -69,6 +69,7 @@ const Answers = ({
       gameId,
       data: {
         answerKeys,
+        ...(answerTexts && { answerTexts }),
       },
     })
     sfxPop()
