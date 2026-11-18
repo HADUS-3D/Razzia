@@ -3,7 +3,7 @@ import { CircleQuestionMark, Image, Video } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
-import type { QuestionMediaType } from "@razzia/common/types/game"
+import type { PinPosition, QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import { EVENTS, MEDIA_TYPES, NO_TIME_LIMIT } from "@razzia/common/constants"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
@@ -44,8 +44,12 @@ const Answers = ({
   const { t } = useTranslation()
   const { width } = useScreenSize()
 
+  const { AnswerComponent, mediaInAnswer } = QUESTION_REGISTRY[questionType]
+
   const popupMedia: QuestionMediaType[] = [MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO]
-  const isPopupMedia = popupMedia.includes(media?.type)
+  // The media of a pin question is the answer area itself, so it is not shown twice.
+  const mediaIsField = mediaInAnswer?.(options) ?? false
+  const isPopupMedia = popupMedia.includes(media?.type) && !mediaIsField
   const showAnswersOnly = Boolean(player) && answersOnly
   const showMediaInPopup =
     Boolean(player) && width < MOBILE_BREAKPOINT && isPopupMedia
@@ -60,7 +64,11 @@ const Answers = ({
     loop: true,
   })
 
-  const handleSubmit = (answerKeys: number[], answerTexts?: string[]) => {
+  const handleSubmit = (
+    answerKeys: number[],
+    answerTexts?: string[],
+    pin?: PinPosition,
+  ) => {
     if (!player || !gameId) {
       return
     }
@@ -70,6 +78,7 @@ const Answers = ({
       data: {
         answerKeys,
         ...(answerTexts && { answerTexts }),
+        ...(pin && { pin }),
       },
     })
     sfxPop()
@@ -101,8 +110,6 @@ const Answers = ({
     setTotalAnswer(count)
     sfxPop()
   })
-
-  const { AnswerComponent } = QUESTION_REGISTRY[questionType]
 
   const MediaIcon = media?.type === MEDIA_TYPES.VIDEO ? Video : Image
 
@@ -146,7 +153,7 @@ const Answers = ({
               )}
             </QuestionDialog>
           ) : (
-            <QuestionMedia media={media} alt={question} />
+            !mediaIsField && <QuestionMedia media={media} alt={question} />
           )}
         </div>
       )}
@@ -174,6 +181,7 @@ const Answers = ({
         <AnswerComponent
           answers={answers}
           options={options}
+          media={media}
           onSubmit={handleSubmit}
           readOnly={!player}
           fill={showAnswersOnly}

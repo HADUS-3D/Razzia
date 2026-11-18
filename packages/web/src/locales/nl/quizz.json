@@ -64,6 +64,29 @@
         "addAlternative": "Goedgekeurd antwoord toevoegen",
         "removeAlternative": "Goedgekeurd antwoord verwijderen",
         "spellingHint": "Hoofdletters, accenten en extra spaties worden genegeerd. Typefouten niet, voeg daarom spellingvarianten toe als goedgekeurd antwoord."
+      },
+      "pin": {
+        "title": "Pin op kaart",
+        "hint": "Spelers tikken een plek aan op de afbeelding. Hoe dichter bij de juiste plek, hoe meer punten, ongeacht de snelheid.",
+        "radius": "Straal voor volle punten",
+        "radiusHint": "Pins zo dicht bij de juiste plek krijgen volle punten, in procenten van de breedte van de afbeelding.",
+        "maxDistance": "Afstand voor nul punten",
+        "maxDistanceHint": "Vanaf deze afstand levert een pin niets op. Daartussen dalen de punten lineair.",
+        "imageWidth": "Breedte van de afbeelding in het echt",
+        "unit": "Eenheid",
+        "unitPlaceholder": "Eenheid, bijv. km",
+        "imageWidthHint": "Optioneel. Vul in hoe breed de afbeelding in het echt is om afstanden in die eenheid te tonen in plaats van een percentage.",
+        "needsImage": "Voeg hierboven een afbeelding of kaart toe en tik daarna op de juiste plek.",
+        "placeHint": "Tik op de afbeelding om de juiste plek te plaatsen",
+        "legend": "Groen: juiste plek en straal voor volle punten. Rood gestippeld: afstand waarop de punten nul zijn.",
+        "mode": "Speelveld",
+        "modes": {
+          "image": "Afbeelding of kaartplaatje",
+          "map": "Echte kaart"
+        },
+        "placeHintMap": "Zoom en verschuif de kaart en tik daarna op de juiste plek. De kaart zoals je hem achterlaat is waar spelers beginnen.",
+        "legendMap": "Groen: juiste plek en straal voor volle punten. Rood gestippeld: afstand waarop de punten nul zijn. Afstanden zijn in km.",
+        "radiusHintMap": "Pins zo dicht bij de juiste plek krijgen volle punten, in km."
       }
     },
     "deleteQuestion": "Vraag verwijderen",
@@ -86,7 +109,8 @@
     "single": "Enkele keuze",
     "multi": "Meerkeuze",
     "estimation": "Schatting",
-    "puzzle": "Puzzel"
+    "puzzle": "Puzzel",
+    "pin": "Pin op kaart"
   },
   "quizzSaved": "Quiz succesvol opgeslagen",
   "quizzUpdated": "Quiz succesvol bijgewerkt",

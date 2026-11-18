@@ -20,6 +20,7 @@ import Card from "@razzia/web/components/Card"
 import Input from "@razzia/web/components/Input"
 import Loader from "@razzia/web/components/Loader"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
+import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import {
@@ -90,6 +91,30 @@ const QuestionEditorMedia = () => {
     updateQuestion(currentIndex, {
       media: { url: e.target.value },
     })
+  }
+
+  // A pin question draws its image itself, as the field to place the right spot on.
+  if (
+    QUESTION_REGISTRY[currentQuestion.type].mediaInAnswer?.(
+      currentQuestion.options,
+    ) &&
+    questionMedia?.type === MEDIA_TYPES.IMAGE
+  ) {
+    return (
+      <div className="relative z-10 flex items-center justify-between gap-3 rounded-2xl bg-white px-4 py-2 shadow-sm">
+        <img
+          src={questionMedia.url}
+          alt=""
+          className="h-12 w-auto rounded-md"
+        />
+        <Button
+          className="rounded-sm bg-accent px-4 py-2 font-semibold text-foreground transition-colors hover:bg-accent"
+          onClick={handleRemoveMedia}
+        >
+          {t("common:delete")}
+        </Button>
+      </div>
+    )
   }
 
   return (

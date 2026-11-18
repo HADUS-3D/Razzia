@@ -74,7 +74,15 @@
     "puzzleInvalidOptions": "A puzzle needs the connections of its 3 groups",
     "puzzleConnectionEmpty": "Give at least one connection for this group",
     "puzzleConnectionTooLong": "A connection can be at most 100 characters",
-    "puzzleNeedsQuiz": "Puzzles are only available in a quiz, not in a survey"
+    "puzzleNeedsQuiz": "Puzzles are only available in a quiz, not in a survey",
+    "pinNoAnswers": "A pin question has no answer buttons",
+    "pinNeedsImage": "A pin question needs an image or map",
+    "pinInvalidOptions": "The right spot of this pin question is missing or invalid",
+    "pinRadiusNegative": "The radius cannot be negative",
+    "pinMaxDistanceTooSmall": "The maximum distance must be greater than the radius",
+    "pinImageWidthNegative": "The image width cannot be negative",
+    "pinUnitTooLong": "The unit can be at most 12 characters",
+    "pinNeedsQuiz": "Pin questions are only available in a quiz, not in a survey"
   },
   "result": {
     "notFound": "Result not found"

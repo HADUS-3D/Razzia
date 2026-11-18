@@ -1,6 +1,6 @@
 import type {
   EstimationQuestionOptions,
-  QuestionOptions,
+  PlayerQuestionOptions,
 } from "@razzia/common/types/game"
 import { ESTIMATION_INPUT_MODES } from "@razzia/common/constants"
 import { isEstimationOptions } from "@razzia/common/questions/options"
@@ -15,7 +15,7 @@ export const createDefaultEstimationOptions =
   })
 
 export const getEstimationOptions = (
-  options?: QuestionOptions,
+  options?: PlayerQuestionOptions,
 ): EstimationQuestionOptions =>
   isEstimationOptions(options) ? options : createDefaultEstimationOptions()
 

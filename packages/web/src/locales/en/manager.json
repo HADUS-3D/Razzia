@@ -45,6 +45,11 @@
     },
     "puzzle": {
       "group": "Group {{number}}"
+    },
+    "pin": {
+      "close": "Within {{radius}} of the spot",
+      "scored": "Scored some points",
+      "far": "Too far away"
     }
   },
   "tabs": {

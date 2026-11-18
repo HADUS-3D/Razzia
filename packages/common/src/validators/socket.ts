@@ -36,6 +36,13 @@ export const clientEventValidators = {
         .array(z.string().max(MAX_PUZZLE_ANSWER_LENGTH))
         .max(PUZZLE_GROUPS)
         .optional(),
+      /** Where a pin question was tapped: percent of the image, or longitude and latitude on a map. The server checks the range. */
+      pin: z
+        .object({
+          x: z.number().min(0).max(100),
+          y: z.number().min(0).max(100),
+        })
+        .optional(),
     }),
   }),
 }

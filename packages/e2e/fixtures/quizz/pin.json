@@ -1,0 +1,25 @@
+{
+  "id": "e2e-pin",
+  "gameMode": "quiz",
+  "subject": "E2E Pin",
+  "questions": [
+    {
+      "type": "pin",
+      "question": "Where is the treasure?",
+      "answers": [],
+      "media": {
+        "type": "image",
+        "url": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%239ad%22/%3E%3C/svg%3E"
+      },
+      "options": {
+        "x": 50,
+        "y": 50,
+        "radius": 3,
+        "maxDistance": 43,
+        "aspect": 1
+      },
+      "cooldown": 3,
+      "time": 20
+    }
+  ]
+}

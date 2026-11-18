@@ -9,6 +9,7 @@ import CricleXmark from "@razzia/web/features/game/components/icons/CricleXmark"
 import PuzzleSolution from "@razzia/web/features/game/components/PuzzleSolution"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { SFX } from "@razzia/web/features/game/utils/constants"
+import PinSolution from "@razzia/web/features/questions/pin/components/PinSolution"
 
 interface Props {
   data: CommonStatusDataMap["SHOW_RESULT"]
@@ -17,11 +18,21 @@ interface Props {
 const NOTE_DELAY_MS = 1000
 
 const Result = ({
-  data: { correct, message, points, myPoints, rank, aheadOfMe, note, puzzle },
+  data: {
+    correct,
+    message,
+    points,
+    myPoints,
+    rank,
+    aheadOfMe,
+    note,
+    puzzle,
+    pin,
+  },
 }: Props) => {
   const { updatePlayer } = usePlayerStore()
   const { t } = useTranslation()
-  const hasNote = Boolean(note?.trim()) || Boolean(puzzle)
+  const hasNote = Boolean(note?.trim()) || Boolean(puzzle) || Boolean(pin)
   const [compact, setCompact] = useState(false)
 
   useEffect(() => {
@@ -80,6 +91,7 @@ const Result = ({
       {compact && (
         <div className="mt-4 flex w-full flex-col gap-3">
           {puzzle && <PuzzleSolution groups={puzzle.groups} />}
+          {pin && <PinSolution pin={pin} />}
           <AnswerNote note={note} />
         </div>
       )}

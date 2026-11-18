@@ -31,7 +31,7 @@ export const scoreQuestion = (
 
       const scoring = QUESTION_SCORING[question.type]
 
-      return scoring(question, playerAnswer.answerIds)
+      return scoring(question, playerAnswer.answerIds, playerAnswer)
     })()
 
     const points = Math.round((playerAnswer?.points ?? 0) * scoreMultiplier)

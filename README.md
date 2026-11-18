@@ -21,6 +21,7 @@ This repository is a personal fork of [Ralex91/Razzia](https://github.com/Ralex9
 - **Multiple manager accounts with permissions.** Admins create users and choose per user whether they may create, edit and delete quizzes. Quizzes can be marked secret and shared with chosen users. See [Configuration](docs/configuration.md#accounts-and-permissions).
 - **Question generator.** Add a generated round of questions from the [Open Trivia Database](https://opentdb.com) (category, difficulty, type and number of questions) straight from the quiz editor. The questions are in English and can be translated with an AI tool. See [Quiz](docs/quiz.md#generated-question-rounds-open-trivia-database).
 - **Puzzle question type.** Inspired by De Slimste Mens ter Wereld: 12 words form 3 groups of 4, and players type the connection of each group. See [Quiz](docs/quiz.md#puzzle-questions).
+- **Pin question type.** Players tap a spot on an image or a real OpenStreetMap map. The big screen shows every pin, reveals the right spot and the distances, and points follow the distance. See [Quiz](docs/quiz.md#pin-questions).
 - **Rounds.** Split a quiz into named rounds with a title slide, a full leaderboard with animated score movement and the longest answer streak when a round ends. See [Quiz](docs/quiz.md#rounds).
 - **Customizable backgrounds.** Set a background per quiz, per round or per question, next to the optional app-wide branding.
 - **Explanation per question.** An optional note that is shown when the answer is revealed.

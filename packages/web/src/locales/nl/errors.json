@@ -74,7 +74,15 @@
     "puzzleInvalidOptions": "Een puzzel heeft de verbanden van de 3 groepen nodig",
     "puzzleConnectionEmpty": "Geef minstens één verband voor deze groep",
     "puzzleConnectionTooLong": "Een verband mag maximaal 100 tekens bevatten",
-    "puzzleNeedsQuiz": "Puzzels kunnen alleen in een quiz, niet in een enquête"
+    "puzzleNeedsQuiz": "Puzzels kunnen alleen in een quiz, niet in een enquête",
+    "pinNoAnswers": "Een pinvraag heeft geen antwoordknoppen",
+    "pinNeedsImage": "Een pinvraag heeft een afbeelding of kaart nodig",
+    "pinInvalidOptions": "De juiste plek van deze pinvraag ontbreekt of is ongeldig",
+    "pinRadiusNegative": "De straal mag niet negatief zijn",
+    "pinMaxDistanceTooSmall": "De maximale afstand moet groter zijn dan de straal",
+    "pinImageWidthNegative": "De breedte van de afbeelding mag niet negatief zijn",
+    "pinUnitTooLong": "De eenheid mag maximaal 12 tekens zijn",
+    "pinNeedsQuiz": "Pinvragen zijn alleen beschikbaar in een quiz, niet in een enquete"
   },
   "result": {
     "notFound": "Resultaat niet gevonden"

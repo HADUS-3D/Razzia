@@ -45,6 +45,11 @@
     },
     "puzzle": {
       "group": "Groep {{number}}"
+    },
+    "pin": {
+      "close": "Binnen {{radius}} van de plek",
+      "scored": "Punten gescoord",
+      "far": "Te ver weg"
     }
   },
   "tabs": {

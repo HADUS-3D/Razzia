@@ -87,5 +87,15 @@
     "placeholder": "Wat hebben deze woorden gemeen?",
     "found": "{{count}} van {{total}} verbanden gevonden",
     "noAnswer": "Geen antwoord"
+  },
+  "pin": {
+    "tapHint": "Tik op de plek op de afbeelding",
+    "moveHint": "Tik opnieuw om je pin te verplaatsen",
+    "distance": "{{distance}} van de juiste plek",
+    "noAnswer": "Geen pin geplaatst",
+    "rightSpot": "De juiste plek",
+    "pinsPlaced_one": "{{count}} pin geplaatst",
+    "pinsPlaced_other": "{{count}} pins geplaatst",
+    "nobody": "Niemand plaatste een pin"
   }
 }

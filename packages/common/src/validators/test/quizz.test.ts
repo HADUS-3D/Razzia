@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { Question, Quizz } from "@razzia/common/types/game"
 import {
   ESTIMATION_INPUT_MODES,
+  MEDIA_TYPES,
   QUESTION_TYPES,
   QUIZZ_MODES,
   SCORING_MODES,
@@ -288,6 +289,88 @@ describe("puzzle question", () => {
 
     expect(parsed.data?.questions[0].options).toEqual({
       connections: [["A"], ["B", "b"], ["C"]],
+    })
+  })
+})
+
+describe("pin question", () => {
+  const pinQuestion = (overrides: Partial<Question> = {}): Question => ({
+    type: QUESTION_TYPES.PIN,
+    question: "Where is Paris ?",
+    answers: [],
+    media: { type: MEDIA_TYPES.IMAGE, url: "/media/map.png" },
+    cooldown: 5,
+    time: 30,
+    options: { x: 38, y: 62, radius: 3, maxDistance: 40 },
+    ...overrides,
+  })
+
+  it("is valid without solutions", () => {
+    expect(issues(quizz([pinQuestion()]))).toEqual([])
+  })
+
+  it("needs an image", () => {
+    expect(issues(quizz([pinQuestion({ media: undefined })]))).toContain(
+      "errors:quizz.pinNeedsImage",
+    )
+  })
+
+  it("needs a maximum distance beyond the radius", () => {
+    expect(
+      issues(
+        quizz([
+          pinQuestion({ options: { x: 1, y: 1, radius: 10, maxDistance: 5 } }),
+        ]),
+      ),
+    ).toContain("errors:quizz.pinMaxDistanceTooSmall")
+  })
+
+  it("needs no image on a real map", () => {
+    expect(
+      issues(
+        quizz([
+          pinQuestion({
+            media: undefined,
+            options: {
+              mode: "map",
+              x: 4.9,
+              y: 52.37,
+              radius: 25,
+              maxDistance: 500,
+              view: { lat: 50, lng: 5, zoom: 4 },
+            },
+          }),
+        ]),
+      ),
+    ).toEqual([])
+  })
+
+  it("keeps the right spot on the image", () => {
+    expect(
+      issues(
+        quizz([
+          pinQuestion({
+            options: { x: 150, y: 10, radius: 1, maxDistance: 5 },
+          }),
+        ]),
+      ),
+    ).toContain("errors:quizz.pinInvalidOptions")
+  })
+
+  it("is not allowed in a survey", () => {
+    expect(issues(quizz([pinQuestion()], QUIZZ_MODES.SURVEY))).toContain(
+      "errors:quizz.pinNeedsQuiz",
+    )
+  })
+
+  it("keeps its options when parsed", () => {
+    const parsed = quizzValidator.safeParse(quizz([pinQuestion()]))
+
+    expect(parsed.data?.questions[0].options).toEqual({
+      x: 38,
+      y: 62,
+      radius: 3,
+      maxDistance: 40,
     })
   })
 })

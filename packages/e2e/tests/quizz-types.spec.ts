@@ -1,4 +1,5 @@
 import {
+  PIN_QUIZZ,
   PUZZLE_QUIZZ,
   SCORING_QUIZZ,
   SURVEY_QUIZZ,
@@ -108,4 +109,33 @@ test("scores a puzzle per connection found, ignoring capitals and accents", asyn
     player.getByText(t("game:puzzle.found", { count: 2, total: 3 })),
   ).toBeVisible()
   await expect(player.getByText("Shakespeare plays")).toBeVisible()
+})
+
+test("scores a pin on its distance to the right spot and reveals every pin", async ({
+  page: manager,
+  newPage,
+}) => {
+  const pin = await createGame(manager, PIN_QUIZZ)
+  const alice = await newPage()
+  const bob = await newPage()
+
+  await joinGame(alice, pin, "Alice")
+  await joinGame(bob, pin, "Bob")
+  await expect(manager.getByText("Bob")).toBeVisible()
+  await startGame(manager)
+
+  // Alice hits the middle, Bob taps a corner far beyond the maximum distance
+  await alice.getByTestId("pin-field").click()
+  await confirm(alice)
+  await bob.getByTestId("pin-field").click({ position: { x: 2, y: 2 } })
+  await confirm(bob)
+
+  await expect(alice.getByText("+1000")).toBeVisible()
+  await expect(bob.getByText(t("game:wrong"))).toBeVisible()
+
+  await expect(
+    manager.getByText(t("game:pin.pinsPlaced", { count: 2 })),
+  ).toBeVisible()
+  await expect(manager.getByText(t("game:pin.rightSpot"))).toBeVisible()
+  await expect(manager.getByText("+1000")).toBeVisible()
 })

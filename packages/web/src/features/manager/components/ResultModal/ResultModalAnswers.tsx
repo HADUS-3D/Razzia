@@ -11,6 +11,7 @@ import {
 import {
   isEstimationOptions,
   isMultiOptions,
+  isPinOptions,
 } from "@razzia/common/questions/options"
 import {
   ANSWERS_COLORS,
@@ -18,6 +19,7 @@ import {
 } from "@razzia/web/features/game/utils/constants"
 import { useResultModal } from "@razzia/web/features/manager/contexts/result-modal-context"
 import { formatValue } from "@razzia/web/features/questions/estimation/utils"
+import { formatPinDistance } from "@razzia/web/features/questions/pin/utils"
 import { getPuzzleConnections } from "@razzia/web/features/questions/puzzle/utils"
 
 interface AnswerRow {
@@ -129,7 +131,49 @@ const ResultModalAnswers = () => {
       answerLabel: String(group + 1),
     }))
 
+  const pinRows = (): AnswerRow[] => {
+    if (!isPinOptions(options)) {
+      return []
+    }
+
+    const pins = questionResult.playerAnswers.flatMap((pa) =>
+      pa.pin ? [pa.pin.distance] : [],
+    )
+    const close = pins.filter((d) => d <= options.radius).length
+    const far = pins.filter((d) => d >= options.maxDistance).length
+
+    return [
+      {
+        label: t("manager:result.pin.close", {
+          radius: formatPinDistance(options.radius, options),
+        }),
+        count: close,
+        isCorrect: true,
+        color: "bg-correct",
+        answerLabel: "◎",
+      },
+      {
+        label: t("manager:result.pin.scored"),
+        count: pins.length - close - far,
+        isCorrect: true,
+        color: "bg-primary",
+        answerLabel: "≈",
+      },
+      {
+        label: t("manager:result.pin.far"),
+        count: far,
+        isCorrect: false,
+        color: "bg-red-500",
+        answerLabel: "≠",
+      },
+    ]
+  }
+
   const answerRows: AnswerRow[] = (() => {
+    if (questionResult.type === QUESTION_TYPES.PIN) {
+      return pinRows()
+    }
+
     if (questionResult.type === QUESTION_TYPES.PUZZLE) {
       return puzzleRows()
     }

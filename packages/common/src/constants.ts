@@ -106,6 +106,7 @@ export const QUESTION_TYPES = {
   MULTI: "multi",
   ESTIMATION: "estimation",
   PUZZLE: "puzzle",
+  PIN: "pin",
 } as const
 
 /** A puzzle shows 12 words that form 3 groups of 4, each group with a connection. */
@@ -114,6 +115,38 @@ export const PUZZLE_GROUPS = 3
 export const PUZZLE_GROUP_SIZE = 4
 
 export const MAX_PUZZLE_ANSWER_LENGTH = 100
+
+/**
+ * A pin question is answered by tapping a spot on an image. Every position is
+ * a percentage: x of the image width, y of the image height. Distances are
+ * measured in percent of the image width.
+ */
+export const PIN_DEFAULTS = {
+  /** Answers this close (or closer) to the right spot earn full points. */
+  RADIUS: 3,
+  /** Answers this far (or further) from the right spot earn nothing. */
+  MAX_DISTANCE: 50,
+} as const
+
+export const MAX_PIN_UNIT_LENGTH = 12
+
+export const PIN_MODES = {
+  /** Players tap an image. Positions are percentages, distances percent of the image width. */
+  IMAGE: "image",
+  /** Players tap a real map. x is the longitude and y the latitude, distances are in km. */
+  MAP: "map",
+} as const
+
+export const PIN_DEFAULT_MAP_VIEW = { lat: 30, lng: 10, zoom: 2 } as const
+
+export const PIN_MAP_DEFAULTS = {
+  RADIUS_KM: 25,
+  MAX_DISTANCE_KM: 2000,
+} as const
+
+export const EARTH_RADIUS_KM = 6371
+
+export const MAP_MAX_ZOOM = 18
 
 export const ESTIMATION_INPUT_MODES = {
   SLIDER: "slider",

@@ -3,6 +3,7 @@ import { MAX_ANSWERS, MIN_ANSWERS } from "@razzia/common/constants"
 import { estimationAccuracy } from "@razzia/common/questions/estimation"
 import {
   isEstimationOptions,
+  isPinOptions,
   isPuzzleOptions,
 } from "@razzia/common/questions/options"
 
@@ -27,6 +28,11 @@ export const isAnswerCorrect = (
   // For a puzzle the ids are the groups that were solved.
   if (isPuzzleOptions(options)) {
     return (answerIds?.length ?? 0) > 0
+  }
+
+  // For a pin question the result record says whether the tap scored.
+  if (isPinOptions(options)) {
+    return false
   }
 
   if (!answerIds || !solutions) {

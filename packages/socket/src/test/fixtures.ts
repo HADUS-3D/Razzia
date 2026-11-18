@@ -1,6 +1,7 @@
 import type { Player, Question, Quizz } from "@razzia/common/types/game"
 import {
   ESTIMATION_INPUT_MODES,
+  MEDIA_TYPES,
   QUESTION_TYPES,
   QUIZZ_MODES,
 } from "@razzia/common/constants"
@@ -79,5 +80,17 @@ export const createPuzzleQuestion = (
         ["Shakespeare plays"],
       ],
     },
+    ...overrides,
+  })
+
+export const createPinQuestion = (
+  overrides: Partial<Question> = {},
+): Question =>
+  createQuestion({
+    type: QUESTION_TYPES.PIN,
+    answers: [],
+    solutions: undefined,
+    media: { type: MEDIA_TYPES.IMAGE, url: "/media/map.png" },
+    options: { x: 50, y: 50, radius: 5, maxDistance: 25, aspect: 2 },
     ...overrides,
   })
