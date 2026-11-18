@@ -14,25 +14,43 @@ export class ApiError extends Error {
   }
 }
 
-const authFetch: typeof fetch = async (input, init) => {
-  const { token } = await ensureSession()
-  const headers = new Headers(init?.headers)
+/**
+ * A stored session can be rejected without being expired, for example after a
+ * deploy when the server restarted with a new signing secret. Drop it and try
+ * once more with a fresh session before giving up.
+ */
+const authFetch = (
+  input: Parameters<typeof fetch>[0],
+  init?: Parameters<typeof fetch>[1],
+  retried = false,
+): Promise<Response> =>
+  ensureSession()
+    .then(({ token }) => {
+      const headers = new Headers(init?.headers)
 
-  headers.set("Authorization", `Bearer ${token}`)
+      headers.set("Authorization", `Bearer ${token}`)
 
-  const response = await fetch(input, { ...init, headers })
-  const status: StatusCodes = response.status
+      return fetch(input, { ...init, headers })
+    })
+    .then((response) => {
+      const status: StatusCodes = response.status
 
-  if (status === StatusCodes.UNAUTHORIZED) {
-    clearToken()
+      if (status !== StatusCodes.UNAUTHORIZED) {
+        return response
+      }
 
-    throw new ApiError(StatusCodes.UNAUTHORIZED, "errors:auth.unauthorized")
-  }
+      clearToken()
 
-  return response
-}
+      if (retried) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "errors:auth.unauthorized")
+      }
 
-export const api = hc<ApiType>("/api", { fetch: authFetch })
+      return authFetch(input, init, true)
+    })
+
+export const api = hc<ApiType>("/api", {
+  fetch: ((input, init) => authFetch(input, init)) as typeof fetch,
+})
 
 const readErrorKey = async (response: Response, fallback: string) => {
   try {
