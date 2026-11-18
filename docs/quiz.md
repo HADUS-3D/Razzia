@@ -50,7 +50,7 @@ Quiz Options:
 - `gameMode`: `"quiz"` (default) or `"survey"`, see [Survey mode](#survey-mode)
 - `subject`: Title/topic of the quiz
 - `questions`: Array of question objects containing:
-  - `type`: `"single"` (exactly one answer), `"multi"` (one or more), `"estimation"` (a number, see [Estimation questions](#estimation-questions)) or `"puzzle"` (12 words in 3 groups, see [Puzzle questions](#puzzle-questions)). Defaults to `"single"` when omitted
+  - `type`: `"single"` (exactly one answer), `"multi"` (one or more), `"estimation"` (a number, see [Estimation questions](#estimation-questions)) `"puzzle"` (12 words in 3 groups, see [Puzzle questions](#puzzle-questions)) or `"pin"` (tap a spot on an image or map, see [Pin questions](#pin-questions)). Defaults to `"single"` when omitted
   - `question`: The question text
   - `category`: Optional category, see [Categories](#categories)
   - `round`: Optional `{ "name": string, "background"?: url }` that starts a new round with this question, see [Rounds](#rounds)
@@ -133,6 +133,65 @@ A `"puzzle"` question, inspired by De Slimste Mens ter Wereld, shows 12 words th
 - `options.connections`: Three arrays, one per group, with every answer that is accepted for that group. The first is shown as the solution. `solutions` is not used
 - Capitals, accents and extra spaces are ignored when answers are checked. Typos are **not** forgiven, so list spelling variants as accepted answers
 - Points do not depend on speed. Every group found earns an equal share of `maxPoints` (a third each, so all three groups earn `maxPoints`). A question counts as answered correctly, for the streak and the `penalty`, when at least one group is found
+
+## Pin questions
+
+A `"pin"` question asks players to tap a spot, either on an image (a map picture, a floor plan, a photo) or on a real OpenStreetMap map. When time is up the big screen shows every player's pin at once, then reveals the right spot and lists each player's distance. Points depend on the distance only, never on speed. Pin questions are only available in `"quiz"` mode.
+
+On an image (`options.mode` omitted or `"image"`):
+
+```json
+{
+  "type": "pin",
+  "question": "Where is Paris?",
+  "answers": [],
+  "media": { "type": "image", "url": "/media/europe.png" },
+  "options": {
+    "x": 38,
+    "y": 62,
+    "radius": 3,
+    "maxDistance": 40,
+    "aspect": 1.5,
+    "imageWidth": 4000,
+    "unit": "km"
+  },
+  "cooldown": 5,
+  "time": 30
+}
+```
+
+- `media`: Required, an image. It is the field players tap
+- `options.x` / `options.y`: The right spot as percentages (0-100) of the image width and height, from the top left
+- `options.radius` / `options.maxDistance`: Distances in percent of the image width. A pin within `radius` earns the full `maxPoints`, a pin at `maxDistance` or further earns nothing, in between the points fall in a straight line. `maxDistance` must be greater than `radius`
+- `options.aspect`: Width divided by height of the image (default `1`). The editor fills it in, set it when you write the file by hand, as the distances need it
+- `options.imageWidth` / `options.unit`: Optional. How wide the image is in real life, e.g. `4000` and `"km"`, to show distances as "412 km" instead of a percentage
+
+On a real map (`options.mode` is `"map"`), no `media` is needed:
+
+```json
+{
+  "type": "pin",
+  "question": "Where is Amsterdam?",
+  "answers": [],
+  "options": {
+    "mode": "map",
+    "x": 4.9,
+    "y": 52.37,
+    "radius": 25,
+    "maxDistance": 1500,
+    "view": { "lat": 50, "lng": 10, "zoom": 4 }
+  },
+  "cooldown": 5,
+  "time": 30
+}
+```
+
+- `options.x` / `options.y`: The right spot as longitude and latitude
+- `options.radius` / `options.maxDistance`: Distances in km over the earth's surface, scored the same way as on an image
+- `options.view`: Where the players' map starts (`lat`, `lng` and `zoom` 0-18). The editor stores the map as you leave it
+- The map tiles come from `tile.openstreetmap.org`, so the host's and the players' devices need internet access. Mind the [OpenStreetMap tile usage policy](https://operations.osmfoundation.org/policies/tiles/) for heavy use
+
+A question counts as answered correctly, for the streak and the `penalty`, when the pin is closer than `maxDistance`. The right spot stays on the server until the answer is revealed.
 
 ## Rounds
 

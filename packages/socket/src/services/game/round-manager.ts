@@ -4,9 +4,11 @@ import type {
   GameResult,
   GameSettings,
   GameUpdateQuestion,
+  PinPosition,
   Player,
   Question,
   QuestionMedia,
+  PlayerQuestionOptions,
   QuestionResult,
   Quizz,
   QuizzMode,
@@ -18,18 +20,26 @@ import {
   MAX_POINTS,
   MEDIA_TYPES,
   NO_TIME_LIMIT,
+  PIN_MODES,
   PUZZLE_GROUPS,
   QUIZZ_MODES,
 } from "@razzia/common/constants"
 import {
   isEstimationOptions,
+  isPinOptions,
   isPuzzleOptions,
 } from "@razzia/common/questions/options"
+import {
+  isPinPositionValid,
+  pinDistanceTo,
+  scorePin,
+} from "@razzia/common/questions/pin"
 import {
   puzzleGroupWords,
   solvedPuzzleGroups,
 } from "@razzia/common/questions/puzzle"
 import {
+  type PinResponse,
   type Status,
   STATUS,
   type StatusDataMap,
@@ -66,6 +76,12 @@ export interface RoundManagerOptions {
   onNewQuestion: () => void
   onGameFinished: (_result: GameResult) => void
   getSettings: () => GameSettings
+}
+
+/** What a player sends along with the answer keys: typed texts (puzzle) or a pin. */
+export interface AnswerExtra {
+  answerTexts?: string[]
+  pin?: PinPosition
 }
 
 const ROUND_INTRO_SECONDS = 4
@@ -425,7 +441,8 @@ export class RoundManager {
     this.startTime = Date.now()
     this.acceptingAnswers = true
 
-    // A puzzle's words are shuffled and its connections stay on the server.
+    // A puzzle's words are shuffled. The solutions of a puzzle and of a pin
+    // question stay on the server.
     const isPuzzle = isPuzzleOptions(this.question.options)
 
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
@@ -437,7 +454,7 @@ export class RoundManager {
       time: this.question.time,
       totalPlayer: this.opts.players.count(),
       questionType: this.question.type,
-      options: isPuzzle ? undefined : this.question.options,
+      options: this.publicOptions(),
       answersOnly: this.opts.getSettings().answersOnly,
     })
 
@@ -468,6 +485,7 @@ export class RoundManager {
               ?.answerIds ?? null,
           answerTexts: this.playersAnswers.find((a) => a.playerId === player.id)
             ?.answerTexts,
+          pin: this.pinRecord(player.id),
           ...(score && {
             correct: score.lastCorrect,
             points: score.lastPoints,
@@ -528,12 +546,14 @@ export class RoundManager {
         aheadOfMe: aheadPlayer ? aheadPlayer.username : null,
         note: this.question.note,
         puzzle: this.puzzleResult(player.id),
+        pin: this.pinResult(player.id),
       })
     })
 
     this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
       ...this.question,
       responses: answerCounts,
+      pins: this.pinResponses(sortedPlayers),
     })
 
     this.recordHistory(currentPlayers, sortedPlayers)
@@ -561,6 +581,73 @@ export class RoundManager {
         correct: answer?.answerIds.includes(group) ?? false,
       })),
     }
+  }
+
+  /** The options players get with the question: never the solutions. */
+  private publicOptions(): PlayerQuestionOptions | undefined {
+    const { options } = this.question
+
+    if (isPinOptions(options)) {
+      return { mode: options.mode ?? PIN_MODES.IMAGE, view: options.view }
+    }
+
+    return isPuzzleOptions(options) ? undefined : options
+  }
+
+  /** Where a player tapped and how far that is from the right spot. */
+  private pinRecord(
+    playerId: string,
+  ): (PinPosition & { distance: number }) | undefined {
+    const { options } = this.question
+    const pin = this.playersAnswers.find((a) => a.playerId === playerId)?.pin
+
+    if (!isPinOptions(options) || !pin) {
+      return undefined
+    }
+
+    return { ...pin, distance: pinDistanceTo(pin, options) }
+  }
+
+  private pinResult(playerId: string): StatusDataMap["SHOW_RESULT"]["pin"] {
+    const { options, media } = this.question
+
+    if (!isPinOptions(options)) {
+      return undefined
+    }
+
+    const record = this.pinRecord(playerId)
+
+    return {
+      media,
+      options,
+      guess: record ? { x: record.x, y: record.y } : null,
+      distance: record?.distance ?? null,
+    }
+  }
+
+  /** Every pin on the board, closest first, for the big screen. */
+  private pinResponses(scored: ScoredPlayer[]): PinResponse[] | undefined {
+    if (!isPinOptions(this.question.options)) {
+      return undefined
+    }
+
+    return scored
+      .flatMap((player) => {
+        const record = this.pinRecord(player.id)
+
+        return record
+          ? [
+              {
+                username: player.username,
+                x: record.x,
+                y: record.y,
+                distance: record.distance,
+                points: Math.max(0, player.lastPoints),
+              },
+            ]
+          : []
+      })
+      .sort((a, b) => a.distance - b.distance)
   }
 
   private showLeaderboard(): void {
@@ -646,7 +733,7 @@ export class RoundManager {
   private normalizeAnswer(answerIds: number[]): number[] | null {
     const { options } = this.question
 
-    if (isPuzzleOptions(options)) {
+    if (isPuzzleOptions(options) || isPinOptions(options)) {
       return []
     }
 
@@ -670,7 +757,7 @@ export class RoundManager {
   selectAnswer(
     socket: Socket,
     answerIds: number[],
-    answerTexts?: string[],
+    { answerTexts, pin }: AnswerExtra = {},
   ): void {
     const player = this.opts.players.findById(socket.id)
 
@@ -689,6 +776,14 @@ export class RoundManager {
     }
 
     const { options } = this.question
+
+    // A pin question can only be answered with a pin.
+    if (isPinOptions(options) && (!pin || !isPinPositionValid(pin, options))) {
+      return
+    }
+
+    const accuracy =
+      isPinOptions(options) && pin ? scorePin(pin, options).accuracy : undefined
     const texts = isPuzzleOptions(options)
       ? Array.from({ length: PUZZLE_GROUPS }, (_, group) =>
           (answerTexts?.at(group) ?? "").trim(),
@@ -702,7 +797,8 @@ export class RoundManager {
     const points = (() => {
       if (
         isEstimationOptions(this.question.options) ||
-        isPuzzleOptions(this.question.options)
+        isPuzzleOptions(this.question.options) ||
+        isPinOptions(this.question.options)
       ) {
         return this.question.maxPoints ?? MAX_POINTS
       }
@@ -722,6 +818,7 @@ export class RoundManager {
       playerId: player.id,
       answerIds: submitted,
       ...(texts && { answerTexts: texts }),
+      ...(accuracy !== undefined && { pin, accuracy }),
       points,
     })
 

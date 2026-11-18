@@ -18,6 +18,7 @@ import Game from "@razzia/socket/services/game"
 import { createFakeIo } from "@razzia/socket/test/fake-io"
 import {
   createEstimationQuestion,
+  createPinQuestion,
   createPuzzleQuestion,
   createQuestion,
   createQuizz,
@@ -745,9 +746,13 @@ describe("quiz flow", () => {
     expect([...select.answers].sort()).toEqual([...PUZZLE_WORDS].sort())
     expect(select.options).toBeUndefined()
 
-    game.selectAnswer(alice, [], ["PLANETS", "rivers", "Shakespeare plays"])
-    game.selectAnswer(bob, [0, 1, 2], ["planets", "", "wrong"])
-    game.selectAnswer(carol, [], ["planeten", "", ""])
+    game.selectAnswer(alice, [], {
+      answerTexts: ["PLANETS", "rivers", "Shakespeare plays"],
+    })
+    game.selectAnswer(bob, [0, 1, 2], {
+      answerTexts: ["planets", "", "wrong"],
+    })
+    game.selectAnswer(carol, [], { answerTexts: ["planeten", "", ""] })
 
     await vi.advanceTimersByTimeAsync(TICK_MS)
 
@@ -773,6 +778,91 @@ describe("quiz flow", () => {
     expect(status(MANAGER)?.data).toMatchObject({
       responses: { 0: 2, 1: 1, 2: 1 },
     })
+  })
+
+  it("scores a pin by distance, regardless of speed", async () => {
+    const { game, sockets, status, start } = setup(
+      createQuizz([createPinQuestion()]),
+      ["Alice", "Bob", "Carol", "Dave"],
+    )
+    const [alice, bob, carol, dave] = sockets
+
+    await start()
+
+    const select = status(game.gameId)?.data as { options?: unknown }
+
+    // Players only learn where the map starts, never the right spot
+    expect(select.options).toEqual({ mode: "image", view: undefined })
+
+    game.selectAnswer(alice, [], { pin: { x: 51, y: 50 } })
+    game.selectAnswer(bob, [], { pin: { x: 65, y: 50 } })
+    game.selectAnswer(carol, [], { pin: { x: 0, y: 0 } })
+    // A pin question cannot be answered without a pin
+    game.selectAnswer(dave, [0])
+
+    await vi.advanceTimersByTimeAsync(createPinQuestion().time * 1000)
+
+    expect(status("alice")?.data).toMatchObject({
+      correct: true,
+      points: 1000,
+      pin: { guess: { x: 51, y: 50 }, distance: 1 },
+    })
+    expect(status("bob")?.data).toMatchObject({ correct: true, points: 500 })
+    expect(status("carol")?.data).toMatchObject({ correct: false })
+    expect(status("dave")?.data).toMatchObject({ pin: { guess: null } })
+
+    const shown = status(MANAGER)?.data as {
+      pins: Array<{ username: string; points: number }>
+    }
+    const { pins } = shown
+
+    expect(pins.map((p) => p.username)).toEqual(["Alice", "Bob", "Carol"])
+    expect(pins.map((p) => p.points)).toEqual([1000, 500, 0])
+  })
+
+  it("scores a pin on a real map in km", async () => {
+    const { game, sockets, status, start } = setup(
+      createQuizz([
+        createPinQuestion({
+          media: undefined,
+          options: {
+            mode: "map",
+            x: 4.9,
+            y: 52.37,
+            radius: 50,
+            maxDistance: 450,
+            view: { lat: 50, lng: 5, zoom: 4 },
+          },
+        }),
+      ]),
+      ["Alice", "Bob", "Carol"],
+    )
+    const [alice, bob, carol] = sockets
+
+    await start()
+
+    const select = status(game.gameId)?.data as { options?: unknown }
+
+    expect(select.options).toEqual({
+      mode: "map",
+      view: { lat: 50, lng: 5, zoom: 4 },
+    })
+
+    // Amsterdam is the right spot: Utrecht is about 35 km away, Paris about 430 km
+    game.selectAnswer(alice, [], { pin: { x: 5.12, y: 52.09 } })
+    game.selectAnswer(bob, [], { pin: { x: 2.35, y: 48.86 } })
+    // Latitudes beyond 90 are not a place on earth
+    game.selectAnswer(carol, [], { pin: { x: 5, y: 120 } })
+
+    await vi.advanceTimersByTimeAsync(createPinQuestion().time * 1000)
+
+    expect(status("alice")?.data).toMatchObject({
+      correct: true,
+      points: 1000,
+    })
+    expect(status("bob")?.data).toMatchObject({ correct: true })
+    expect(status("bob")?.data).not.toMatchObject({ points: 1000 })
+    expect(status("carol")?.data).toMatchObject({ pin: { guess: null } })
   })
 
   it("advances automatically when enabled", async () => {

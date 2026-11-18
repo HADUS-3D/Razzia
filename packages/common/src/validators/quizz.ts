@@ -11,6 +11,7 @@ import {
 import { QUESTION_REFINEMENTS } from "@razzia/common/validators/questions"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
 import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
+import { pinOptionsValidator } from "@razzia/common/validators/questions/pin"
 import { puzzleOptionsValidator } from "@razzia/common/validators/questions/puzzle"
 
 const mediaUrlValidator = z
@@ -77,6 +78,7 @@ const questionSchema = z.object({
       multiOptionsValidator,
       estimationOptionsValidator,
       puzzleOptionsValidator,
+      pinOptionsValidator,
     ])
     .optional(),
 })
@@ -105,15 +107,24 @@ export const quizzValidator = z
             message: "errors:quizz.puzzleNeedsQuiz",
           })
         }
+
+        if (question.type === QUESTION_TYPES.PIN) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["questions", index, "type"],
+            message: "errors:quizz.pinNeedsQuiz",
+          })
+        }
       })
 
       return
     }
 
     quizz.questions.forEach((question, index) => {
-      // A puzzle's solutions are the connections in its options.
+      // The solutions of a puzzle or a pin question live in its options.
       if (
         question.type === QUESTION_TYPES.PUZZLE ||
+        question.type === QUESTION_TYPES.PIN ||
         (question.solutions && question.solutions.length > 0)
       ) {
         return
@@ -159,7 +170,8 @@ export const normalizeLegacyQuizz = (data: unknown): unknown => {
             : [question.solutions],
         ...(isRecord(question.options) &&
         question.type !== QUESTION_TYPES.ESTIMATION &&
-        question.type !== QUESTION_TYPES.PUZZLE
+        question.type !== QUESTION_TYPES.PUZZLE &&
+        question.type !== QUESTION_TYPES.PIN
           ? {
               options: {
                 scoringMode: SCORING_MODES.BALANCED,

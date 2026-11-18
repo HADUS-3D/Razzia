@@ -2,6 +2,7 @@ import type { Question, QuestionType } from "@razzia/common/types/game"
 import { QUESTION_TYPES } from "@razzia/common/constants"
 import { refineChoiceQuestion } from "@razzia/common/validators/questions/choice"
 import { refineEstimationQuestion } from "@razzia/common/validators/questions/estimation"
+import { refinePinQuestion } from "@razzia/common/validators/questions/pin"
 import { refinePuzzleQuestion } from "@razzia/common/validators/questions/puzzle"
 
 export type AddIssue = (_path: Array<string | number>, _message: string) => void
@@ -16,4 +17,5 @@ export const QUESTION_REFINEMENTS: Record<QuestionType, QuestionRefinement> = {
   [QUESTION_TYPES.MULTI]: refineChoiceQuestion,
   [QUESTION_TYPES.ESTIMATION]: refineEstimationQuestion,
   [QUESTION_TYPES.PUZZLE]: refinePuzzleQuestion,
+  [QUESTION_TYPES.PIN]: refinePinQuestion,
 }

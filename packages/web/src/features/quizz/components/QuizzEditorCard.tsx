@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { CircleAlert, Flag, Music, Trash2, Video } from "lucide-react"
+import { CircleAlert, Flag, MapPin, Music, Trash2, Video } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { twMerge } from "tailwind-merge"
 import type { Question, QuestionMedia } from "@razzia/common/types/game"
@@ -31,6 +31,14 @@ const AnswersPreview = ({ question }: { question: Question }) => {
         <div className="relative h-1 w-full rounded-full bg-accent">
           <div className="absolute top-1/2 left-1/2 size-1.5 -translate-1/2 rounded-full bg-correct" />
         </div>
+      </div>
+    )
+  }
+
+  if (question.type === QUESTION_TYPES.PIN) {
+    return (
+      <div className="flex h-4 items-center justify-center">
+        <MapPin className="size-4 fill-correct/30 text-correct" />
       </div>
     )
   }

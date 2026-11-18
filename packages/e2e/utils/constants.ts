@@ -17,3 +17,5 @@ export const SURVEY_QUIZZ = "E2E Survey"
 export const REVEAL_QUIZZ = "E2E Reveal"
 
 export const PUZZLE_QUIZZ = "E2E Puzzle"
+
+export const PIN_QUIZZ = "E2E Pin"

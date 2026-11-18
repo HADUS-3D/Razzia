@@ -89,5 +89,15 @@
     "placeholder": "What do these words have in common?",
     "found": "{{count}} of {{total}} connections found",
     "noAnswer": "No answer"
+  },
+  "pin": {
+    "tapHint": "Tap the spot on the image",
+    "moveHint": "Tap again to move your pin",
+    "distance": "{{distance}} from the right spot",
+    "noAnswer": "No pin placed",
+    "rightSpot": "The right spot",
+    "pinsPlaced_one": "{{count}} pin placed",
+    "pinsPlaced_other": "{{count}} pins placed",
+    "nobody": "Nobody placed a pin"
   }
 }

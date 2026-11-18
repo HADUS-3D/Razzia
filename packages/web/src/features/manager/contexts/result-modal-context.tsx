@@ -4,7 +4,11 @@ import {
   useState,
   type PropsWithChildren,
 } from "react"
-import type { GameResult, QuestionResult } from "@razzia/common/types/game"
+import type {
+  GameResult,
+  PlayerAnswerRecord,
+  QuestionResult,
+} from "@razzia/common/types/game"
 import { isAnswerCorrect } from "@razzia/web/features/questions/utils"
 
 interface ResultModalContextType {
@@ -37,11 +41,19 @@ export const ResultModalProvider = ({ children, result, onClose }: Props) => {
   const total = result.questions.length
   const totalPlayers = result.players.length
 
-  const answeredCount = questionResult.playerAnswers.filter((pa) =>
-    pa.answerTexts
-      ? pa.answerTexts.some((text) => text.trim() !== "")
-      : pa.answerIds !== null && pa.answerIds.length > 0,
-  ).length
+  const hasAnswered = (pa: PlayerAnswerRecord) => {
+    if (pa.pin) {
+      return true
+    }
+
+    if (pa.answerTexts) {
+      return pa.answerTexts.some((text) => text.trim() !== "")
+    }
+
+    return pa.answerIds !== null && pa.answerIds.length > 0
+  }
+
+  const answeredCount = questionResult.playerAnswers.filter(hasAnswered).length
 
   const correctCount = questionResult.playerAnswers.filter(
     (pa) => pa.correct ?? isAnswerCorrect(questionResult, pa.answerIds),

@@ -22,6 +22,10 @@ const PNG = Buffer.from(
   "base64",
 )
 
+const SQUARE_IMAGE = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#9ad"/></svg>',
+)}`
+
 const uniqueSubject = (name: string) => `${name} ${Date.now()}`
 
 test.beforeEach(async ({ page }) => {
@@ -496,6 +500,58 @@ test("saves a puzzle with its words and accepted connections", async ({
             ["Shakespeare plays"],
           ],
         },
+      },
+    ],
+  })
+})
+
+test("saves a pin question with the right spot and its radius", async ({
+  page,
+}) => {
+  const subject = uniqueSubject("Pin quizz")
+
+  await page.getByRole("button", { name: t("manager:quizz.create") }).click()
+  await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
+  await page
+    .getByPlaceholder(t("quizz:question.placeholder"))
+    .fill("Where is the treasure?")
+  await selectOption(
+    page,
+    t("quizz:question.config.answerMode"),
+    t("quizz:questionType.pin"),
+  )
+
+  // Without an image there is nothing to tap yet
+  await expect(
+    page.getByText(t("quizz:question.config.pin.needsImage")),
+  ).toBeVisible()
+
+  // A data URL, because the dev server of the e2e tests does not serve uploads
+  await page.getByRole("button", { name: t("quizz:media.fromUrl") }).click()
+  await page
+    .getByPlaceholder(t("quizz:question.mediaUrlPlaceholder"))
+    .fill(SQUARE_IMAGE)
+  await page
+    .getByRole("button", { name: t("quizz:question.media.image") })
+    .click()
+
+  // The point at 25% across and 75% down
+  const field = page.getByTestId("pin-field")
+
+  await expect(field).toBeVisible()
+  await field.click({ position: { x: 50, y: 150 } })
+  await numberSetting(page, t("quizz:question.config.pin.radius")).fill("5")
+
+  await saveQuizz(page)
+
+  expect(readQuizz(subject)).toMatchObject({
+    gameMode: "quiz",
+    questions: [
+      {
+        type: "pin",
+        answers: [],
+        media: { type: "image" },
+        options: { x: 25, y: 75, radius: 5, maxDistance: 50, aspect: 1 },
       },
     ],
   })

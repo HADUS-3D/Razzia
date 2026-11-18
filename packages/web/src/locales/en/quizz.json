@@ -64,6 +64,29 @@
         "addAlternative": "Add accepted answer",
         "removeAlternative": "Remove accepted answer",
         "spellingHint": "Capitals, accents and extra spaces are ignored. Typos are not, so add spelling variants as accepted answers."
+      },
+      "pin": {
+        "title": "Pin on the map",
+        "hint": "Players tap a spot on the image. The closer to the right spot, the more points, whatever the speed.",
+        "radius": "Full points radius",
+        "radiusHint": "Pins this close to the right spot earn full points, in percent of the image width.",
+        "maxDistance": "Zero points distance",
+        "maxDistanceHint": "From this distance on a pin earns nothing. In between the points fall in a straight line.",
+        "imageWidth": "Image width in real life",
+        "unit": "Unit",
+        "unitPlaceholder": "Unit, e.g. km",
+        "imageWidthHint": "Optional. Fill in how wide the image is in real life to show distances in that unit instead of a percentage.",
+        "needsImage": "Add an image or map above, then tap the right spot on it.",
+        "placeHint": "Tap the image to place the right spot",
+        "legend": "Green: right spot and full points radius. Dashed red: distance where points reach zero.",
+        "mode": "Playing field",
+        "modes": {
+          "image": "Image or map picture",
+          "map": "Real map"
+        },
+        "placeHintMap": "Zoom and move the map, then tap the right spot. The map you leave behind is where players start.",
+        "legendMap": "Green: right spot and full points radius. Dashed red: distance where points reach zero. Distances are in km.",
+        "radiusHintMap": "Pins this close to the right spot earn full points, in km."
       }
     },
     "deleteQuestion": "Delete question",
@@ -86,7 +109,8 @@
     "single": "Single choice",
     "multi": "Multiple choice",
     "estimation": "Estimation",
-    "puzzle": "Puzzle"
+    "puzzle": "Puzzle",
+    "pin": "Pin on the map"
   },
   "quizzSaved": "Quizz saved successfully",
   "quizzUpdated": "Quizz updated successfully",

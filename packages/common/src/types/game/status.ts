@@ -1,10 +1,20 @@
 import type {
+  PinPosition,
+  PlayerQuestionOptions,
+  PinQuestionOptions,
   Player,
   QuestionMedia,
   QuestionOptions,
   QuestionType,
   QuizzSource,
 } from "@razzia/common/types/game"
+
+export interface PinResponse extends PinPosition {
+  username: string
+  /** Percent of the image width. */
+  distance: number
+  points: number
+}
 
 export const STATUS = {
   SHOW_ROOM: "SHOW_ROOM",
@@ -43,7 +53,7 @@ export interface CommonStatusDataMap {
     time: number
     totalPlayer: number
     questionType: QuestionType
-    options?: QuestionOptions
+    options?: PlayerQuestionOptions
     answersOnly: boolean
   }
   SHOW_RESULT: {
@@ -62,6 +72,14 @@ export interface CommonStatusDataMap {
         given: string
         correct: boolean
       }>
+    }
+    /** Set for a pin question: the image, where the player tapped and the right spot. */
+    pin?: {
+      media?: QuestionMedia
+      options: PinQuestionOptions
+      guess: PinPosition | null
+      /** Percent of the image width, null when the player did not answer. */
+      distance: number | null
     }
   }
   WAIT: { text: string }
@@ -85,6 +103,8 @@ interface ManagerExtraStatus {
     type: QuestionType
     options?: QuestionOptions
     note?: string
+    /** Set for a pin question: every player's pin, closest first. */
+    pins?: PinResponse[]
   }
   SHOW_LEADERBOARD: {
     oldLeaderboard: Player[]

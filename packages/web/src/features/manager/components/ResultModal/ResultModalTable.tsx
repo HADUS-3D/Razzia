@@ -5,6 +5,7 @@ import type { PlayerAnswerRecord } from "@razzia/common/types/game"
 import { QUIZZ_MODES } from "@razzia/common/constants"
 import {
   isEstimationOptions,
+  isPinOptions,
   isPuzzleOptions,
 } from "@razzia/common/questions/options"
 import {
@@ -13,6 +14,7 @@ import {
 } from "@razzia/web/features/game/utils/constants"
 import { useResultModal } from "@razzia/web/features/manager/contexts/result-modal-context"
 import { formatValue } from "@razzia/web/features/questions/estimation/utils"
+import { formatPinDistance } from "@razzia/web/features/questions/pin/utils"
 import { isAnswerCorrect } from "@razzia/web/features/questions/utils"
 
 interface RowProps {
@@ -23,11 +25,21 @@ const ResultModalTableRow = ({ playerAnswer }: RowProps) => {
   const { result, questionResult, getPlayerPoints } = useResultModal()
   const { t } = useTranslation()
 
-  const { playerName, answerIds, answerTexts, correct, points } = playerAnswer
+  const { playerName, answerIds, answerTexts, correct, points, pin } =
+    playerAnswer
   const isPuzzle = isPuzzleOptions(questionResult.options)
-  const hasAnswer = isPuzzle
-    ? Boolean(answerTexts?.some((text) => text.trim() !== ""))
-    : answerIds !== null && answerIds.length > 0
+  const pinOptions = isPinOptions(questionResult.options)
+    ? questionResult.options
+    : undefined
+  const hasAnswer = (() => {
+    if (pinOptions) {
+      return Boolean(pin)
+    }
+
+    return isPuzzle
+      ? Boolean(answerTexts?.some((text) => text.trim() !== ""))
+      : answerIds !== null && answerIds.length > 0
+  })()
 
   const isCorrect = correct ?? isAnswerCorrect(questionResult, answerIds)
   const isEstimation = isEstimationOptions(questionResult.options)
@@ -36,6 +48,11 @@ const ResultModalTableRow = ({ playerAnswer }: RowProps) => {
     <tr>
       <td className="px-5 py-2.5 font-medium">{playerName}</td>
       <td className="px-4 py-2.5">
+        {hasAnswer && pinOptions && pin && (
+          <span className="inline-flex rounded-md bg-accent px-2 py-1 text-xs font-bold text-accent-foreground">
+            {formatPinDistance(pin.distance, pinOptions)}
+          </span>
+        )}
         {hasAnswer && isPuzzle && (
           <div className="flex flex-wrap gap-1">
             {answerTexts?.map((text, group) => (
@@ -53,12 +70,12 @@ const ResultModalTableRow = ({ playerAnswer }: RowProps) => {
             ))}
           </div>
         )}
-        {hasAnswer && !isPuzzle && isEstimation && (
+        {hasAnswer && !isPuzzle && !pinOptions && isEstimation && (
           <span className="inline-flex rounded-md bg-accent px-2 py-1 text-xs font-bold text-accent-foreground">
             {formatValue(answerIds?.[0] ?? 0)}
           </span>
         )}
-        {hasAnswer && !isPuzzle && !isEstimation && (
+        {hasAnswer && !isPuzzle && !pinOptions && !isEstimation && (
           <div className="flex flex-wrap gap-1">
             {answerIds?.map((id) => (
               <span

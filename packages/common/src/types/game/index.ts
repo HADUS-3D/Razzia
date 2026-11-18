@@ -1,5 +1,6 @@
 import type {
   ACCEPTED_MEDIA_TYPES,
+  PIN_MODES,
   ESTIMATION_INPUT_MODES,
   MEDIA_TYPES,
   QUESTION_TYPES,
@@ -41,10 +42,56 @@ export interface PuzzleQuestionOptions {
   connections: string[][]
 }
 
+export type PinMode = (typeof PIN_MODES)[keyof typeof PIN_MODES]
+
+/** Where the players' map starts out, for a pin question on a real map. */
+export interface PinMapView {
+  lat: number
+  lng: number
+  zoom: number
+}
+
+export interface PinPosition {
+  /** Image: percent of the image width from the left (0-100). Map: longitude (-180 to 180). */
+  x: number
+  /** Image: percent of the image height from the top (0-100). Map: latitude (-90 to 90). */
+  y: number
+}
+
+/**
+ * A pin question uses `Question.media` (an image or map) as the playing field:
+ * players tap a spot and are scored on their distance to the right one.
+ */
+export interface PinQuestionOptions extends PinPosition {
+  /** "image" (default) or "map", a real map with tiles. */
+  mode?: PinMode
+  /** Map mode: where the map is when the question starts. */
+  view?: PinMapView
+  /** Answers within this distance earn full points: percent of the image width, or km on a map. */
+  radius: number
+  /** From this distance on an answer earns nothing: percent of the image width, or km on a map. */
+  maxDistance: number
+  /** Width divided by height of the image, so distances come out right. */
+  aspect?: number
+  /** How wide the image is in real life (0 or empty: unknown), to show distances in `unit`. */
+  imageWidth?: number
+  unit?: string
+}
+
+/** What players get to see of a pin question before they answered: where to start, not the answer. */
+export interface PinPublicOptions {
+  mode: PinMode
+  view?: PinMapView
+}
+
+/** The options a player's device gets with a question. */
+export type PlayerQuestionOptions = QuestionOptions | PinPublicOptions
+
 export type QuestionOptions =
   | MultiQuestionOptions
   | EstimationQuestionOptions
   | PuzzleQuestionOptions
+  | PinQuestionOptions
 
 export interface Player {
   id: string
@@ -64,6 +111,10 @@ export interface Answer {
   answerIds: number[]
   /** For a puzzle: what the player typed, one text per group. */
   answerTexts?: string[]
+  /** For a pin question: where the player tapped. */
+  pin?: PinPosition
+  /** For a pin question: how close that is to the right spot, from 0 to 1. */
+  accuracy?: number
   points: number
 }
 
@@ -157,6 +208,8 @@ export interface PlayerAnswerRecord {
   playerName: string
   answerIds: number[] | null
   answerTexts?: string[]
+  /** For a pin question: where the player tapped and how far that is from the right spot. */
+  pin?: PinPosition & { distance: number }
   correct?: boolean
   points?: number
 }

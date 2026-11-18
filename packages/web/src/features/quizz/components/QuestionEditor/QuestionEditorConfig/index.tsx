@@ -42,9 +42,10 @@ const QuestionEditorConfig = () => {
 
   const { ConfigComponent } = QUESTION_REGISTRY[questionType]
 
-  // A puzzle has no survey variant: there are no right answers to find.
+  // A puzzle and a pin question have no survey variant: there are no right answers to find.
+  const quizOnly: QuestionType[] = [QUESTION_TYPES.PUZZLE, QUESTION_TYPES.PIN]
   const typeOptions = QUESTION_TYPE_LIST.filter(
-    (type) => type !== QUESTION_TYPES.PUZZLE || gameMode === QUIZZ_MODES.QUIZ,
+    (type) => !quizOnly.includes(type) || gameMode === QUIZZ_MODES.QUIZ,
   ).map((type) => ({
     value: type,
     label: t(QUESTION_REGISTRY[type].labelKey),
