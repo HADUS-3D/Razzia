@@ -89,6 +89,9 @@ button:not(:disabled),
   animation: quizz 0.8s linear;
   transform: perspective(1200px) rotateY(-15deg) rotateX(15deg)
     translateZ(100px);
+  /* The tilt pushes the card about 27px to the left of the screen's middle,
+     which shows on a phone. Move it back so its content sits centered. */
+  translate: 27px 0;
   box-shadow: 10px 10px 0 rgba(20, 24, 29, 1);
 }
 

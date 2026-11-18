@@ -39,8 +39,10 @@ export const clientEventValidators = {
       /** Where a pin question was tapped: percent of the image, or longitude and latitude on a map. The server checks the range. */
       pin: z
         .object({
-          x: z.number().min(0).max(100),
-          y: z.number().min(0).max(100),
+          // Wide enough for a map (longitude -180..180, latitude -90..90) as well
+          // as an image (0..100); the round manager checks the range per mode.
+          x: z.number().min(-180).max(180),
+          y: z.number().min(-180).max(180),
         })
         .optional(),
     }),
