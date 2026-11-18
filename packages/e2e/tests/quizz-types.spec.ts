@@ -90,15 +90,19 @@ test("scores a puzzle per connection found, ignoring capitals and accents", asyn
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
 
-  await expect(player.getByText("Mars", { exact: true })).toBeVisible()
-  await expect(player.getByText("Tempest", { exact: true })).toBeVisible()
+  // The words are on the big screen only, never on the player device.
+  await expect(manager.getByText("Mars", { exact: true })).toBeVisible()
+  await expect(manager.getByText("Tempest", { exact: true })).toBeVisible()
+  await expect(player.getByText("Mars", { exact: true })).toBeHidden()
+  await expect(player.getByText(t("game:puzzle.hint"))).toBeVisible()
 
+  // The field a connection goes in does not matter.
   await player
     .getByLabel(t("game:puzzle.connection", { number: 1 }))
-    .fill("  PLANÈTS ")
+    .fill("Rivers")
   await player
     .getByLabel(t("game:puzzle.connection", { number: 2 }))
-    .fill("Rivers")
+    .fill("  PLANÈTS ")
   await player
     .getByLabel(t("game:puzzle.connection", { number: 3 }))
     .fill("Shakespear plays")

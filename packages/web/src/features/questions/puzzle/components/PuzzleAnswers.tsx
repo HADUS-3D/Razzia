@@ -28,21 +28,18 @@ const PuzzleAnswers = ({
 
   const canSubmit = texts.some((text) => text.trim() !== "")
 
-  const words = (
-    <div
-      className={clsx(
-        "grid w-full grid-cols-4 gap-1.5 md:gap-3",
-        readOnly && "mb-6",
-      )}
-    >
-      {answers.map((word, i) => (
-        <Word key={i}>{word}</Word>
-      ))}
-    </div>
-  )
-
+  // The words are only shown on the big screen: on a phone they would crowd
+  // out the fields and the button.
   if (readOnly) {
-    return <div className="mx-auto w-full max-w-7xl px-2">{words}</div>
+    return (
+      <div className="mx-auto w-full max-w-7xl px-2">
+        <div className="mb-6 grid w-full grid-cols-4 gap-1.5 md:gap-3">
+          {answers.map((word, i) => (
+            <Word key={i}>{word}</Word>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -59,7 +56,9 @@ const PuzzleAnswers = ({
         fill && "flex-1 justify-center",
       )}
     >
-      {words}
+      <p className="text-center text-lg font-bold text-white drop-shadow-lg">
+        {t("game:puzzle.hint")}
+      </p>
 
       {texts.map((text, group) => (
         <Input

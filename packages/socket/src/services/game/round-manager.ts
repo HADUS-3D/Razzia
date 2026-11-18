@@ -37,6 +37,7 @@ import {
   scorePin,
 } from "@razzia/common/questions/pin"
 import {
+  matchPuzzleTexts,
   puzzleGroupWords,
   solvedPuzzleGroups,
 } from "@razzia/common/questions/puzzle"
@@ -663,13 +664,41 @@ export class RoundManager {
 
     const answer = this.playersAnswers.find((a) => a.playerId === playerId)
 
+    const texts = answer?.answerTexts ?? []
+    const matched = matchPuzzleTexts(texts, options.connections)
+    const unmatched = new Set(
+      texts.flatMap((text, index) =>
+        matched.includes(index) || text.trim() === "" ? [] : [index],
+      ),
+    )
+    // A wrong text stays on its own field when it can, and otherwise takes the
+    // next free unsolved group, because the field a text was typed in is not
+    // what counts.
+    const shown = new Map<number, string>()
+
+    for (const group of options.connections.keys()) {
+      if (matched[group] === undefined && unmatched.delete(group)) {
+        shown.set(group, texts[group] ?? "")
+      }
+    }
+
+    const leftovers = [...unmatched].map((index) => texts[index] ?? "")
+
     return {
-      groups: options.connections.map((accepted, group) => ({
-        words: puzzleGroupWords(answers, group),
-        connection: accepted.find((c) => c.trim() !== "") ?? "",
-        given: answer?.answerTexts?.at(group) ?? "",
-        correct: answer?.answerIds.includes(group) ?? false,
-      })),
+      groups: options.connections.map((accepted, group) => {
+        const textIndex = matched[group]
+        const correct = textIndex !== undefined
+        const given = correct
+          ? (texts[textIndex] ?? "")
+          : (shown.get(group) ?? leftovers.shift() ?? "")
+
+        return {
+          words: puzzleGroupWords(answers, group),
+          connection: accepted.find((c) => c.trim() !== "") ?? "",
+          given,
+          correct,
+        }
+      }),
     }
   }
 

@@ -39,8 +39,11 @@ const PinResponses = ({
   const colored = pins.map((pin, index) => ({ ...pin, color: pinColor(index) }))
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
-      <div className="flex flex-col items-center gap-3">
+    // An empty column on the left mirrors the list on the right, so the board
+    // stays centered before and after the list shows up.
+    <div className="mx-auto grid w-full max-w-screen-2xl gap-4 px-4 lg:grid-cols-[16rem_minmax(0,1fr)_16rem]">
+      <div aria-hidden className="hidden lg:block" />
+      <div className="flex min-w-0 flex-col items-center gap-3 lg:col-start-2 lg:row-start-1">
         <PinBoard
           mode={pinOptions.mode}
           media={media}
@@ -103,7 +106,7 @@ const PinResponses = ({
       </div>
 
       {revealed && (
-        <ol className="anim-show flex max-h-[60vh] flex-col gap-1.5 self-start overflow-y-auto rounded-2xl bg-white/90 p-3 shadow-lg">
+        <ol className="anim-show flex max-h-[60vh] flex-col gap-1.5 self-start overflow-y-auto rounded-2xl bg-white/90 p-3 shadow-lg lg:col-start-3 lg:row-start-1">
           {colored.length === 0 && (
             <li className="text-center text-sm font-semibold text-muted-foreground">
               {t("game:pin.nobody")}

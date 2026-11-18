@@ -35,7 +35,7 @@
   "reconnect": "Reconnect",
   "reconnectTitle": "You were in a game",
   "resultBehind": ", behind ",
-  "resultTop": "You finished ",
+  "resultTop": "You are now in ",
   "settings": {
     "autoAdvance": {
       "hint": "Move on by itself after the reveal and the leaderboard.",
@@ -62,7 +62,7 @@
   "usernamePlaceholder": "Username here",
   "waitingForAnswers": "Waiting for the players to answer",
   "waitingForPlayers": "Waiting for players",
-  "wrong": "Too bad",
+  "wrong": "Too bad, that is wrong",
   "estimation": {
     "yourAnswer": "Your answer",
     "rangeHint": "Between {{min}} and {{max}}"
@@ -87,6 +87,7 @@
     "bestStreakCount_other": "{{count}} in a row"
   },
   "puzzle": {
+    "hint": "Look at the words on the big screen and fill in the 3 connections. It does not matter which field you use.",
     "connection": "Connection {{number}}",
     "placeholder": "What do these words have in common?",
     "found": "{{count}} of {{total}} connections found",

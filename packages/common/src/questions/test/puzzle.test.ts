@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   isPuzzleAnswerCorrect,
+  matchPuzzleTexts,
   normalizePuzzleAnswer,
   puzzleGroupWords,
   solvedPuzzleGroups,
@@ -42,6 +43,30 @@ describe("solvedPuzzleGroups", () => {
       solvedPuzzleGroups(["planets", "wrong", "shakespeare"], connections),
     ).toEqual([0, 2])
     expect(solvedPuzzleGroups([], connections)).toEqual([])
+  })
+
+  it("does not care in which field an answer was typed", () => {
+    expect(
+      solvedPuzzleGroups(["shakespeare", "PLANETS", "rivers"], connections),
+    ).toEqual([0, 1, 2])
+    expect(solvedPuzzleGroups(["", "", "rivers"], connections)).toEqual([1])
+  })
+
+  it("counts an answer typed twice only once", () => {
+    expect(
+      solvedPuzzleGroups(["planets", "planets", "Planets"], connections),
+    ).toEqual([0])
+  })
+
+  it("lets an answer that fits two groups settle for the free one", () => {
+    const overlapping = [["Animals", "Pets"], ["Pets"], ["Cars"]]
+
+    expect(solvedPuzzleGroups(["pets", "animals"], overlapping)).toEqual([0, 1])
+    expect(matchPuzzleTexts(["pets", "animals"], overlapping)).toEqual([
+      1,
+      0,
+      undefined,
+    ])
   })
 })
 
