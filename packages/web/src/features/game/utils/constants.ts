@@ -66,7 +66,6 @@ export const SFX = {
     FIRST: "/sounds/first.mp3",
     SNEAR_ROOL: "/sounds/snearRoll.mp3",
   },
-  RESULTS_SOUND: "/sounds/results.mp3",
   SHOW_SOUND: "/sounds/show.mp3",
   BOUMP_SOUND: "/sounds/boump.mp3",
 } as const

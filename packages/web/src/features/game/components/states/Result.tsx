@@ -1,14 +1,12 @@
 import clsx from "clsx"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import useSound from "use-sound"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
 import CricleCheck from "@razzia/web/features/game/components/icons/CricleCheck"
 import CricleXmark from "@razzia/web/features/game/components/icons/CricleXmark"
 import PuzzleSolution from "@razzia/web/features/game/components/PuzzleSolution"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
-import { SFX } from "@razzia/web/features/game/utils/constants"
 import PinSolution from "@razzia/web/features/questions/pin/components/PinSolution"
 
 interface Props {
@@ -45,16 +43,12 @@ const Result = ({
     return () => clearTimeout(timer)
   }, [hasNote])
 
-  const [sfxResults] = useSound(SFX.RESULTS_SOUND, {
-    volume: 0.2,
-  })
-
   useEffect(() => {
     updatePlayer(({ player }) => ({ player: { ...player, points: myPoints } }))
 
-    sfxResults()
+    // The end-of-answer sound is configurable and plays on the big screen only.
     // oxlint-disable-next-line
-  }, [sfxResults])
+  }, [])
 
   return (
     <section className="anim-show relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center">
