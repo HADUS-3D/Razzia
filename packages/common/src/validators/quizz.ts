@@ -73,6 +73,18 @@ const questionSchema = z.object({
     .min(0, "errors:quizz.maxPointsNegative")
     .optional(),
   penalty: z.number().int().min(0, "errors:quizz.penaltyNegative").optional(),
+  penaltyPercent: z
+    .number()
+    .int()
+    .min(1, "errors:quizz.penaltyPercentRange")
+    .max(100, "errors:quizz.penaltyPercentRange")
+    .optional(),
+  topPercent: z
+    .number()
+    .int()
+    .min(1, "errors:quizz.topPercentRange")
+    .max(100, "errors:quizz.topPercentRange")
+    .optional(),
   options: z
     .union([
       multiOptionsValidator,
@@ -84,6 +96,14 @@ const questionSchema = z.object({
 })
 
 const questionValidator = questionSchema.superRefine((question, ctx) => {
+  if (question.penalty !== undefined && question.penaltyPercent !== undefined) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["penaltyPercent"],
+      message: "errors:quizz.penaltyBoth",
+    })
+  }
+
   QUESTION_REFINEMENTS[question.type](question, (path, message) =>
     ctx.addIssue({ code: "custom", path, message }),
   )
@@ -95,6 +115,12 @@ export const quizzValidator = z
     subject: z.string().min(1, "errors:quizz.subjectEmpty"),
     source: z.enum(QUIZZ_SOURCES).optional(),
     background: backgroundValidator.optional(),
+    speedBonus: z
+      .number()
+      .int()
+      .min(0, "errors:quizz.speedBonusRange")
+      .max(100, "errors:quizz.speedBonusRange")
+      .optional(),
     questions: z.array(questionValidator).min(1, "errors:quizz.noQuestions"),
   })
   .superRefine((quizz, ctx) => {

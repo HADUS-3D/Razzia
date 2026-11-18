@@ -16,11 +16,21 @@ export const countAnswers = (answers: Answer[]): Record<number, number> => {
   }, {})
 }
 
+const penaltyFor = (question: Question, currentPoints: number): number => {
+  if (question.penaltyPercent) {
+    return Math.round((currentPoints * question.penaltyPercent) / 100)
+  }
+
+  return question.penalty ?? 0
+}
+
 export const scoreQuestion = (
   question: Question,
   players: Player[],
   answers: Answer[],
 ): ScoredPlayer[] => {
+  // A top challenge (`topPercent`) only gets the players that were asked it.
+  const isChallenge = question.topPercent !== undefined
   const scored = players.map((player) => {
     const playerAnswer = answers.find((a) => a.playerId === player.id)
 
@@ -34,9 +44,14 @@ export const scoreQuestion = (
       return scoring(question, playerAnswer.answerIds, playerAnswer)
     })()
 
-    const points = Math.round((playerAnswer?.points ?? 0) * scoreMultiplier)
     const isCorrect = scoreMultiplier > 0
-    const penalty = !isCorrect && playerAnswer ? (question.penalty ?? 0) : 0
+    // A challenge keeps the points of whoever gets it right.
+    const points = isChallenge
+      ? 0
+      : Math.round((playerAnswer?.points ?? 0) * scoreMultiplier)
+    // A challenge also penalises not answering: it counts as wrong.
+    const isPenalised = !isCorrect && (playerAnswer ?? isChallenge)
+    const penalty = isPenalised ? penaltyFor(question, player.points) : 0
 
     player.points = Math.max(0, player.points + points - penalty)
     player.streak = isCorrect ? player.streak + 1 : 0

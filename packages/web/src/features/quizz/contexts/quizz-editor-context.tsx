@@ -30,6 +30,7 @@ export interface QuizzFormValues {
   subject: string
   source?: QuizzSource
   background?: string
+  speedBonus?: number
   questions: Question[]
 }
 
@@ -86,6 +87,7 @@ export const QuizzEditorProvider = ({
       subject: initialData?.subject ?? "Untitled Quizz",
       source: initialData?.source,
       background: initialData?.background,
+      speedBonus: initialData?.speedBonus,
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
   })

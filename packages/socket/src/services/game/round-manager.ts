@@ -51,7 +51,13 @@ import {
   scoreQuestion,
   type ScoredPlayer,
 } from "@razzia/socket/services/scoring/round"
-import { orderToPoint, shuffle, timeToPoint } from "@razzia/socket/utils/game"
+import {
+  applySpeedBonus,
+  orderToPoint,
+  shuffle,
+  timeToPoint,
+  topPlayers,
+} from "@razzia/socket/utils/game"
 import sleep, { SECOND_MS } from "@razzia/socket/utils/sleep"
 
 type BroadcastFn = <T extends Status>(
@@ -109,6 +115,8 @@ export class RoundManager {
   private tempOldLeaderboard: Player[] | null = null
   private questionsHistory: QuestionResult[] = []
   private autoAdvanceTimer: NodeJS.Timeout | null = null
+  /** Ids of the players asked the current top challenge; null for a normal question. */
+  private challengeIds: Set<string> | null = null
 
   constructor(opts: RoundManagerOptions) {
     this.opts = opts
@@ -409,6 +417,8 @@ export class RoundManager {
       }
     }
 
+    this.challengeIds = this.pickChallenge()
+
     this.opts.broadcast(STATUS.SHOW_PREPARED, {
       totalAnswers: this.question.answers.length,
       questionNumber: this.currentQuestion + 1,
@@ -426,7 +436,7 @@ export class RoundManager {
         ? this.questionImage
         : undefined
 
-    this.opts.broadcast(STATUS.SHOW_QUESTION, {
+    this.toAudience(STATUS.SHOW_QUESTION, {
       question: this.question.question,
       media: imageMedia,
       cooldown: this.question.cooldown,
@@ -445,7 +455,7 @@ export class RoundManager {
     // question stay on the server.
     const isPuzzle = isPuzzleOptions(this.question.options)
 
-    this.opts.broadcast(STATUS.SELECT_ANSWER, {
+    this.toAudience(STATUS.SELECT_ANSWER, {
       question: this.question.question,
       answers: isPuzzle
         ? shuffle(this.question.answers)
@@ -467,6 +477,48 @@ export class RoundManager {
     }
 
     this.runStep(0)
+  }
+
+  /** The best players of the leaderboard, when the current question is a top challenge. */
+  private pickChallenge(): Set<string> | null {
+    const { topPercent } = this.question
+
+    if (!topPercent || this.isSurvey()) {
+      return null
+    }
+
+    return new Set(
+      topPlayers(this.opts.players.getAll(), topPercent).map(({ id }) => id),
+    )
+  }
+
+  /**
+   * Sends a status to everyone, or, for a top challenge, only to the players
+   * asked. The manager and the other players see a waiting screen instead, so
+   * the question and its answers stay on the challenged players' devices.
+   */
+  private toAudience<
+    T extends typeof STATUS.SHOW_QUESTION | typeof STATUS.SELECT_ANSWER,
+  >(status: T, data: StatusDataMap[T]): void {
+    if (!this.challengeIds) {
+      this.opts.broadcast(status, data)
+
+      return
+    }
+
+    const waiting = { text: "game:topChallengeWaiting" }
+
+    this.opts.send(this.opts.getManagerId(), STATUS.WAIT, waiting)
+
+    this.opts.players.getAll().forEach((player) => {
+      if (this.challengeIds?.has(player.id)) {
+        this.opts.send(player.id, status, data)
+
+        return
+      }
+
+      this.opts.send(player.id, STATUS.WAIT, waiting)
+    })
   }
 
   // ── Steps ────────────────────────────────────────────────────────────────
@@ -526,16 +578,30 @@ export class RoundManager {
       return this.leaderboard.map((p) => ({ ...p }))
     })()
 
-    const sortedPlayers = scoreQuestion(
-      this.question,
-      currentPlayers,
-      this.playersAnswers,
+    // Only the challenged players are scored for a top challenge; the others keep their points.
+    const challenged = currentPlayers.filter(
+      (player) => !this.challengeIds || this.challengeIds.has(player.id),
     )
+    const scored = scoreQuestion(this.question, challenged, this.playersAnswers)
+    const sortedPlayers: ScoredPlayer[] = [
+      ...scored,
+      ...currentPlayers
+        .filter((player) => !challenged.includes(player))
+        .map((player) => ({ ...player, lastCorrect: false, lastPoints: 0 })),
+    ].sort((a, b) => b.points - a.points)
 
     this.opts.players.replace(sortedPlayers)
 
     sortedPlayers.forEach((player, index) => {
       const aheadPlayer = sortedPlayers[index - 1]
+
+      if (this.challengeIds && !this.challengeIds.has(player.id)) {
+        this.opts.send(player.id, STATUS.WAIT, {
+          text: "game:topChallengeSkipped",
+        })
+
+        return
+      }
 
       this.opts.send(player.id, STATUS.SHOW_RESULT, {
         correct: player.lastCorrect,
@@ -765,6 +831,10 @@ export class RoundManager {
       return
     }
 
+    if (this.challengeIds && !this.challengeIds.has(player.id)) {
+      return
+    }
+
     if (this.playersAnswers.find((a) => a.playerId === socket.id)) {
       return
     }
@@ -803,15 +873,26 @@ export class RoundManager {
         return this.question.maxPoints ?? MAX_POINTS
       }
 
+      const maxPoints = this.question.maxPoints ?? MAX_POINTS
+      const { speedBonus } = this.opts.quizz
+
       if (this.question.time === NO_TIME_LIMIT) {
-        return orderToPoint(
-          this.playersAnswers.length,
-          this.opts.players.count(),
-          this.question.maxPoints,
+        return applySpeedBonus(
+          orderToPoint(
+            this.playersAnswers.length,
+            this.opts.players.count(),
+            this.question.maxPoints,
+          ),
+          maxPoints,
+          speedBonus,
         )
       }
 
-      return timeToPoint(this.startTime, this.question)
+      return applySpeedBonus(
+        timeToPoint(this.startTime, this.question),
+        maxPoints,
+        speedBonus,
+      )
     })()
 
     this.playersAnswers.push({
@@ -834,6 +915,10 @@ export class RoundManager {
   }
 
   updatePlayerId(oldId: string, newId: string): void {
+    if (this.challengeIds?.delete(oldId)) {
+      this.challengeIds.add(newId)
+    }
+
     this.playersAnswers = this.playersAnswers.map((answer) =>
       answer.playerId === oldId ? { ...answer, playerId: newId } : answer,
     )
@@ -844,7 +929,12 @@ export class RoundManager {
       return
     }
 
-    const connected = this.opts.players.getAll().filter((p) => p.connected)
+    const connected = this.opts.players
+      .getAll()
+      .filter(
+        (p) =>
+          p.connected && (!this.challengeIds || this.challengeIds.has(p.id)),
+      )
     const everyoneAnswered = connected.every((player) =>
       this.playersAnswers.some((a) => a.playerId === player.id),
     )

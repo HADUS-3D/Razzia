@@ -1,7 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { createQuestion } from "@razzia/socket/test/fixtures"
 import { normalizeFilename } from "@razzia/socket/utils/file"
-import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
+import {
+  applySpeedBonus,
+  orderToPoint,
+  timeToPoint,
+  topPlayers,
+} from "@razzia/socket/utils/game"
 import { createNickname } from "@razzia/socket/utils/nickname"
 
 afterEach(() => {
@@ -95,5 +100,34 @@ describe("GAME_SPEED", () => {
     await expect(import("@razzia/socket/env")).rejects.toThrow(
       "GAME_SPEED must be a positive number",
     )
+  })
+})
+
+describe("applySpeedBonus", () => {
+  it("leaves the points alone at 100 percent or by default", () => {
+    expect(applySpeedBonus(300, 1000)).toBe(300)
+    expect(applySpeedBonus(300, 1000, 100)).toBe(300)
+  })
+
+  it("gives every right answer full points at 0 percent", () => {
+    expect(applySpeedBonus(0, 1000, 0)).toBe(1000)
+  })
+
+  it("mixes a fixed part with a speed part in between", () => {
+    expect(applySpeedBonus(0, 1000, 50)).toBe(500)
+    expect(applySpeedBonus(1000, 1000, 50)).toBe(1000)
+  })
+})
+
+describe("topPlayers", () => {
+  const players = [10, 50, 30, 20, 40].map((points) => ({ points }))
+
+  it("takes the best percentage of the players, rounded up", () => {
+    expect(topPlayers(players, 40).map((p) => p.points)).toEqual([50, 40])
+    expect(topPlayers(players, 50).map((p) => p.points)).toEqual([50, 40, 30])
+  })
+
+  it("always takes at least one player", () => {
+    expect(topPlayers(players, 1).map((p) => p.points)).toEqual([50])
   })
 })

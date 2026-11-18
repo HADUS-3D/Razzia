@@ -94,3 +94,60 @@ describe("scoreQuestion", () => {
     expect(player.streak).toBe(0)
   })
 })
+
+describe("scoreQuestion with a top challenge", () => {
+  it("keeps the points of a right answer and leaves the others alone", () => {
+    const players = [
+      createPlayer({ id: "alice", username: "Alice", points: 1000 }),
+      createPlayer({ id: "bob", username: "Bob", points: 500 }),
+    ]
+    const scored = scoreQuestion(
+      createQuestion({ solutions: [0], penalty: 300, topPercent: 50 }),
+      [players[0]],
+      [{ playerId: "alice", answerIds: [0], points: 900 }],
+    )
+
+    expect(scored.map((p) => [p.username, p.points, p.lastPoints])).toEqual([
+      ["Alice", 1000, 0],
+    ])
+  })
+
+  it("penalises a wrong answer, and also no answer", () => {
+    const wrong = scoreQuestion(
+      createQuestion({ solutions: [0], penalty: 300, topPercent: 20 }),
+      [createPlayer({ id: "alice", points: 1000 })],
+      [{ playerId: "alice", answerIds: [1], points: 900 }],
+    )
+    const missing = scoreQuestion(
+      createQuestion({ solutions: [0], penalty: 300, topPercent: 20 }),
+      [createPlayer({ id: "alice", points: 1000 })],
+      [],
+    )
+
+    expect(wrong[0].points).toBe(700)
+    expect(missing[0].points).toBe(700)
+  })
+
+  it("supports a percentage penalty", () => {
+    const [scored] = scoreQuestion(
+      createQuestion({ solutions: [0], penaltyPercent: 20, topPercent: 20 }),
+      [createPlayer({ id: "alice", points: 1000 })],
+      [{ playerId: "alice", answerIds: [1], points: 900 }],
+    )
+
+    expect(scored.points).toBe(800)
+    expect(scored.lastPoints).toBe(-200)
+  })
+})
+
+describe("scoreQuestion with a percentage penalty", () => {
+  it("takes a share of the player's points on a wrong answer", () => {
+    const [scored] = scoreQuestion(
+      createQuestion({ solutions: [0], penaltyPercent: 50 }),
+      [createPlayer({ id: "alice", points: 600 })],
+      [{ playerId: "alice", answerIds: [1], points: 900 }],
+    )
+
+    expect(scored.points).toBe(300)
+  })
+})
