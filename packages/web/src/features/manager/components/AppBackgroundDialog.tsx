@@ -3,6 +3,7 @@ import { Image, X } from "lucide-react"
 import { Dialog } from "radix-ui"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
+import { isSameImage } from "@razzia/common/background"
 import {
   settingsKeys,
   settingsQuery,
@@ -64,7 +65,7 @@ const AppBackgroundDialog = () => {
             value={settings?.background}
             onChange={handleChange}
             onMediaDeleted={({ url }) => {
-              if (settings?.background === url) {
+              if (isSameImage(settings?.background, url)) {
                 handleChange(undefined)
               }
             }}

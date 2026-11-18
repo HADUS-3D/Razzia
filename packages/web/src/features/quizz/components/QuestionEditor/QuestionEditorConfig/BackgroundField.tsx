@@ -1,5 +1,6 @@
 import { ImageIcon, ImagePlay } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { isSameImage } from "@razzia/common/background"
 import { MEDIA_TYPES } from "@razzia/common/constants"
 import BackgroundPicker from "@razzia/web/features/quizz/components/BackgroundPicker"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
@@ -19,7 +20,8 @@ const BackgroundField = () => {
     currentQuestion.media?.type === MEDIA_TYPES.IMAGE
       ? currentQuestion.media
       : undefined
-  const imageIsBackground = image && image.url === currentQuestion.background
+  const imageIsBackground =
+    image && isSameImage(image.url, currentQuestion.background)
 
   return (
     <>

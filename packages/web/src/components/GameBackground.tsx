@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import { parseBackground } from "@razzia/common/background"
 import defaultBackground from "@razzia/web/assets/background.png"
 import { getBranding, imageFallback } from "@razzia/web/branding"
 import { settingsQuery } from "@razzia/web/features/manager/queries"
@@ -11,7 +12,9 @@ interface Props {
 const GameBackground = ({ background }: Props) => {
   const { data: settings, isPending } = useQuery(settingsQuery())
   const fallback = getBranding()?.background ?? defaultBackground
-  const src = background ?? settings?.background ?? fallback
+  const { url: src, focus } = parseBackground(
+    background ?? settings?.background ?? fallback,
+  )
 
   // Wait for the app setting so the stock image does not flash first.
   if (!background && isPending) {
@@ -23,6 +26,7 @@ const GameBackground = ({ background }: Props) => {
       <img
         key={src}
         className="pointer-events-none h-full w-full object-cover select-none"
+        style={{ objectPosition: `${focus.x}% ${focus.y}%` }}
         src={src}
         onError={imageFallback(fallback)}
         alt=""

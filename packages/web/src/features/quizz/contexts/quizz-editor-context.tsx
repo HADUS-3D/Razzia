@@ -19,6 +19,7 @@ import type {
   QuizzSource,
   QuizzWithId,
 } from "@razzia/common/types/game"
+import { isSameImage } from "@razzia/common/background"
 import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import {
   quizzValidator,
@@ -181,18 +182,18 @@ export const QuizzEditorProvider = ({
         updateQuestion(index, { media: undefined })
       }
 
-      if (question.background === url) {
+      if (isSameImage(question.background, url)) {
         updateQuestion(index, { background: undefined })
       }
 
-      if (question.round?.background === url) {
+      if (question.round && isSameImage(question.round.background, url)) {
         updateQuestion(index, {
           round: { ...question.round, background: undefined },
         })
       }
     })
 
-    if (getValues("background") === url) {
+    if (isSameImage(getValues("background"), url)) {
       setQuizzBackground(undefined)
     }
   }
