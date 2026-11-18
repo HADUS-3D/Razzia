@@ -134,8 +134,9 @@ A `"puzzle"` question, inspired by De Slimste Mens ter Wereld, shows 12 words th
 }
 ```
 
-- `answers`: Exactly 12 words. Words 1-4 are group 1, words 5-8 group 2 and words 9-12 group 3. Players see the words shuffled
+- `answers`: Exactly 12 words. Words 1-4 are group 1, words 5-8 group 2 and words 9-12 group 3. The words are shown shuffled on the big screen only; players get just the answer fields on their own device
 - `options.connections`: Three arrays, one per group, with every answer that is accepted for that group. The first is shown as the solution. `solutions` is not used
+- It does not matter in which of the three fields a player types a connection: the typed answers are compared as a set with the accepted answers. Every group can be found once, so typing the same answer twice does not score twice
 - Capitals, accents and extra spaces are ignored when answers are checked. Typos are **not** forgiven, so list spelling variants as accepted answers
 - Points do not depend on speed. Every group found earns an equal share of `maxPoints` (a third each, so all three groups earn `maxPoints`). A question counts as answered correctly, for the streak and the `penalty`, when at least one group is found
 

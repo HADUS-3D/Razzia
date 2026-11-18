@@ -33,7 +33,7 @@
   "reconnect": "Opnieuw verbinden",
   "reconnectTitle": "Je zat in een spel",
   "resultBehind": ", achter ",
-  "resultTop": "Je eindigde als ",
+  "resultTop": "Je staat nu op de ",
   "settings": {
     "autoAdvance": {
       "hint": "Ga vanzelf verder na het onthullen van het antwoord en het scorebord.",
@@ -60,7 +60,7 @@
   "usernamePlaceholder": "Gebruikersnaam",
   "waitingForAnswers": "Wachten tot de spelers antwoorden",
   "waitingForPlayers": "Wachten op spelers",
-  "wrong": "Helaas",
+  "wrong": "Helaas, je hebt het fout",
   "estimation": {
     "yourAnswer": "Jouw antwoord",
     "rangeHint": "Tussen {{min}} en {{max}}"
@@ -85,8 +85,9 @@
     "bestStreakCount_other": "{{count}} op rij"
   },
   "puzzle": {
+    "hint": "Kijk naar de woorden op het grote scherm en vul de 3 verbanden in. In welk vak je ze invult maakt niet uit.",
     "connection": "Verband {{number}}",
-    "placeholder": "Wat hebben deze woorden gemeen?",
+    "placeholder": "Een verband",
     "found": "{{count}} van {{total}} verbanden gevonden",
     "noAnswer": "Geen antwoord"
   },

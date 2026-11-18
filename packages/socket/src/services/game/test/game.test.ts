@@ -780,6 +780,46 @@ describe("quiz flow", () => {
     })
   })
 
+  it("scores puzzle answers whatever field they were typed in, once each", async () => {
+    const { game, sockets, status, start } = setup(
+      createQuizz([createPuzzleQuestion()]),
+      ["Alice", "Bob"],
+    )
+    const [alice, bob] = sockets
+
+    await start()
+
+    game.selectAnswer(alice, [], {
+      answerTexts: ["Shakespeare plays", "PLANETS", "rivers"],
+    })
+    game.selectAnswer(bob, [], {
+      answerTexts: ["planets", "planets", "wrong"],
+    })
+
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    expect(status("alice")?.data).toMatchObject({
+      points: 1000,
+      puzzle: {
+        groups: [
+          { correct: true, given: "PLANETS" },
+          { correct: true, given: "rivers" },
+          { correct: true, given: "Shakespeare plays" },
+        ],
+      },
+    })
+    expect(status("bob")?.data).toMatchObject({
+      points: 333,
+      puzzle: {
+        groups: [
+          { correct: true, given: "planets" },
+          { correct: false, given: "planets" },
+          { correct: false, given: "wrong" },
+        ],
+      },
+    })
+  })
+
   it("scores a pin by distance, regardless of speed", async () => {
     const { game, sockets, status, start } = setup(
       createQuizz([createPinQuestion()]),

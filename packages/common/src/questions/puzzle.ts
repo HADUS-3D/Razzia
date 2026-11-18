@@ -26,13 +26,60 @@ export const isPuzzleAnswerCorrect = (
   )
 }
 
-/** The indexes of the groups whose connection was named correctly. */
+/**
+ * Pairs the typed texts with the groups they name, whatever field a text was
+ * typed in. Returns, per group, the index of the text that solved it. A text
+ * solves at most one group and a group is solved at most once, so typing the
+ * same answer twice never scores twice.
+ */
+export const matchPuzzleTexts = (
+  texts: string[],
+  connections: string[][],
+): Array<number | undefined> => {
+  const matchedGroupOfText = new Map<number, number>()
+
+  const tryAssign = (group: number, seen: Set<number>): boolean => {
+    for (const [index, text] of texts.entries()) {
+      if (
+        seen.has(index) ||
+        !isPuzzleAnswerCorrect(text, connections[group] ?? [])
+      ) {
+        continue
+      }
+
+      seen.add(index)
+      const taken = matchedGroupOfText.get(index)
+
+      if (taken === undefined || tryAssign(taken, seen)) {
+        matchedGroupOfText.set(index, group)
+
+        return true
+      }
+    }
+
+    return false
+  }
+
+  for (let group = 0; group < connections.length; group += 1) {
+    tryAssign(group, new Set())
+  }
+
+  const result: Array<number | undefined> = connections.map(() => undefined)
+
+  for (const [index, group] of matchedGroupOfText) {
+    result[group] = index
+  }
+
+  return result
+}
+
+/** The indexes of the groups whose connection was named, in any field. */
 export const solvedPuzzleGroups = (
   texts: string[],
   connections: string[][],
 ): number[] =>
-  connections.flatMap((accepted, group) =>
-    isPuzzleAnswerCorrect(texts.at(group) ?? "", accepted) ? [group] : [],
+  matchPuzzleTexts(texts, connections).flatMap((text, group) =>
+    text === undefined ? [] : [group],
   )
 
 /** The words of one group, out of the question's flat list of words. */
