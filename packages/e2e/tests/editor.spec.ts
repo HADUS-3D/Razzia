@@ -556,3 +556,34 @@ test("saves a pin question with the right spot and its radius", async ({
     ],
   })
 })
+
+test("quizz-wide settings live in a dialog in the top bar", async ({
+  page,
+}) => {
+  const subject = uniqueSubject("Settings quizz")
+
+  await openQuizzTab(page)
+  await page.getByRole("button", { name: t("manager:quizz.create") }).click()
+  await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
+  await page.getByPlaceholder(t("quizz:question.placeholder")).fill("Where?")
+  await answerInput(page, 0).fill("Here")
+  await answerInput(page, 1).fill("There")
+
+  // The side menu only holds the settings of the selected question.
+  await expect(
+    page.locator("aside").getByText(t("quizz:background.quizz")),
+  ).toBeHidden()
+
+  await page.getByRole("button", { name: t("quizz:settings.open") }).click()
+
+  const dialog = page.getByRole("dialog", { name: t("quizz:settings.title") })
+
+  await dialog.getByLabel(t("quizz:question.config.speedBonus")).fill("40")
+  await expect(dialog.getByText(t("quizz:background.quizz"))).toBeVisible()
+  await expect(dialog.getByText(t("quizz:sounds.quizz"))).toBeVisible()
+  await page.keyboard.press("Escape")
+
+  await saveQuizz(page)
+
+  expect(readQuizz(subject)?.speedBonus).toBe(40)
+})

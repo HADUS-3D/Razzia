@@ -247,7 +247,7 @@ A value is one of:
 
 A sound that is left out is inherited: question, then quiz, then app, then the original sound (the leaderboard has no original sound, so it is silent). The volume of all sounds is set once for the app, in percent.
 
-In the app, admins set the defaults with the music button next to the background button on the configuration screen, and quizzes and questions get their own pickers in the editor, each with a preview button.
+In the app, admins set the defaults with the music button next to the background button on the configuration screen, and quizzes and questions get their own pickers in the editor, each with a preview button. The pickers of the whole quiz (together with its background and speed bonus) are in the **Quiz settings** button in the top bar of the editor; the menu on the right only holds the settings of the selected question.
 
 ### Adding sounds to the app
 

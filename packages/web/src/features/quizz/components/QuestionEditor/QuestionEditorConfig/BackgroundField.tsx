@@ -11,8 +11,6 @@ const BackgroundField = () => {
     currentQuestion,
     currentIndex,
     updateQuestion,
-    quizzBackground,
-    setQuizzBackground,
     removeMediaReferences,
   } = useQuizzEditor()
   const { t } = useTranslation()
@@ -58,22 +56,6 @@ const BackgroundField = () => {
             {t("quizz:background.imageIsBackground")}
           </ConfigField.Description>
         )}
-      </ConfigField>
-
-      <ConfigField>
-        <ConfigField.Label
-          icon={<ImageIcon className="size-4" />}
-          label={t("quizz:background.quizz")}
-        />
-        <ConfigField.Description>
-          {t("quizz:background.quizzHint")}
-        </ConfigField.Description>
-        <BackgroundPicker
-          value={quizzBackground}
-          onChange={setQuizzBackground}
-          onMediaDeleted={({ url }) => removeMediaReferences(url)}
-          emptyLabel={t("quizz:background.appDefault")}
-        />
       </ConfigField>
     </>
   )
