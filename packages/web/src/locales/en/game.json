@@ -1,4 +1,6 @@
 {
+  "topChallengeWaiting": "The top players are answering a challenge question...",
+  "topChallengeSkipped": "Top challenge: you're not in the top this time, your points stay as they are",
   "answerNoted": "Thanks, that's noted",
   "confirm": "Confirm",
   "correct": "Nice!",

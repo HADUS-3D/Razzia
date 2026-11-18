@@ -123,6 +123,25 @@ describe("quizzValidator", () => {
     )
   })
 
+  it("validates the percentages and the speed bonus", () => {
+    expect(
+      issues(quizz([choiceQuestion({ topPercent: 20, penaltyPercent: 25 })])),
+    ).toEqual([])
+    expect(issues(quizz([choiceQuestion({ topPercent: 0 })]))).toContain(
+      "errors:quizz.topPercentRange",
+    )
+    expect(issues(quizz([choiceQuestion({ penaltyPercent: 101 })]))).toContain(
+      "errors:quizz.penaltyPercentRange",
+    )
+    expect(
+      issues(quizz([choiceQuestion({ penalty: 100, penaltyPercent: 10 })])),
+    ).toContain("errors:quizz.penaltyBoth")
+    expect(issues({ ...quizz([choiceQuestion()]), speedBonus: 101 })).toContain(
+      "errors:quizz.speedBonusRange",
+    )
+    expect(issues({ ...quizz([choiceQuestion()]), speedBonus: 0 })).toEqual([])
+  })
+
   it("bounds the cooldown between 3 and 15 seconds", () => {
     expect(issues(quizz([choiceQuestion({ cooldown: 2 })]))).toContain(
       "errors:quizz.cooldownTooShort",

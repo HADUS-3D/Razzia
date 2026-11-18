@@ -1,4 +1,13 @@
-import { ArrowBigDownDash, Clock, ListChecks, Star, Timer } from "lucide-react"
+import {
+  ArrowBigDownDash,
+  Clock,
+  Gauge,
+  ListChecks,
+  Star,
+  Timer,
+  Trophy,
+} from "lucide-react"
+import { useController, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import type { ScoringMode } from "@razzia/common/types/game"
 import {
@@ -7,6 +16,7 @@ import {
   QUIZZ_MODES,
 } from "@razzia/common/constants"
 import { isMultiOptions } from "@razzia/common/questions/options"
+import Input from "@razzia/web/components/Input"
 import {
   Select,
   SelectContent,
@@ -19,17 +29,66 @@ import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import ConfigNumberInput from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigNumberInput"
 import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
-import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
+import {
+  useQuizzEditor,
+  type QuizzFormValues,
+} from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 
 const DEFAULT_TIME = 20
 const DEFAULT_PENALTY = 100
+const DEFAULT_PENALTY_PERCENT = 25
+const DEFAULT_TOP_PERCENT = 20
+
+type PenaltyType = "points" | "percent"
+
+/** The speed bonus belongs to the whole quizz, not to one question. */
+const SpeedBonusField = () => {
+  const { t } = useTranslation()
+  const { control } = useFormContext<QuizzFormValues>()
+  const { field } = useController({ control, name: "speedBonus" })
+  const value = field.value ?? 100
+
+  return (
+    <ConfigField>
+      <ConfigField.Label
+        icon={<Gauge className="size-4" />}
+        label={t("quizz:question.config.speedBonus")}
+        unit="%"
+      />
+      <Input
+        variant="sm"
+        type="number"
+        min={0}
+        max={100}
+        aria-label={t("quizz:question.config.speedBonus")}
+        value={value}
+        onChange={(e) => {
+          const num = Number(e.target.value)
+
+          if (e.target.value !== "" && !isNaN(num)) {
+            field.onChange(Math.min(100, Math.max(0, Math.round(num))))
+          }
+        }}
+        className="w-full"
+      />
+      <ConfigField.Description>
+        {t("quizz:question.config.speedBonusHint")}
+      </ConfigField.Description>
+    </ConfigField>
+  )
+}
 
 const BaseConfig = () => {
   const { currentQuestion, currentIndex, gameMode, updateQuestion } =
     useQuizzEditor()
   const { t } = useTranslation()
   const isTimeLimitEnabled = currentQuestion.time !== NO_TIME_LIMIT
-  const isPenaltyEnabled = (currentQuestion.penalty ?? 0) > 0
+  const isPercentPenalty = currentQuestion.penaltyPercent !== undefined
+  const isPenaltyEnabled =
+    (currentQuestion.penalty ?? 0) > 0 || isPercentPenalty
+  const penaltyType: PenaltyType = isPercentPenalty ? "percent" : "points"
+  const penaltyUnit = isPercentPenalty ? "%" : "pts"
+  const isTopChallenge = currentQuestion.topPercent !== undefined
   const { scoringModes } = QUESTION_REGISTRY[currentQuestion.type]
   const { options } = currentQuestion
   const scoringMode = isMultiOptions(options) ? options.scoringMode : undefined
@@ -47,6 +106,22 @@ const BaseConfig = () => {
   const handleTogglePenalty = (checked: boolean) => {
     updateQuestion(currentIndex, {
       penalty: checked ? DEFAULT_PENALTY : undefined,
+      penaltyPercent: undefined,
+    })
+  }
+
+  const handlePenaltyType = (type: PenaltyType) => {
+    updateQuestion(
+      currentIndex,
+      type === "percent"
+        ? { penalty: undefined, penaltyPercent: DEFAULT_PENALTY_PERCENT }
+        : { penalty: DEFAULT_PENALTY, penaltyPercent: undefined },
+    )
+  }
+
+  const handleToggleTopChallenge = (checked: boolean) => {
+    updateQuestion(currentIndex, {
+      topPercent: checked ? DEFAULT_TOP_PERCENT : undefined,
     })
   }
 
@@ -76,11 +151,13 @@ const BaseConfig = () => {
             </ConfigField.Description>
           </ConfigField>
 
+          <SpeedBonusField />
+
           <ConfigField>
             <ConfigField.Label
               icon={<ArrowBigDownDash className="size-4" />}
               label={t("quizz:question.config.penalty")}
-              unit={isPenaltyEnabled ? "pts" : undefined}
+              unit={isPenaltyEnabled ? penaltyUnit : undefined}
               action={
                 <Switch
                   aria-label={t("quizz:question.config.penalty")}
@@ -90,15 +167,70 @@ const BaseConfig = () => {
               }
             />
             {isPenaltyEnabled && (
+              <>
+                <Select value={penaltyType} onValueChange={handlePenaltyType}>
+                  <SelectTrigger
+                    aria-label={t("quizz:question.config.penaltyType")}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(["points", "percent"] as const).map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {t(`quizz:question.config.penaltyType.${type}`)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {isPercentPenalty ? (
+                  <ConfigNumberInput
+                    name="penaltyPercent"
+                    label={t("quizz:question.config.penalty")}
+                    fallback={DEFAULT_PENALTY_PERCENT}
+                    min={1}
+                    max={100}
+                  />
+                ) : (
+                  <ConfigNumberInput
+                    name="penalty"
+                    label={t("quizz:question.config.penalty")}
+                    fallback={DEFAULT_PENALTY}
+                    min={1}
+                  />
+                )}
+              </>
+            )}
+            <ConfigField.Description>
+              {isPercentPenalty
+                ? t("quizz:question.config.penaltyPercentHint")
+                : t("quizz:question.config.penaltyHint")}
+            </ConfigField.Description>
+          </ConfigField>
+
+          <ConfigField>
+            <ConfigField.Label
+              icon={<Trophy className="size-4" />}
+              label={t("quizz:question.config.topChallenge")}
+              unit={isTopChallenge ? "%" : undefined}
+              action={
+                <Switch
+                  aria-label={t("quizz:question.config.topChallenge")}
+                  checked={isTopChallenge}
+                  onCheckedChange={handleToggleTopChallenge}
+                />
+              }
+            />
+            {isTopChallenge && (
               <ConfigNumberInput
-                name="penalty"
-                label={t("quizz:question.config.penalty")}
-                fallback={DEFAULT_PENALTY}
+                name="topPercent"
+                label={t("quizz:question.config.topPercent")}
+                fallback={DEFAULT_TOP_PERCENT}
                 min={1}
+                max={100}
               />
             )}
             <ConfigField.Description>
-              {t("quizz:question.config.penaltyHint")}
+              {t("quizz:question.config.topChallengeHint")}
             </ConfigField.Description>
           </ConfigField>
 

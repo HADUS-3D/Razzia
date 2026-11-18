@@ -49,6 +49,7 @@ Quiz Options:
 
 - `gameMode`: `"quiz"` (default) or `"survey"`, see [Survey mode](#survey-mode)
 - `subject`: Title/topic of the quiz
+- `speedBonus`: Optional, `0`-`100` (default: `100`). How much of the points of a question depends on answering fast. `100` is fully by speed, like the classic scoring. `0` gives every right answer the full `maxPoints`, whatever the speed. `50` gives half of `maxPoints` for any right answer plus up to half more for speed. Useful when some players need more time to read. Estimation and puzzle questions never depend on speed
 - `questions`: Array of question objects containing:
   - `type`: `"single"` (exactly one answer), `"multi"` (one or more), `"estimation"` (a number, see [Estimation questions](#estimation-questions)) `"puzzle"` (12 words in 3 groups, see [Puzzle questions](#puzzle-questions)) or `"pin"` (tap a spot on an image or map, see [Pin questions](#pin-questions)). Defaults to `"single"` when omitted
   - `question`: The question text
@@ -64,6 +65,8 @@ Quiz Options:
   - `time`: Time in seconds allowed to answer (5-120)
   - `maxPoints`: Maximum points awarded for a correct answer (default: `1000`, min: `0`)
   - `penalty`: Points deducted for a wrong answer (default: none, min: `0`). The player's total cannot go below 0. Unanswered questions are not penalised.
+  - `penaltyPercent`: Like `penalty`, but a percentage (`1`-`100`) of the player's current points. Use either `penalty` or `penaltyPercent`, not both
+  - `topPercent`: Optional, `1`-`100`. Makes the question a top challenge: only the best `topPercent` percent of the players (at least one) get it, on their own device. The main screen and the other players only see a waiting screen. A right answer awards no points, so the player keeps what they have; a wrong or missing answer costs the `penalty` or `penaltyPercent` (set one, or the challenge has no consequence). Streaks follow the answer. Place it at the end of a round. Not used in `"survey"` mode
   - `options.scoringMode`: For `"multi"` questions only — `"strict"` (full points only if the selection matches exactly), `"balanced"` (correct picks minus wrong ones, the default) or `"lenient"` (points per correct pick, no penalty for wrong ones)
 
 ## Estimation questions

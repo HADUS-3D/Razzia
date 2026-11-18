@@ -159,6 +159,14 @@ export interface Question {
   time: number
   maxPoints?: number
   penalty?: number
+  /** Like `penalty`, but a percentage of the player's current points. */
+  penaltyPercent?: number
+  /**
+   * Makes this a challenge for the top of the leaderboard: only the best
+   * `topPercent` percent of the players see and answer it, on their own device.
+   * A right answer keeps the points, a wrong one costs the penalty.
+   */
+  topPercent?: number
   options?: QuestionOptions
 }
 
@@ -169,6 +177,11 @@ export interface Quizz {
   source?: QuizzSource
   /** Image shown behind the game; falls back to the app background. */
   background?: string
+  /**
+   * How much of the points of a question depends on answering fast, in percent.
+   * 100 (the default) is fully by speed; 0 gives every right answer the same points.
+   */
+  speedBonus?: number
   questions: Question[]
 }
 

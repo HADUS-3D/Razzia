@@ -93,6 +93,31 @@ export const timeToPoint = (startTime: number, question: Question): number => {
   return points
 }
 
+/**
+ * Lets only `speedBonus` percent of the points depend on speed: the rest is
+ * awarded in full to every right answer. 100 leaves the points as they are.
+ */
+export const applySpeedBonus = (
+  points: number,
+  maxPoints: number,
+  speedBonus = 100,
+): number => {
+  const share = Math.min(100, Math.max(0, speedBonus)) / 100
+
+  return maxPoints * (1 - share) + points * share
+}
+
+/** The players that get a top challenge: the best `percent` percent, at least one. */
+export const topPlayers = <T extends { points: number }>(
+  players: T[],
+  percent: number,
+): T[] => {
+  const ranked = [...players].sort((a, b) => b.points - a.points)
+  const count = Math.max(1, Math.ceil((players.length * percent) / 100))
+
+  return ranked.slice(0, count)
+}
+
 export const shuffle = <T>(items: T[]): T[] => {
   const result = [...items]
 
