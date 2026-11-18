@@ -562,7 +562,6 @@ test("quizz-wide settings live in a dialog in the top bar", async ({
 }) => {
   const subject = uniqueSubject("Settings quizz")
 
-  await openQuizzTab(page)
   await page.getByRole("button", { name: t("manager:quizz.create") }).click()
   await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
   await page.getByPlaceholder(t("quizz:question.placeholder")).fill("Where?")
