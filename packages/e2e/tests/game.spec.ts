@@ -41,12 +41,8 @@ test("plays a full quiz from the lobby to the podium", async ({
   await expect(
     manager.getByRole("button", { name: t("common:exit") }),
   ).toBeVisible()
-  await expect(
-    alice.getByText(t("game:rank", { count: 1, ordinal: true })),
-  ).toBeVisible()
-  await expect(
-    bob.getByText(t("game:rank", { count: 2, ordinal: true })),
-  ).toBeVisible()
+  await expect(alice.getByText(t("game:place", { nth: "1st" }))).toBeVisible()
+  await expect(bob.getByText(t("game:place", { nth: "2nd" }))).toBeVisible()
 })
 
 test("refuses players once the room is locked", async ({
@@ -196,12 +192,8 @@ test("lets the host end the quiz early from the menu", async ({
   await expect(
     manager.getByRole("button", { name: t("common:exit") }),
   ).toBeVisible()
-  await expect(
-    alice.getByText(t("game:rank", { count: 1, ordinal: true })),
-  ).toBeVisible()
-  await expect(
-    bob.getByText(t("game:rank", { count: 2, ordinal: true })),
-  ).toBeVisible()
+  await expect(alice.getByText(t("game:place", { nth: "1st" }))).toBeVisible()
+  await expect(bob.getByText(t("game:place", { nth: "2nd" }))).toBeVisible()
   await expect(
     manager.getByRole("button", { name: t("game:menu.title") }),
   ).toBeHidden()

@@ -48,9 +48,7 @@ test("scores every question type with its scoring settings", async ({
   await expectPoints(player, 1550)
   await next(manager)
 
-  await expect(
-    player.getByText(t("game:rank", { count: 1, ordinal: true })),
-  ).toBeVisible()
+  await expect(player.getByText(t("game:place", { nth: "1st" }))).toBeVisible()
 })
 
 test("collects answers without scoring in survey mode", async ({
@@ -136,10 +134,18 @@ test("scores a pin on its distance to the right spot and reveals every pin", asy
 
   await expect(alice.getByText("+1000")).toBeVisible()
   await expect(bob.getByText(t("game:wrong"))).toBeVisible()
+  await expect(bob.getByText(/now in (1st|2nd) place/u)).toBeVisible()
 
   await expect(
     manager.getByText(t("game:pin.pinsPlaced", { count: 2 })),
   ).toBeVisible()
   await expect(manager.getByText(t("game:pin.rightSpot"))).toBeVisible()
   await expect(manager.getByText("+1000")).toBeVisible()
+
+  // The board sits in the middle of the screen, not pushed aside by the list
+  const board = await manager.getByTestId("pin-field").boundingBox()
+  const width = manager.viewportSize()?.width ?? 0
+  const middle = (board?.x ?? 0) + (board?.width ?? 0) / 2
+
+  expect(Math.abs(middle - width / 2)).toBeLessThan(2)
 })

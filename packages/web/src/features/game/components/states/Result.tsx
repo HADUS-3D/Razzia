@@ -8,6 +8,7 @@ import CricleXmark from "@razzia/web/features/game/components/icons/CricleXmark"
 import PuzzleSolution from "@razzia/web/features/game/components/PuzzleSolution"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import PinSolution from "@razzia/web/features/questions/pin/components/PinSolution"
+import { usePlace } from "@razzia/web/lib/place"
 
 interface Props {
   data: CommonStatusDataMap["SHOW_RESULT"]
@@ -30,6 +31,7 @@ const Result = ({
 }: Props) => {
   const { updatePlayer } = usePlayerStore()
   const { t } = useTranslation()
+  const { place } = usePlace()
   const hasNote = Boolean(note?.trim()) || Boolean(puzzle) || Boolean(pin)
   const [compact, setCompact] = useState(false)
 
@@ -74,7 +76,7 @@ const Result = ({
       </h2>
       <p className="mt-1 text-xl font-bold text-white drop-shadow-lg">
         {t("game:resultTop")}
-        {t("game:rank", { count: rank, ordinal: true })}
+        {place(rank)}
         {aheadOfMe ? `${t("game:resultBehind")}${aheadOfMe}` : ""}
       </p>
       {correct && (
