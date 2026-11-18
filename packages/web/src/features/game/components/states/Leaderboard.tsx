@@ -9,7 +9,7 @@ interface Props {
   data: ManagerStatusDataMap["SHOW_LEADERBOARD"]
 }
 
-const AnimatedPoints = ({ from, to }: { from: number; to: number }) => {
+export const AnimatedPoints = ({ from, to }: { from: number; to: number }) => {
   const spring = useSpring(from, { stiffness: 1000, damping: 30 })
   const display = useTransform(spring, (value) => Math.round(value))
   const [displayValue, setDisplayValue] = useState(from)

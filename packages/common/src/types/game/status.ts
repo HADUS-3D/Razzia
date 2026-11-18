@@ -26,12 +26,25 @@ export const STATUS = {
   SHOW_RESULT: "SHOW_RESULT",
   SHOW_RESPONSES: "SHOW_RESPONSES",
   SHOW_LEADERBOARD: "SHOW_LEADERBOARD",
+  SHOW_PLAYER_LEADERBOARD: "SHOW_PLAYER_LEADERBOARD",
   FINISHED: "FINISHED",
   SUMMARY: "SUMMARY",
   WAIT: "WAIT",
 } as const
 
 export type Status = (typeof STATUS)[keyof typeof STATUS]
+
+/** One row of the leaderboard on a player's device, before and after the question. */
+export interface PlayerLeaderboardRow {
+  id: string
+  username: string
+  points: number
+  oldPoints: number
+  /** 1-based position now and before the last question. */
+  rank: number
+  oldRank: number
+  me: boolean
+}
 
 export interface CommonStatusDataMap {
   SHOW_START: { time: number }
@@ -83,6 +96,11 @@ export interface CommonStatusDataMap {
     }
   }
   WAIT: { text: string }
+  /** The top 5 plus the player's own position with the players next to it. */
+  SHOW_PLAYER_LEADERBOARD: {
+    rows: PlayerLeaderboardRow[]
+    round?: { name: string }
+  }
   FINISHED: {
     subject: string
     source?: QuizzSource

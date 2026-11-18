@@ -2,6 +2,7 @@ import { STATUS } from "@razzia/common/types/game/status"
 import Answers from "@razzia/web/features/game/components/states/Answers"
 import Leaderboard from "@razzia/web/features/game/components/states/Leaderboard"
 import PlayerFinished from "@razzia/web/features/game/components/states/PlayerFinished"
+import PlayerLeaderboard from "@razzia/web/features/game/components/states/PlayerLeaderboard"
 import Podium from "@razzia/web/features/game/components/states/Podium"
 import Prepared from "@razzia/web/features/game/components/states/Prepared"
 import Question from "@razzia/web/features/game/components/states/Question"
@@ -41,6 +42,7 @@ export const GAME_STATE_COMPONENTS = {
   [STATUS.SHOW_ROUND]: Round,
   [STATUS.SHOW_RESULT]: Result,
   [STATUS.SHOW_PREPARED]: Prepared,
+  [STATUS.SHOW_PLAYER_LEADERBOARD]: PlayerLeaderboard,
   [STATUS.FINISHED]: PlayerFinished,
   [STATUS.SUMMARY]: Summary,
 }
@@ -86,6 +88,7 @@ export const MANAGER_SKIP_BTN = {
   [STATUS.SHOW_RESULT]: null,
   [STATUS.SHOW_RESPONSES]: "common:next",
   [STATUS.SHOW_LEADERBOARD]: "common:next",
+  [STATUS.SHOW_PLAYER_LEADERBOARD]: null,
   [STATUS.FINISHED]: "common:exit",
   [STATUS.SUMMARY]: "common:exit",
   [STATUS.WAIT]: null,

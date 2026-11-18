@@ -99,5 +99,9 @@
     "pinsPlaced_one": "{{count}} pin geplaatst",
     "pinsPlaced_other": "{{count}} pins geplaatst",
     "nobody": "Niemand plaatste een pin"
+  },
+  "playerLeaderboard": {
+    "change_one": "Omhoog of omlaag {{count}} plek",
+    "change_other": "Omhoog of omlaag {{count}} plekken"
   }
 }

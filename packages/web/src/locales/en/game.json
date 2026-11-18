@@ -101,5 +101,9 @@
     "pinsPlaced_one": "{{count}} pin placed",
     "pinsPlaced_other": "{{count}} pins placed",
     "nobody": "Nobody placed a pin"
+  },
+  "playerLeaderboard": {
+    "change_one": "Up or down {{count}} place",
+    "change_other": "Up or down {{count}} places"
   }
 }
