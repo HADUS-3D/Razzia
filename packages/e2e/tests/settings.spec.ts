@@ -55,9 +55,7 @@ test("applies the game settings", async ({ page: manager, newPage }) => {
   await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
   await answer(player, "4")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
-  await expect(
-    player.getByText(t("game:rank", { count: 1, ordinal: true })),
-  ).toBeVisible()
+  await expect(player.getByText(t("game:place", { nth: "1st" }))).toBeVisible()
 })
 
 test("refuses an auto-advance delay out of range", async ({ page }) => {

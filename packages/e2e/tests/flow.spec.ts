@@ -161,9 +161,7 @@ test("lets the manager skip the auto-advance countdown", async ({
   await expect(player.getByText(t("game:correct"))).toBeVisible()
   await next(manager)
 
-  await expect(
-    player.getByText(t("game:rank", { count: 1, ordinal: true })),
-  ).toBeVisible()
+  await expect(player.getByText(t("game:place", { nth: "1st" }))).toBeVisible()
 })
 
 test("keeps the waiting room when the manager reloads the page", async ({

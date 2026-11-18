@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
+import { usePlace } from "@razzia/web/lib/place"
 
 interface Props {
   data: CommonStatusDataMap["FINISHED"]
@@ -8,7 +8,7 @@ interface Props {
 
 const PlayerFinished = ({ data: { rank, subject } }: Props) => {
   const { player } = usePlayerStore()
-  const { t } = useTranslation()
+  const { place } = usePlace()
 
   return (
     <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 px-4">
@@ -17,9 +17,7 @@ const PlayerFinished = ({ data: { rank, subject } }: Props) => {
       </p>
 
       <p className="text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
-        {typeof rank === "number"
-          ? t("game:rank", { count: rank, ordinal: true })
-          : "—"}
+        {typeof rank === "number" ? place(rank) : "—"}
       </p>
 
       <p className="mt-2 rounded bg-black/40 px-6 py-2 text-2xl font-bold text-white">
