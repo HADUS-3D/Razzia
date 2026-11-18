@@ -66,6 +66,27 @@ describe("quizzValidator", () => {
     expect(issues(data)).toEqual([])
   })
 
+  it("accepts sounds on the quizz and on questions", () => {
+    const data = {
+      ...quizz([
+        choiceQuestion({
+          sounds: { music: "lib:music/quiz1", answerEnd: "none" },
+        }),
+      ]),
+      sounds: { leaderboard: "lib:sfx/leader1", podium: "/media/fanfare.mp3" },
+    }
+
+    expect(issues(data)).toEqual([])
+  })
+
+  it("rejects a sound that is not silence, a library sound or an upload", () => {
+    const data = quizz([
+      choiceQuestion({ sounds: { music: "https://example.com/a.mp3" } }),
+    ])
+
+    expect(issues(data)).not.toEqual([])
+  })
+
   it("accepts rounds on questions, with or without a background", () => {
     const data = quizz([
       choiceQuestion({

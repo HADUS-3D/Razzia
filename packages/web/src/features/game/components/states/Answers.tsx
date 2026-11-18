@@ -14,6 +14,7 @@ import {
 } from "@razzia/web/features/game/contexts/socket-context"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { SFX } from "@razzia/web/features/game/utils/constants"
+import { useGameSound } from "@razzia/web/features/game/utils/sounds"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import useScreenSize from "@razzia/web/hooks/useScreenSize"
 
@@ -58,11 +59,12 @@ const Answers = ({
     volume: 0.1,
   })
 
-  const [playMusic, { stop: stopMusic }] = useSound(SFX.ANSWERS.MUSIC, {
-    volume: 0.2,
-    interrupt: true,
-    loop: true,
-  })
+  // The music plays on the big screen only.
+  const {
+    play: playMusic,
+    stop: stopMusic,
+    silent,
+  } = useGameSound("music", true)
 
   const handleSubmit = (
     answerKeys: number[],
@@ -90,7 +92,7 @@ const Answers = ({
       MEDIA_TYPES.VIDEO,
     ]
 
-    if (disabledMusicMedia.includes(media?.type)) {
+    if (player || silent || disabledMusicMedia.includes(media?.type)) {
       return
     }
 
@@ -100,7 +102,7 @@ const Answers = ({
       stopMusic()
     }
     // oxlint-disable-next-line
-  }, [playMusic])
+  }, [playMusic, silent, player])
 
   useEvent(EVENTS.GAME.COOLDOWN, (sec) => {
     setCooldown(sec)

@@ -182,5 +182,11 @@
       "days90": "90 days",
       "year": "1 year"
     }
+  },
+  "sounds": {
+    "title": "Default sounds",
+    "hint": "Used on the big screen unless a quizz or question sets its own.",
+    "volume": "Volume",
+    "saved": "Sounds saved"
   }
 }

@@ -10,6 +10,7 @@ import {
   QUIZZ_SOURCES,
 } from "@razzia/common/constants"
 import { SFX } from "@razzia/web/features/game/utils/constants"
+import { useGameSound } from "@razzia/web/features/game/utils/sounds"
 import useScreenSize from "@razzia/web/hooks/useScreenSize"
 
 interface Props {
@@ -28,7 +29,7 @@ const usePodiumAnimation = (topLength: number) => {
   const [sfxRool, { stop: sfxRoolStop }] = useSound(SFX.PODIUM.SNEAR_ROOL, {
     volume: 0.1,
   })
-  const [sfxFirst] = useSound(SFX.PODIUM.FIRST, { volume: 0.1 })
+  const { play: sfxFirst } = useGameSound("podium")
 
   useEffect(() => {
     const actions: Partial<Record<number, () => void>> = {

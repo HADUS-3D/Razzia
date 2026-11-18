@@ -10,6 +10,7 @@ import type {
   GameUpdateQuestion,
   Player,
   QuizzMode,
+  ResolvedSounds,
 } from "@razzia/common/types/game"
 import type { Status, StatusDataMap } from "@razzia/common/types/game/status"
 import type { clientEventValidators } from "@razzia/common/validators/socket"
@@ -42,6 +43,7 @@ export interface ServerToClientEvents {
     name: Status
     data: StatusDataMap[Status]
     background?: string
+    sounds?: ResolvedSounds
   }) => void
   [EVENTS.GAME.SUCCESS_JOIN]: (_data: {
     gameId: string
@@ -65,6 +67,7 @@ export interface ServerToClientEvents {
     gameMode: QuizzMode
     status: { name: Status; data: StatusDataMap[Status] }
     background?: string
+    sounds?: ResolvedSounds
     player: { username: string; points: number }
     currentQuestion: GameUpdateQuestion | null
   }) => void
@@ -78,6 +81,7 @@ export interface ServerToClientEvents {
     locked: boolean
     status: { name: Status; data: StatusDataMap[Status] }
     background?: string
+    sounds?: ResolvedSounds
     players: Player[]
     currentQuestion: GameUpdateQuestion | null
   }) => void

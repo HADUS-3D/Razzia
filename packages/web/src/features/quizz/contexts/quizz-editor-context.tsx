@@ -16,6 +16,7 @@ import {
 import type {
   Question,
   QuizzMode,
+  QuizzSounds,
   QuizzSource,
   QuizzWithId,
 } from "@razzia/common/types/game"
@@ -31,6 +32,7 @@ export interface QuizzFormValues {
   subject: string
   source?: QuizzSource
   background?: string
+  sounds?: QuizzSounds
   speedBonus?: number
   questions: Question[]
 }
@@ -44,6 +46,7 @@ interface QuizzEditorContextType {
   currentQuestion: Question
   currentQuestionId: string
   quizzBackground: string | undefined
+  quizzSounds: QuizzSounds | undefined
   isRemoving: boolean
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
@@ -52,6 +55,7 @@ interface QuizzEditorContextType {
   reorderQuestions: (_from: number, _to: number) => void
   updateQuestion: (_index: number, _updates: Partial<Question>) => void
   setQuizzBackground: (_background: string | undefined) => void
+  setQuizzSounds: (_sounds: QuizzSounds | undefined) => void
   /** Drops a deleted library item from every question and the quizz. */
   removeMediaReferences: (_url: string) => void
   questionPath: <K extends FieldPath<Question>>(
@@ -88,6 +92,7 @@ export const QuizzEditorProvider = ({
       subject: initialData?.subject ?? "Untitled Quizz",
       source: initialData?.source,
       background: initialData?.background,
+      sounds: initialData?.sounds,
       speedBonus: initialData?.speedBonus,
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
@@ -103,6 +108,7 @@ export const QuizzEditorProvider = ({
 
   const questions = useWatch({ control, name: "questions" })
   const quizzBackground = useWatch({ control, name: "background" })
+  const quizzSounds = useWatch({ control, name: "sounds" })
   const gameMode = useWatch({ control, name: "gameMode" })
   const safeIndex = clampIndex(currentIndex, questions.length)
   const currentQuestion = questions[safeIndex]
@@ -176,6 +182,10 @@ export const QuizzEditorProvider = ({
     setValue("background", background, { shouldDirty: true })
   }
 
+  const setQuizzSounds = (sounds: QuizzSounds | undefined) => {
+    setValue("sounds", sounds, { shouldDirty: true })
+  }
+
   const removeMediaReferences = (url: string) => {
     getValues("questions").forEach((question, index) => {
       if (question.media?.url === url) {
@@ -210,6 +220,7 @@ export const QuizzEditorProvider = ({
           currentQuestion,
           currentQuestionId: questionIds[safeIndex],
           quizzBackground,
+          quizzSounds,
           isRemoving: removingFrom === questions,
           setCurrentIndex,
           addQuestion,
@@ -218,6 +229,7 @@ export const QuizzEditorProvider = ({
           reorderQuestions,
           updateQuestion,
           setQuizzBackground,
+          setQuizzSounds,
           removeMediaReferences,
           questionPath,
         }}

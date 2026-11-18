@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
 import Fire from "@razzia/web/features/game/components/icons/Fire"
+import { useGameSound } from "@razzia/web/features/game/utils/sounds"
 
 interface Props {
   data: ManagerStatusDataMap["SHOW_LEADERBOARD"]
@@ -81,6 +82,13 @@ const Leaderboard = ({
     useState(oldLeaderboard)
   const [isAnimating, setIsAnimating] = useState(false)
   const { t } = useTranslation()
+  const { play: sfxLeaderboard } = useGameSound("leaderboard")
+
+  useEffect(() => {
+    sfxLeaderboard()
+    // Only when the leaderboard shows, not when the sound is re-created.
+    // oxlint-disable-next-line
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => {

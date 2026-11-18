@@ -223,3 +223,9 @@ export const EXAMPLE_QUIZZ = {
     },
   ],
 } as const
+
+/** A sound value for silence, as opposed to inheriting the sound of the level above. */
+export const SOUND_NONE = "none"
+
+/** Prefix of a sound that ships with the app, e.g. "lib:music/quiz1". */
+export const SOUND_LIBRARY_PREFIX = "lib:"

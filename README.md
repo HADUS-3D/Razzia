@@ -24,6 +24,7 @@ This repository is a personal fork of [Ralex91/Razzia](https://github.com/Ralex9
 - **Pin question type.** Players tap a spot on an image or a real OpenStreetMap map. The big screen shows every pin, reveals the right spot and the distances, and points follow the distance. See [Quiz](docs/quiz.md#pin-questions).
 - **Rounds.** Split a quiz into named rounds with a title slide, a full leaderboard with animated score movement and the longest answer streak when a round ends. See [Quiz](docs/quiz.md#rounds).
 - **Customizable backgrounds.** Set a background per quiz, per round or per question, next to the optional app-wide branding.
+- **Customizable sounds.** Change the answer music and the effects for the whole app, per quiz or per question, with a library of bundled sounds and your own uploads.
 - **Explanation per question.** An optional note that is shown when the answer is revealed.
 - **End a quiz early.** The host can stop a running quiz; everyone goes to the final screen with the scores so far.
 - **API tokens.** Scripts and AI tools can call the HTTP API with a personal token. See [HTTP API](docs/http-api.md).

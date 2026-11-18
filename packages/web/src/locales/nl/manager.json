@@ -182,5 +182,11 @@
       "days90": "90 dagen",
       "year": "1 jaar"
     }
+  },
+  "sounds": {
+    "title": "Standaardgeluiden",
+    "hint": "Op het grote scherm, tenzij een quiz of vraag een eigen geluid kiest.",
+    "volume": "Volume",
+    "saved": "Geluiden opgeslagen"
   }
 }
