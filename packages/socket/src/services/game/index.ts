@@ -152,6 +152,7 @@ class Game {
     this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, {
       ...statusData,
       background: this.round.backgroundFor(status),
+      sounds: this.round.sounds,
     })
   }
 
@@ -171,6 +172,7 @@ class Game {
     this.io.to(target).emit(EVENTS.GAME.STATUS, {
       ...statusData,
       background: this.round.backgroundFor(status),
+      sounds: this.round.sounds,
     })
   }
 
@@ -280,6 +282,7 @@ class Game {
       currentQuestion: this.round.getReconnectInfo(),
       status,
       background: this.round.backgroundFor(status.name),
+      sounds: this.round.sounds,
       players: this.playerManager.getAll(),
     })
     socket.emit(EVENTS.GAME.TOTAL_PLAYERS, this.playerManager.joinedCount())
@@ -328,6 +331,7 @@ class Game {
       currentQuestion: this.round.getReconnectInfo(),
       status,
       background: this.round.backgroundFor(status.name),
+      sounds: this.round.sounds,
       player: { username: player.username, points: player.points },
     })
     this.playerManager.broadcastCount()

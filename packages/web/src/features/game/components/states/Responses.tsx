@@ -1,15 +1,14 @@
 import clsx from "clsx"
-import { useEffect, useState } from "react"
-import useSound from "use-sound"
+import { useEffect } from "react"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
-  SFX,
 } from "@razzia/web/features/game/utils/constants"
 import { calculatePercentages } from "@razzia/web/features/game/utils/score"
+import { useGameSound } from "@razzia/web/features/game/utils/sounds"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 
 interface Props {
@@ -20,36 +19,11 @@ const Responses = ({ data }: Props) => {
   const { question, answers, responses, solutions, type, note } = data
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
   const percentages = calculatePercentages(responses)
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false)
-
-  const [sfxResults] = useSound(SFX.RESULTS_SOUND, {
-    volume: 0.2,
-  })
-
-  const [playMusic, { stop: stopMusic }] = useSound(SFX.ANSWERS.MUSIC, {
-    volume: 0.2,
-    onplay: () => {
-      setIsMusicPlaying(true)
-    },
-    onend: () => {
-      setIsMusicPlaying(false)
-    },
-  })
+  const { play: sfxEnd } = useGameSound("answerEnd")
 
   useEffect(() => {
-    stopMusic()
-    sfxResults()
-  }, [responses, playMusic, stopMusic, sfxResults])
-
-  useEffect(() => {
-    if (!isMusicPlaying) {
-      playMusic()
-    }
-  }, [isMusicPlaying, playMusic])
-
-  useEffect(() => {
-    stopMusic()
-  }, [playMusic, stopMusic])
+    sfxEnd()
+  }, [responses, sfxEnd])
 
   if (ResponsesComponent) {
     return (

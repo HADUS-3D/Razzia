@@ -182,5 +182,23 @@
     "background": "Achtergrond van de ronde",
     "backgroundHint": "Afbeelding achter de titelslide van deze ronde.",
     "badge": "Ronde: {{name}}"
+  },
+  "sounds": {
+    "question": "Geluiden van deze vraag",
+    "questionHint": "Muziek tijdens het antwoordmoment en het effect als de tijd om is, op het grote scherm.",
+    "quizz": "Geluiden van deze quiz",
+    "quizzHint": "Voor elke vraag zonder eigen geluid. Het geluid van het leaderboard en het podium stel je hier in.",
+    "music": "Antwoordmuziek",
+    "answerEnd": "Effect als de tijd om is",
+    "leaderboard": "Leaderboard-effect",
+    "podium": "Podiumfanfare",
+    "inheritQuizz": "Gebruikt het geluid van de quiz of app",
+    "inheritApp": "Gebruikt het geluid van de app",
+    "none": "Geen geluid",
+    "default": "Standaardgeluid",
+    "missing": "Bestand ontbreekt",
+    "play": "Voorbeeld afspelen",
+    "stop": "Voorbeeld stoppen",
+    "upload": "Audio uploaden"
   }
 }

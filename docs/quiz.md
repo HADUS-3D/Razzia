@@ -49,12 +49,14 @@ Quiz Options:
 
 - `gameMode`: `"quiz"` (default) or `"survey"`, see [Survey mode](#survey-mode)
 - `subject`: Title/topic of the quiz
+- `sounds`: Optional `{ "music"?, "answerEnd"?, "leaderboard"?, "podium"? }`, see [Sounds](#sounds)
 - `speedBonus`: Optional, `0`-`100` (default: `100`). How much of the points of a question depends on answering fast. `100` is fully by speed, like the classic scoring. `0` gives every right answer the full `maxPoints`, whatever the speed. `50` gives half of `maxPoints` for any right answer plus up to half more for speed. Useful when some players need more time to read. Estimation and puzzle questions never depend on speed
 - `questions`: Array of question objects containing:
   - `type`: `"single"` (exactly one answer), `"multi"` (one or more), `"estimation"` (a number, see [Estimation questions](#estimation-questions)) `"puzzle"` (12 words in 3 groups, see [Puzzle questions](#puzzle-questions)) or `"pin"` (tap a spot on an image or map, see [Pin questions](#pin-questions)). Defaults to `"single"` when omitted
   - `question`: The question text
   - `category`: Optional category, see [Categories](#categories)
   - `round`: Optional `{ "name": string, "background"?: url }` that starts a new round with this question, see [Rounds](#rounds)
+  - `sounds`: Optional `{ "music"?, "answerEnd"? }`, see [Sounds](#sounds)
   - `note`: Optional explanation shown on the main screen when the answer is revealed, e.g. `"Red, green and blue are the primary colors of light"`
   - `answers`: Array of possible answers (2-4 options)
   - `media`: Optional media object displayed with the question:
@@ -225,6 +227,31 @@ Put `round` on the first question of each round to play the quiz in rounds:
 - Questions are not required to belong to a round. A quiz without any `round` plays as one long quiz, as before, and there is no title slide: the quiz name is shown in the lobby and on the screen where players enter their name
 - Rounds work together with [categories](#categories): the leaderboard is still shown or skipped by category inside a round, and always shown at the end of a round
 - In `"survey"` mode a round only shows its title slide; there is no leaderboard
+
+## Sounds
+
+The music during the answer moment and a few effects can be changed for the whole app, per quiz and per question. All sounds play on the big screen only, not on the players' devices.
+
+| Key           | Plays                                             | Set on              |
+| ------------- | ------------------------------------------------- | ------------------- |
+| `music`       | Looping music while players answer                | app, quiz, question |
+| `answerEnd`   | Effect when the time is up                        | app, quiz, question |
+| `leaderboard` | Effect when the leaderboard shows                 | app, quiz           |
+| `podium`      | Fanfare when the winner is revealed on the podium | app, quiz           |
+
+A value is one of:
+
+- `"none"`: silence
+- `"lib:music/quiz1"` or `"lib:sfx/end1"`: a sound that ships with the app (the file name without `.mp3`). `"lib:default/music"`, `"lib:default/answerEnd"` and `"lib:default/podium"` are the original sounds
+- `"/media/...mp3"`: an audio file uploaded to the media library
+
+A sound that is left out is inherited: question, then quiz, then app, then the original sound (the leaderboard has no original sound, so it is silent). The volume of all sounds is set once for the app, in percent.
+
+In the app, admins set the defaults with the music button next to the background button on the configuration screen, and quizzes and questions get their own pickers in the editor, each with a preview button.
+
+### Adding sounds to the app
+
+Put `.mp3` files in `packages/web/src/assets/sounds/music` (answer music) or `packages/web/src/assets/sounds/sfx` (effects) and rebuild. In `sfx`, the start of the file name decides where it can be picked: `end...` for the end of the answer moment, `leader...` for the leaderboard and `podium...` for the podium.
 
 ## Categories
 

@@ -8,6 +8,7 @@ import Card from "@razzia/web/components/Card"
 import LanguageSwitcher from "@razzia/web/components/LanguageSwitcher"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import AppBackgroundDialog from "@razzia/web/features/manager/components/AppBackgroundDialog"
+import AppSoundsDialog from "@razzia/web/features/manager/components/AppSoundsDialog"
 import ChangePasswordForm from "@razzia/web/features/manager/components/ChangePasswordForm"
 import ConfigManageQuizz from "@razzia/web/features/manager/components/configurations/ConfigManageQuizz"
 import ConfigResults from "@razzia/web/features/manager/components/configurations/ConfigResults"
@@ -75,6 +76,7 @@ const Configurations = () => {
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
           {me && isAdmin(me) && <AppBackgroundDialog />}
+          {me && isAdmin(me) && <AppSoundsDialog />}
           {me && isAdmin(me) && (
             <button
               className="rounded-sm p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"

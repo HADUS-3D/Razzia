@@ -86,7 +86,9 @@
     "pinMaxDistanceTooSmall": "De maximale afstand moet groter zijn dan de straal",
     "pinImageWidthNegative": "De breedte van de afbeelding mag niet negatief zijn",
     "pinUnitTooLong": "De eenheid mag maximaal 12 tekens zijn",
-    "pinNeedsQuiz": "Pinvragen zijn alleen beschikbaar in een quiz, niet in een enquete"
+    "pinNeedsQuiz": "Pinvragen zijn alleen beschikbaar in een quiz, niet in een enquete",
+    "invalidSound": "Het geluid moet stilte zijn, een meegeleverd geluid of een geüpload audiobestand",
+    "volumeRange": "Het volume moet tussen 0 en 100 liggen"
   },
   "result": {
     "notFound": "Resultaat niet gevonden"

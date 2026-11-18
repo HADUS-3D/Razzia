@@ -136,6 +136,23 @@ export interface UploadedMedia {
   type: UploadedMediaType
 }
 
+/** The sounds of a question: each inherits from the quizz and then the app when left out. */
+export interface QuestionSounds {
+  music?: string
+  answerEnd?: string
+}
+
+export interface QuizzSounds extends QuestionSounds {
+  leaderboard?: string
+  podium?: string
+}
+
+/** The sounds that apply to the screen now, resolved over question, quizz and app. */
+export interface ResolvedSounds extends QuizzSounds {
+  /** Percent of the normal volume. */
+  volume?: number
+}
+
 /** A round that starts with the question it is set on. */
 export interface QuestionRound {
   name: string
@@ -153,6 +170,8 @@ export interface Question {
   media?: QuestionMedia
   /** Image shown behind this question; falls back to the quizz background. */
   background?: string
+  /** Sounds for this question; fall back to the quizz and then the app. */
+  sounds?: QuestionSounds
   answers: string[]
   solutions?: number[]
   cooldown: number
@@ -177,6 +196,8 @@ export interface Quizz {
   source?: QuizzSource
   /** Image shown behind the game; falls back to the app background. */
   background?: string
+  /** Sounds for this quizz; fall back to the app. */
+  sounds?: QuizzSounds
   /**
    * How much of the points of a question depends on answering fast, in percent.
    * 100 (the default) is fully by speed; 0 gives every right answer the same points.
@@ -187,6 +208,7 @@ export interface Quizz {
 
 export interface AppSettings {
   background?: string
+  sounds?: ResolvedSounds
 }
 
 export type QuizzWithId = Quizz & { id: string }

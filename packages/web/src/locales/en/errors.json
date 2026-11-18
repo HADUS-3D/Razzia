@@ -86,7 +86,9 @@
     "pinMaxDistanceTooSmall": "The maximum distance must be greater than the radius",
     "pinImageWidthNegative": "The image width cannot be negative",
     "pinUnitTooLong": "The unit can be at most 12 characters",
-    "pinNeedsQuiz": "Pin questions are only available in a quiz, not in a survey"
+    "pinNeedsQuiz": "Pin questions are only available in a quiz, not in a survey",
+    "invalidSound": "Sound must be silence, a library sound or an uploaded audio file",
+    "volumeRange": "Volume must be between 0 and 100"
   },
   "result": {
     "notFound": "Result not found"

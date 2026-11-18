@@ -14,6 +14,7 @@ import { useSocketConnection } from "@razzia/web/features/game/hooks/useSocketCo
 import { useBackgroundStore } from "@razzia/web/features/game/stores/background"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
+import { useSoundsStore } from "@razzia/web/features/game/stores/sounds"
 import {
   GAME_STATE_COMPONENTS_MANAGER,
   isKeyOf,
@@ -27,12 +28,14 @@ const ManagerGamePage = () => {
   const { gameId, status, updateManager, resetManager } = useManagerStore()
   const { setQuestionStates } = useQuestionStore()
   const setBackground = useBackgroundStore((state) => state.setBackground)
+  const setSounds = useSoundsStore((state) => state.setSounds)
   const { t } = useTranslation()
 
   useSocketConnection()
 
-  useEvent(EVENTS.GAME.STATUS, ({ name, data, background }) => {
+  useEvent(EVENTS.GAME.STATUS, ({ name, data, background, sounds }) => {
     setBackground(background)
+    setSounds(sounds)
 
     if (name in GAME_STATE_COMPONENTS_MANAGER) {
       updateManager({ status: createStatus(name, data) })
@@ -54,10 +57,12 @@ const ManagerGamePage = () => {
       locked,
       status: reconnectStatus,
       background,
+      sounds,
       players,
       currentQuestion,
     }) => {
       setBackground(background)
+      setSounds(sounds)
       updateManager({
         gameId: reconnectGameId,
         inviteCode,

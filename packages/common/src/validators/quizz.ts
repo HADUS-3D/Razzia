@@ -7,6 +7,8 @@ import {
   QUIZZ_MODES,
   QUIZZ_SOURCES,
   SCORING_MODES,
+  SOUND_LIBRARY_PREFIX,
+  SOUND_NONE,
 } from "@razzia/common/constants"
 import { QUESTION_REFINEMENTS } from "@razzia/common/validators/questions"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
@@ -36,8 +38,47 @@ export const backgroundValidator = z
     "errors:quizz.invalidMediaUrl",
   )
 
+/**
+ * A sound: "none" for silence, "lib:..." for one that ships with the app, or an
+ * uploaded audio file. Left out, it is inherited from the level above.
+ */
+export const soundValidator = z
+  .string("errors:quizz.invalidSound")
+  .refine(
+    (value) =>
+      value === SOUND_NONE ||
+      value.startsWith(SOUND_LIBRARY_PREFIX) ||
+      value.startsWith(MEDIA_URL_PREFIX),
+    "errors:quizz.invalidSound",
+  )
+
+const questionSoundsValidator = z.object({
+  /** Music during the answer moment, on the big screen. */
+  music: soundValidator.optional(),
+  /** Effect at the end of the answer moment. */
+  answerEnd: soundValidator.optional(),
+})
+
+const quizzSoundsValidator = questionSoundsValidator.extend({
+  /** Effect when the leaderboard shows. */
+  leaderboard: soundValidator.optional(),
+  /** Fanfare for the winner on the podium. */
+  podium: soundValidator.optional(),
+})
+
 export const appSettingsValidator = z.object({
   background: backgroundValidator.optional(),
+  sounds: quizzSoundsValidator
+    .extend({
+      /** Percent of the normal volume. */
+      volume: z
+        .number()
+        .int()
+        .min(0, "errors:quizz.volumeRange")
+        .max(100, "errors:quizz.volumeRange")
+        .optional(),
+    })
+    .optional(),
 })
 
 export const mediaUploadValidator = z.object({
@@ -59,6 +100,7 @@ const questionSchema = z.object({
   note: z.string().optional(),
   media: questionMediaValidator.optional(),
   background: backgroundValidator.optional(),
+  sounds: questionSoundsValidator.optional(),
   answers: z.array(z.string().min(1, "errors:quizz.answerEmpty")),
   solutions: z.array(z.number()).optional(),
   cooldown: z
@@ -115,6 +157,7 @@ export const quizzValidator = z
     subject: z.string().min(1, "errors:quizz.subjectEmpty"),
     source: z.enum(QUIZZ_SOURCES).optional(),
     background: backgroundValidator.optional(),
+    sounds: quizzSoundsValidator.optional(),
     speedBonus: z
       .number()
       .int()

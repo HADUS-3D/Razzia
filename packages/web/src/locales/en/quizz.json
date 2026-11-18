@@ -182,5 +182,23 @@
     "background": "Round background",
     "backgroundHint": "Image behind the title slide of this round.",
     "badge": "Round: {{name}}"
+  },
+  "sounds": {
+    "question": "Sounds of this question",
+    "questionHint": "Music during the answer moment and the effect when the time is up, on the big screen.",
+    "quizz": "Sounds of this quizz",
+    "quizzHint": "Used for every question without its own sound. The leaderboard and podium sounds are set here.",
+    "music": "Answer music",
+    "answerEnd": "Effect when time is up",
+    "leaderboard": "Leaderboard effect",
+    "podium": "Podium fanfare",
+    "inheritQuizz": "Uses the quizz or app sound",
+    "inheritApp": "Uses the app sound",
+    "none": "No sound",
+    "default": "Standard sound",
+    "missing": "Missing file",
+    "play": "Play preview",
+    "stop": "Stop preview",
+    "upload": "Upload audio"
   }
 }

@@ -12,6 +12,7 @@ import type {
   QuestionResult,
   Quizz,
   QuizzMode,
+  ResolvedSounds,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
 import { isSameImage } from "@razzia/common/background"
@@ -53,6 +54,7 @@ import {
   scoreQuestion,
   type ScoredPlayer,
 } from "@razzia/socket/services/scoring/round"
+import { getSettings as getAppSettings } from "@razzia/socket/services/settings"
 import {
   applySpeedBonus,
   orderToPoint,
@@ -168,6 +170,25 @@ export class RoundManager {
     }
 
     return this.question.background ?? this.opts.quizz.background
+  }
+
+  /**
+   * The sounds for the current moment: music and the end-of-answer effect from
+   * the question, then the quizz, then the app; the ranking sounds and the
+   * volume from the quizz and the app.
+   */
+  get sounds(): ResolvedSounds {
+    const app = getAppSettings().sounds
+    const quizz = this.opts.quizz.sounds
+    const question = this.started ? this.question.sounds : undefined
+
+    return {
+      music: question?.music ?? quizz?.music ?? app?.music,
+      answerEnd: question?.answerEnd ?? quizz?.answerEnd ?? app?.answerEnd,
+      leaderboard: quizz?.leaderboard ?? app?.leaderboard,
+      podium: quizz?.podium ?? app?.podium,
+      volume: app?.volume,
+    }
   }
 
   /** The ranking screens fall back to the quizz background. */
