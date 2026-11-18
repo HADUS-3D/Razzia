@@ -183,6 +183,11 @@
     "backgroundHint": "Image behind the title slide of this round.",
     "badge": "Round: {{name}}"
   },
+  "settings": {
+    "title": "Quizz settings",
+    "open": "Quizz settings",
+    "description": "These settings apply to the whole quizz. Settings of a single question are in the menu on the right."
+  },
   "sounds": {
     "question": "Sounds of this question",
     "questionHint": "Music during the answer moment and the effect when the time is up, on the big screen.",

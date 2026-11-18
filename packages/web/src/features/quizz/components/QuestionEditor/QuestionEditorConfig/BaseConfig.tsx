@@ -1,13 +1,11 @@
 import {
   ArrowBigDownDash,
   Clock,
-  Gauge,
   ListChecks,
   Star,
   Timer,
   Trophy,
 } from "lucide-react"
-import { useController, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import type { ScoringMode } from "@razzia/common/types/game"
 import {
@@ -16,7 +14,6 @@ import {
   QUIZZ_MODES,
 } from "@razzia/common/constants"
 import { isMultiOptions } from "@razzia/common/questions/options"
-import Input from "@razzia/web/components/Input"
 import {
   Select,
   SelectContent,
@@ -29,10 +26,7 @@ import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import ConfigNumberInput from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigNumberInput"
 import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
-import {
-  useQuizzEditor,
-  type QuizzFormValues,
-} from "@razzia/web/features/quizz/contexts/quizz-editor-context"
+import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 
 const DEFAULT_TIME = 20
 const DEFAULT_PENALTY = 100
@@ -40,43 +34,6 @@ const DEFAULT_PENALTY_PERCENT = 25
 const DEFAULT_TOP_PERCENT = 20
 
 type PenaltyType = "points" | "percent"
-
-/** The speed bonus belongs to the whole quizz, not to one question. */
-const SpeedBonusField = () => {
-  const { t } = useTranslation()
-  const { control } = useFormContext<QuizzFormValues>()
-  const { field } = useController({ control, name: "speedBonus" })
-  const value = field.value ?? 100
-
-  return (
-    <ConfigField>
-      <ConfigField.Label
-        icon={<Gauge className="size-4" />}
-        label={t("quizz:question.config.speedBonus")}
-        unit="%"
-      />
-      <Input
-        variant="sm"
-        type="number"
-        min={0}
-        max={100}
-        aria-label={t("quizz:question.config.speedBonus")}
-        value={value}
-        onChange={(e) => {
-          const num = Number(e.target.value)
-
-          if (e.target.value !== "" && !isNaN(num)) {
-            field.onChange(Math.min(100, Math.max(0, Math.round(num))))
-          }
-        }}
-        className="w-full"
-      />
-      <ConfigField.Description>
-        {t("quizz:question.config.speedBonusHint")}
-      </ConfigField.Description>
-    </ConfigField>
-  )
-}
 
 const BaseConfig = () => {
   const { currentQuestion, currentIndex, gameMode, updateQuestion } =
@@ -150,8 +107,6 @@ const BaseConfig = () => {
               {t("quizz:question.config.maxPointsHint")}
             </ConfigField.Description>
           </ConfigField>
-
-          <SpeedBonusField />
 
           <ConfigField>
             <ConfigField.Label

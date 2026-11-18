@@ -183,6 +183,11 @@
     "backgroundHint": "Afbeelding achter de titelslide van deze ronde.",
     "badge": "Ronde: {{name}}"
   },
+  "settings": {
+    "title": "Quizinstellingen",
+    "open": "Quizinstellingen",
+    "description": "Deze instellingen gelden voor de hele quiz. Instellingen van één vraag staan in het menu rechts."
+  },
   "sounds": {
     "question": "Geluiden van deze vraag",
     "questionHint": "Muziek tijdens het antwoordmoment en het effect als de tijd om is, op het grote scherm.",
