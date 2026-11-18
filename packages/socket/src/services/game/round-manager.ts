@@ -46,6 +46,7 @@ import {
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
+import { buildPlayerLeaderboard } from "@razzia/socket/services/game/player-leaderboard"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import {
   countAnswers,
@@ -727,6 +728,17 @@ export class RoundManager {
       leaderboard: round ? this.leaderboard : this.leaderboard.slice(0, 5),
       ...(round ? { round: { name: round } } : {}),
     })
+
+    for (const player of this.opts.players.getAll()) {
+      this.opts.send(player.id, STATUS.SHOW_PLAYER_LEADERBOARD, {
+        rows: buildPlayerLeaderboard(
+          oldLeaderboard,
+          this.leaderboard,
+          player.id,
+        ),
+        ...(round ? { round: { name: round } } : {}),
+      })
+    }
 
     this.tempOldLeaderboard = null
   }
