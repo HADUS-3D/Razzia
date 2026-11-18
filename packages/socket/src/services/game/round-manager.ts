@@ -14,6 +14,7 @@ import type {
   QuizzMode,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
+import { isSameImage } from "@razzia/common/background"
 // oxlint-disable typescript/no-unnecessary-condition
 import {
   EVENTS,
@@ -195,7 +196,8 @@ export class RoundManager {
   private get questionImage(): QuestionMedia | undefined {
     const { media, background } = this.question
 
-    return media?.type === MEDIA_TYPES.IMAGE && media.url === background
+    return media?.type === MEDIA_TYPES.IMAGE &&
+      isSameImage(media.url, background)
       ? undefined
       : media
   }

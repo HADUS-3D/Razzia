@@ -3,8 +3,10 @@ import { useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 import type { UploadedMedia } from "@razzia/common/types/game"
+import { parseBackground } from "@razzia/common/background"
 import { ACCEPTED_MEDIA_TYPES, MEDIA_TYPES } from "@razzia/common/constants"
 import Loader from "@razzia/web/components/Loader"
+import FocusDialog from "@razzia/web/features/quizz/components/FocusDialog"
 import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
 import { useUploadMedia } from "@razzia/web/features/quizz/hooks/useUploadMedia"
 
@@ -40,6 +42,7 @@ const BackgroundPicker = ({
     onChange(url)
   }
 
+  const preview = value ? parseBackground(value) : undefined
   const { upload, pendingCount } = useUploadMedia(select)
   const isUploading = pendingCount > 0
 
@@ -48,9 +51,12 @@ const BackgroundPicker = ({
       <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg bg-muted">
         {value ? (
           <img
-            src={value}
+            src={preview?.url}
             alt={t("quizz:background.preview")}
             className="h-full w-full object-cover"
+            style={{
+              objectPosition: `${preview?.focus.x}% ${preview?.focus.y}%`,
+            }}
           />
         ) : (
           <div className="flex flex-col items-center gap-1 px-2 text-center text-xs text-muted-foreground">
@@ -71,6 +77,8 @@ const BackgroundPicker = ({
           </button>
         )}
       </div>
+
+      {value && <FocusDialog value={value} onChange={onChange} />}
 
       <div className="flex gap-2">
         <label

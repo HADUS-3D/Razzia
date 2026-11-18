@@ -161,7 +161,19 @@
     "remove": "Remove background",
     "preview": "Background preview",
     "imageOnly": "Pick an image to use as a background",
-    "pickFromLibrary": "Pick background from library"
+    "pickFromLibrary": "Pick background from library",
+    "focus": {
+      "open": "Set focus point",
+      "title": "Focus point of the background",
+      "hint": "Click or drag to mark the part of the image that must stay visible. The frames show how the image is cropped on a wide screen, a tablet and a phone.",
+      "reset": "Center",
+      "done": "Done",
+      "frames": {
+        "wide": "Wide screen",
+        "tablet": "Tablet",
+        "phone": "Phone"
+      }
+    }
   },
   "round": {
     "label": "Round",

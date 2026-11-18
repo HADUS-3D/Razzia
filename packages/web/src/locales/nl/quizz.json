@@ -161,7 +161,19 @@
     "remove": "Achtergrond verwijderen",
     "preview": "Voorbeeld van de achtergrond",
     "imageOnly": "Kies een afbeelding om als achtergrond te gebruiken",
-    "pickFromLibrary": "Kies een achtergrond uit de bibliotheek"
+    "pickFromLibrary": "Kies een achtergrond uit de bibliotheek",
+    "focus": {
+      "open": "Focuspunt instellen",
+      "title": "Focuspunt van de achtergrond",
+      "hint": "Klik of sleep om het deel van de afbeelding aan te wijzen dat zichtbaar moet blijven. De kaders tonen hoe de afbeelding wordt bijgesneden op een breed scherm, een tablet en een telefoon.",
+      "reset": "Centreren",
+      "done": "Klaar",
+      "frames": {
+        "wide": "Breed scherm",
+        "tablet": "Tablet",
+        "phone": "Telefoon"
+      }
+    }
   },
   "round": {
     "label": "Ronde",

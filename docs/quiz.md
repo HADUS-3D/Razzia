@@ -196,6 +196,18 @@ On a real map (`options.mode` is `"map"`), no `media` is needed:
 
 A question counts as answered correctly, for the streak and the `penalty`, when the pin is closer than `maxDistance`. The right spot stays on the server until the answer is revealed.
 
+## Background focus point
+
+A background (of the app, a quiz, a round or a question) is cropped to fit each screen, so on a phone or a wide screen part of the image can fall outside the view. Add a focus point to keep the important part visible: append `#focus=x,y` to the image URL, with `x` and `y` the spot in percent of the image width and height, measured from the top left.
+
+```json
+{ "question": "Who is this?", "background": "/media/portrait.png#focus=30,20", ... }
+```
+
+- Without a focus point the image is centered (`50,50`)
+- A question without its own `background` uses the one of the quiz, including its focus point; a question with its own image uses its own focus point
+- In the editor, use **Set focus point** below the background: click or drag on the image, and the frames show how it is cropped on a wide screen, a tablet and a phone
+
 ## Rounds
 
 Put `round` on the first question of each round to play the quiz in rounds:
