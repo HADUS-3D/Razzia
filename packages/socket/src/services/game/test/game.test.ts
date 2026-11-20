@@ -694,6 +694,42 @@ describe("quiz flow", () => {
     })
   })
 
+  it("shows the big screen a top challenge without its answers", async () => {
+    const question = createQuestion({
+      topPercent: 50,
+      penalty: 300,
+      cooldown: 3,
+    })
+    const { game, manager, status } = setup(createQuizz([question]))
+
+    void game.start(manager)
+    await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS)
+
+    expect(status(MANAGER)).toMatchObject({
+      name: STATUS.SHOW_CHALLENGE,
+      data: { answering: false, question: question.question },
+    })
+
+    await vi.advanceTimersByTimeAsync(question.cooldown * 1000)
+
+    const screen = status(MANAGER)
+
+    expect(screen?.name).toBe(STATUS.SHOW_CHALLENGE)
+    expect(screen?.data).toMatchObject({
+      answering: true,
+      challenge: {
+        percent: 50,
+        count: 1,
+        total: 2,
+        penalty: { kind: "points", value: 300 },
+      },
+    })
+    expect(screen?.data).not.toHaveProperty("answers")
+    expect([status("alice")?.name, status("bob")?.name].sort()).toEqual(
+      [STATUS.SELECT_ANSWER, STATUS.WAIT].sort(),
+    )
+  })
+
   it("scores by answer order when there is no time limit", async () => {
     const { game, sockets, status, start } = setup(
       createQuizz([createQuestion({ time: NO_TIME_LIMIT })]),

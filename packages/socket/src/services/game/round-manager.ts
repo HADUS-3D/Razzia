@@ -519,8 +519,9 @@ export class RoundManager {
 
   /**
    * Sends a status to everyone, or, for a top challenge, only to the players
-   * asked. The manager and the other players see a waiting screen instead, so
-   * the question and its answers stay on the challenged players' devices.
+   * asked. The manager sees the question and what is at stake, without the
+   * answers; the other players see a waiting screen. The answers stay on the
+   * challenged players' devices.
    */
   private toAudience<
     T extends typeof STATUS.SHOW_QUESTION | typeof STATUS.SELECT_ANSWER,
@@ -533,7 +534,11 @@ export class RoundManager {
 
     const waiting = { text: "game:topChallengeWaiting" }
 
-    this.opts.send(this.opts.getManagerId(), STATUS.WAIT, waiting)
+    this.opts.send(
+      this.opts.getManagerId(),
+      STATUS.SHOW_CHALLENGE,
+      this.challengeScreen(status === STATUS.SELECT_ANSWER),
+    )
 
     this.opts.players.getAll().forEach((player) => {
       if (this.challengeIds?.has(player.id)) {
@@ -544,6 +549,41 @@ export class RoundManager {
 
       this.opts.send(player.id, STATUS.WAIT, waiting)
     })
+  }
+
+  /** The big screen of a top challenge: the question, who is asked and what is at stake. */
+  private challengeScreen(
+    answering: boolean,
+  ): StatusDataMap[typeof STATUS.SHOW_CHALLENGE] {
+    const { question, topPercent, penalty, penaltyPercent } = this.question
+    const asked = this.opts.players
+      .getAll()
+      .filter((player) => this.challengeIds?.has(player.id))
+    const imageMedia =
+      this.questionImage?.type === MEDIA_TYPES.IMAGE
+        ? this.questionImage
+        : undefined
+
+    return {
+      question,
+      media: imageMedia,
+      cooldown: this.question.cooldown,
+      time: this.question.time,
+      answering,
+      challenge: {
+        percent: topPercent ?? 0,
+        count: asked.length,
+        total: this.opts.players.count(),
+        names: asked.map((player) => player.username),
+        penalty: (() => {
+          if (penaltyPercent) {
+            return { kind: "percent" as const, value: penaltyPercent }
+          }
+
+          return penalty ? { kind: "points" as const, value: penalty } : null
+        })(),
+      },
+    }
   }
 
   // ── Steps ────────────────────────────────────────────────────────────────
