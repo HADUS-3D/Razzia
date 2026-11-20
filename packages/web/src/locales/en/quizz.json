@@ -142,6 +142,8 @@
     "dropHere": "Drop to upload",
     "noResults": "No media matches your search",
     "fromUrl": "Add from a URL",
+    "hideBlock": "Hide",
+    "showBlock": "Add media",
     "view": {
       "grid": "Grid view",
       "list": "List view"
