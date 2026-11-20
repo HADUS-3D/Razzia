@@ -1,6 +1,8 @@
 import clsx from "clsx"
 import {
   ChevronDown,
+  Eye,
+  EyeOff,
   Image,
   ImageOff,
   Library,
@@ -34,6 +36,16 @@ const MEDIA_TYPE_BUTTONS = [
   { type: MEDIA_TYPES.AUDIO, icon: Music },
 ] as const
 
+const HIDE_BLOCK_KEY = "razzia_hide_media_block"
+
+const readHidden = () => {
+  try {
+    return localStorage.getItem(HIDE_BLOCK_KEY) === "1"
+  } catch {
+    return false
+  }
+}
+
 const QuestionEditorMedia = () => {
   const {
     updateQuestion,
@@ -44,7 +56,19 @@ const QuestionEditorMedia = () => {
   const questionMedia = currentQuestion.media
   const [isLibraryOpen, setIsLibraryOpen] = useState(false)
   const [isUrlOpen, setIsUrlOpen] = useState(Boolean(questionMedia?.url))
+  const [isBlockHidden, setIsBlockHidden] = useState(readHidden)
   const { t } = useTranslation()
+
+  const handleToggleBlock = () => {
+    const next = !isBlockHidden
+    setIsBlockHidden(next)
+
+    try {
+      localStorage.setItem(HIDE_BLOCK_KEY, next ? "1" : "0")
+    } catch {
+      // Storage unavailable: the choice just lasts for this session.
+    }
+  }
 
   const { upload, pendingCount } = useUploadMedia(({ type, url }) =>
     updateQuestion(currentIndex, { media: { type, url } }),
@@ -125,8 +149,27 @@ const QuestionEditorMedia = () => {
         autoPlay={false}
       />
 
-      {!questionMedia?.type && (
-        <Card className="my-auto flex max-h-100 w-full max-w-xl flex-1 flex-col items-center justify-center gap-2">
+      {!questionMedia?.type && isBlockHidden && (
+        <button
+          onClick={handleToggleBlock}
+          className="my-auto flex items-center gap-1.5 rounded-lg bg-white/70 px-3 py-1.5 text-sm font-semibold text-accent-foreground shadow-sm hover:bg-white"
+        >
+          <Eye className="size-4" />
+          {t("quizz:media.showBlock")}
+        </button>
+      )}
+
+      {!questionMedia?.type && !isBlockHidden && (
+        <Card className="relative my-auto flex max-h-100 w-full max-w-xl flex-1 flex-col items-center justify-center gap-2">
+          <button
+            onClick={handleToggleBlock}
+            title={t("quizz:media.hideBlock")}
+            aria-label={t("quizz:media.hideBlock")}
+            className="absolute right-2 top-2 flex items-center gap-1 rounded-md p-1.5 text-xs font-semibold text-accent-foreground hover:bg-accent"
+          >
+            <EyeOff className="size-4" />
+            {t("quizz:media.hideBlock")}
+          </button>
           <ImageOff className="size-16 stroke-accent-foreground" />
           <p className="text-center text-sm text-accent-foreground">
             {t("quizz:question.addMediaHint")}

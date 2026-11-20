@@ -142,6 +142,8 @@
     "dropHere": "Loslaten om te uploaden",
     "noResults": "Geen media gevonden voor je zoekopdracht",
     "fromUrl": "Toevoegen via een URL",
+    "hideBlock": "Verbergen",
+    "showBlock": "Media toevoegen",
     "view": {
       "grid": "Rasterweergave",
       "list": "Lijstweergave"
