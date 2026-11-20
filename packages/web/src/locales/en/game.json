@@ -103,5 +103,16 @@
   "playerLeaderboard": {
     "change_one": "Up or down {{count}} place",
     "change_other": "Up or down {{count}} places"
+  },
+  "challenge": {
+    "title": "Top challenge",
+    "who_one": "Only the top player is asked this question, on their own device.",
+    "names": "Asked:",
+    "correct": "Right answer: you keep your points.",
+    "wrongPoints": "Wrong or no answer: you lose {{value}} points.",
+    "wrongPercent": "Wrong or no answer: you lose {{value}}% of your points.",
+    "wrongNone": "Wrong or no answer: nothing happens.",
+    "others": "Everyone else keeps their points and waits.",
+    "who_other": "Only the top {{count}} of {{total}} players ({{percent}}%) are asked this question, on their own device."
   }
 }

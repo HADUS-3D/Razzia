@@ -23,6 +23,7 @@ export const STATUS = {
   SHOW_PREPARED: "SHOW_PREPARED",
   SHOW_QUESTION: "SHOW_QUESTION",
   SELECT_ANSWER: "SELECT_ANSWER",
+  SHOW_CHALLENGE: "SHOW_CHALLENGE",
   SHOW_RESULT: "SHOW_RESULT",
   SHOW_RESPONSES: "SHOW_RESPONSES",
   SHOW_LEADERBOARD: "SHOW_LEADERBOARD",
@@ -110,7 +111,33 @@ export interface CommonStatusDataMap {
   SUMMARY: { subject: string; totalPlayers: number; totalQuestions: number }
 }
 
+/** Who a top challenge is for and what it can cost them. */
+export interface ChallengeInfo {
+  /** The share of the players that is asked, 1-100. */
+  percent: number
+  /** How many players are asked, out of `total` players. */
+  count: number
+  total: number
+  /** Usernames of the players asked. */
+  names: string[]
+  /** What a wrong or missing answer costs; null when it costs nothing. */
+  penalty: { kind: "points" | "percent"; value: number } | null
+}
+
 interface ManagerExtraStatus {
+  /**
+   * The big screen during a top challenge: the question without its answers,
+   * who is asked and what is at stake. `answering` is set once the players
+   * can answer; before that it is the reading time.
+   */
+  SHOW_CHALLENGE: {
+    question: string
+    media?: QuestionMedia
+    cooldown: number
+    time: number
+    answering: boolean
+    challenge: ChallengeInfo
+  }
   SHOW_ROOM: { text: string; inviteCode?: string; subject?: string }
   SHOW_RESPONSES: {
     question: string

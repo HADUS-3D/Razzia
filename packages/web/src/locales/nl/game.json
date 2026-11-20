@@ -103,5 +103,16 @@
   "playerLeaderboard": {
     "change_one": "Omhoog of omlaag {{count}} plek",
     "change_other": "Omhoog of omlaag {{count}} plekken"
+  },
+  "challenge": {
+    "title": "Topvraag",
+    "who_one": "Alleen de nummer 1 krijgt deze vraag, op het eigen device.",
+    "names": "Aan de beurt:",
+    "correct": "Goed antwoord: je punten blijven staan.",
+    "wrongPoints": "Fout of geen antwoord: je verliest {{value}} punten.",
+    "wrongPercent": "Fout of geen antwoord: je verliest {{value}}% van je punten.",
+    "wrongNone": "Fout of geen antwoord: er gebeurt niets.",
+    "others": "Alle anderen houden hun punten en wachten.",
+    "who_other": "Alleen de top {{count}} van {{total}} spelers ({{percent}}%) krijgt deze vraag, op het eigen device."
   }
 }
