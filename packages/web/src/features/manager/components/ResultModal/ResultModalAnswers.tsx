@@ -99,6 +99,27 @@ const ResultModalAnswers = () => {
       ]
     }
 
+    if (options.closestWins) {
+      return [
+        {
+          label: t("manager:result.estimation.closest", {
+            value: formatValue(solution),
+          }),
+          count: correctCount,
+          isCorrect: true,
+          color: "bg-correct",
+          answerLabel: "≈",
+        },
+        {
+          label: t("manager:result.estimation.further"),
+          count: answeredCount - correctCount,
+          isCorrect: false,
+          color: "bg-red-500",
+          answerLabel: "≠",
+        },
+      ]
+    }
+
     return [
       {
         label: t("manager:result.estimation.withinMargin", {

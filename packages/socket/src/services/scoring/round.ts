@@ -1,4 +1,6 @@
 import type { Answer, Player, Question } from "@razzia/common/types/game"
+import { isClosestEstimation } from "@razzia/common/questions/estimation"
+import { isEstimationOptions } from "@razzia/common/questions/options"
 import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
 
 export type ScoredPlayer = Player & {
@@ -31,12 +33,39 @@ export const scoreQuestion = (
 ): ScoredPlayer[] => {
   // A top challenge (`topPercent`) only gets the players that were asked it.
   const isChallenge = question.topPercent !== undefined
+  // With "closest wins" only the answer(s) nearest to the solution score, in full.
+  const solution = question.solutions?.at(0)
+  const closestTo =
+    isEstimationOptions(question.options) &&
+    question.options.closestWins === true
+      ? solution
+      : undefined
+  const estimates =
+    closestTo === undefined
+      ? []
+      : players.flatMap((player) => {
+          const value = answers
+            .find((a) => a.playerId === player.id)
+            ?.answerIds.at(0)
+
+          return value === undefined ? [] : [value]
+        })
+
   const scored = players.map((player) => {
     const playerAnswer = answers.find((a) => a.playerId === player.id)
 
     const scoreMultiplier = (() => {
       if (!playerAnswer) {
         return 0
+      }
+
+      if (closestTo !== undefined) {
+        const value = playerAnswer.answerIds.at(0)
+
+        return value !== undefined &&
+          isClosestEstimation(value, estimates, closestTo)
+          ? 1
+          : 0
       }
 
       const scoring = QUESTION_SCORING[question.type]

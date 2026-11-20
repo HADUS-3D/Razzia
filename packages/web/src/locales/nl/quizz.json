@@ -59,7 +59,9 @@
         "step": "Stapgrootte",
         "stepHint": "Precisie van de schuifbalk en het verwachte antwoord",
         "margin": "Marge",
-        "marginHint": "Antwoorden binnen deze afstand van het juiste antwoord scoren van 100% (exact) tot 50%. Antwoorden daarbuiten scoren niets."
+        "marginHint": "Antwoorden binnen deze afstand van het juiste antwoord scoren van 100% (exact) tot 50%. Antwoorden daarbuiten scoren niets.",
+        "closestWins": "Dichtstbij wint",
+        "closestWinsHint": "Alleen de speler(s) die het dichtst bij het juiste antwoord zitten krijgen punten, allemaal de volle punten, ook bij gelijke stand. De marge geldt dan niet."
       },
       "puzzle": {
         "title": "Puzzel",

@@ -43,6 +43,12 @@ export const isAnswerCorrect = (
     const value = answerIds.at(0)
     const solution = solutions.at(0)
 
+    // Whether the answer was the closest depends on the other answers, the
+    // recorded result says it.
+    if (options.closestWins) {
+      return false
+    }
+
     return (
       value !== undefined &&
       solution !== undefined &&

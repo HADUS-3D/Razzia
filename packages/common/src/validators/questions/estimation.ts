@@ -9,6 +9,7 @@ export const estimationOptionsValidator = z.object({
   max: z.number(),
   step: z.number(),
   margin: z.number(),
+  closestWins: z.boolean().optional(),
 })
 
 export const refineEstimationQuestion: QuestionRefinement = (

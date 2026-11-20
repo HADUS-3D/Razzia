@@ -41,7 +41,9 @@
       "answered": "Answered",
       "withinMargin": "{{value}} ± {{margin}}",
       "outsideMargin": "Outside the margin",
-      "average": "Average answer: {{value}}"
+      "average": "Average answer: {{value}}",
+      "closest": "Closest to {{value}}",
+      "further": "Further away"
     },
     "puzzle": {
       "group": "Group {{number}}"

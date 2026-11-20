@@ -31,6 +31,8 @@ export interface EstimationQuestionOptions {
   max: number
   step: number
   margin: number
+  /** Only the answer(s) closest to the solution score, the margin is then ignored. */
+  closestWins?: boolean
 }
 
 /**
