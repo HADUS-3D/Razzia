@@ -165,7 +165,7 @@ const QuestionEditorMedia = () => {
             onClick={handleToggleBlock}
             title={t("quizz:media.hideBlock")}
             aria-label={t("quizz:media.hideBlock")}
-            className="absolute right-2 top-2 flex items-center gap-1 rounded-md p-1.5 text-xs font-semibold text-accent-foreground hover:bg-accent"
+            className="absolute top-2 right-2 flex items-center gap-1 rounded-md p-1.5 text-xs font-semibold text-accent-foreground hover:bg-accent"
           >
             <EyeOff className="size-4" />
             {t("quizz:media.hideBlock")}
