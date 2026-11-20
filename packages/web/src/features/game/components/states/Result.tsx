@@ -68,19 +68,19 @@ const Result = ({
       </div>
       <h2
         className={clsx(
-          "mt-1 font-bold text-white drop-shadow-lg transition-[font-size] duration-500 motion-reduce:transition-none",
+          "mt-1 text-center font-bold text-white drop-shadow-lg transition-[font-size] duration-500 motion-reduce:transition-none",
           compact ? "text-2xl" : "text-4xl",
         )}
       >
         {t(message)}
       </h2>
-      <p className="mt-1 text-xl font-bold text-white drop-shadow-lg">
+      <p className="mt-1 text-center text-xl font-bold text-white drop-shadow-lg">
         {t("game:resultTop")}
         {place(rank)}
         {aheadOfMe ? `${t("game:resultBehind")}${aheadOfMe}` : ""}
       </p>
       {correct && (
-        <span className="mt-2 rounded-lg bg-black/40 px-4 py-2 text-2xl font-bold text-white drop-shadow-lg">
+        <span className="mt-2 rounded-lg bg-black/40 px-4 py-2 text-center text-2xl font-bold text-white drop-shadow-lg">
           +{points}
         </span>
       )}
