@@ -1,7 +1,10 @@
 import clsx from "clsx"
 import { Check, Users } from "lucide-react"
 import type { ResponsesComponentProps } from "@razzia/web/features/questions/types"
-import { estimationAccuracy } from "@razzia/common/questions/estimation"
+import {
+  closestEstimationDistance,
+  estimationAccuracy,
+} from "@razzia/common/questions/estimation"
 import {
   formatValue,
   getEstimationOptions,
@@ -26,6 +29,62 @@ const EstimationResponses = ({
 
   if (solution === undefined) {
     return null
+  }
+
+  if (estimation.closestWins) {
+    const values = Object.keys(responses).map(Number)
+    const closest = closestEstimationDistance(values, solution)
+    const winners =
+      closest === undefined
+        ? []
+        : values.filter(
+            (value) => Math.abs(Math.abs(value - solution) - closest) < 1e-9,
+          )
+
+    return (
+      <div className="mx-auto mt-8 w-full max-w-4xl px-4">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-4">
+          <div className="relative col-start-2 h-20">
+            {winners.map((value) => (
+              <div
+                key={value}
+                className="absolute bottom-0 flex -translate-x-1/2 flex-col items-center rounded-xl bg-white px-4 py-1.5 whitespace-nowrap shadow-lg"
+                style={{ left: clampBadge(getRangeRatio(value, estimation)) }}
+              >
+                <span className="flex items-center gap-2 text-3xl font-bold text-correct">
+                  <Users className="size-7 stroke-3" />
+                  {responses[value]}
+                </span>
+                <span className="text-sm font-bold text-muted-foreground">
+                  {formatValue(value)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <span className={clsx(BADGE_CLASS, "col-start-1")}>
+            {formatValue(min)}
+          </span>
+          <div className="relative h-4 rounded-full bg-white/90 shadow-md">
+            <span
+              className="absolute top-1/2 size-10 -translate-1/2 rounded-full border-4 border-white bg-correct shadow-lg"
+              style={{ left: toPercent(getRangeRatio(solution, estimation)) }}
+            />
+          </div>
+          <span className={BADGE_CLASS}>{formatValue(max)}</span>
+
+          <div className="relative col-start-2 h-12">
+            <span
+              className="absolute top-1 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-correct px-4 py-1.5 text-2xl font-bold whitespace-nowrap text-white shadow-lg"
+              style={{ left: clampBadge(getRangeRatio(solution, estimation)) }}
+            >
+              <Check className="size-6 stroke-4" />
+              {formatValue(solution)}
+            </span>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const rangeFrom = Math.max(min, solution - margin)

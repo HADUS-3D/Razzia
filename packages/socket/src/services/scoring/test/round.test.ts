@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest"
+import { ESTIMATION_INPUT_MODES } from "@razzia/common/constants"
 import {
   countAnswers,
   scoreQuestion,
 } from "@razzia/socket/services/scoring/round"
-import { createPlayer, createQuestion } from "@razzia/socket/test/fixtures"
+import {
+  createEstimationQuestion,
+  createPlayer,
+  createQuestion,
+} from "@razzia/socket/test/fixtures"
 
 const alice = () => createPlayer({ id: "alice", username: "Alice" })
 const bob = () => createPlayer({ id: "bob", username: "Bob" })
@@ -149,5 +154,61 @@ describe("scoreQuestion with a percentage penalty", () => {
     )
 
     expect(scored.points).toBe(300)
+  })
+})
+
+describe("scoreQuestion with estimation closest wins", () => {
+  const carol = () => createPlayer({ id: "carol", username: "Carol" })
+  const question = createEstimationQuestion({
+    options: {
+      inputMode: ESTIMATION_INPUT_MODES.SLIDER,
+      min: 0,
+      max: 100,
+      step: 1,
+      margin: 0,
+      closestWins: true,
+    },
+  })
+
+  it("closest wins: only gives the full points to the closest answer, ignoring the margin", () => {
+    const scored = scoreQuestion(
+      question,
+      [alice(), bob(), carol()],
+      [
+        { playerId: "alice", answerIds: [10], points: 1000 },
+        { playerId: "bob", answerIds: [45], points: 1000 },
+        { playerId: "carol", answerIds: [70], points: 1000 },
+      ],
+    )
+
+    expect(scored.map((p) => [p.username, p.points])).toEqual([
+      ["Bob", 1000],
+      ["Alice", 0],
+      ["Carol", 0],
+    ])
+  })
+
+  it("closest wins: gives every tied player the full points", () => {
+    const scored = scoreQuestion(
+      question,
+      [alice(), bob(), carol()],
+      [
+        { playerId: "alice", answerIds: [45], points: 1000 },
+        { playerId: "bob", answerIds: [55], points: 1000 },
+        { playerId: "carol", answerIds: [80], points: 1000 },
+      ],
+    )
+
+    expect(scored.map((p) => [p.username, p.points, p.lastCorrect])).toEqual([
+      ["Alice", 1000, true],
+      ["Bob", 1000, true],
+      ["Carol", 0, false],
+    ])
+  })
+
+  it("closest wins: scores nobody when nobody answered", () => {
+    const scored = scoreQuestion(question, [alice()], [])
+
+    expect(scored.map((p) => p.points)).toEqual([0])
   })
 })

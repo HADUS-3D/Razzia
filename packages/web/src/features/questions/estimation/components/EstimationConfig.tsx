@@ -1,4 +1,4 @@
-import { Crosshair, Footprints, SlidersHorizontal } from "lucide-react"
+import { Crosshair, Footprints, SlidersHorizontal, Target } from "lucide-react"
 import { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@razzia/web/components/Select"
+import Switch from "@razzia/web/components/Switch"
 import { getEstimationOptions } from "@razzia/web/features/questions/estimation/utils"
 import BaseConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
@@ -47,6 +48,10 @@ const EstimationConfig = () => {
 
   const handleInputModeChange = (inputMode: EstimationInputMode) => {
     updateQuestion(currentIndex, { options: { ...options, inputMode } })
+  }
+
+  const handleClosestWinsChange = (closestWins: boolean) => {
+    updateQuestion(currentIndex, { options: { ...options, closestWins } })
   }
 
   return (
@@ -96,6 +101,25 @@ const EstimationConfig = () => {
         </ConfigField>
 
         {gameMode !== QUIZZ_MODES.SURVEY && (
+          <ConfigField>
+            <ConfigField.Label
+              icon={<Target className="size-4" />}
+              label={t("quizz:question.config.estimation.closestWins")}
+              action={
+                <Switch
+                  aria-label={t("quizz:question.config.estimation.closestWins")}
+                  checked={options.closestWins === true}
+                  onCheckedChange={handleClosestWinsChange}
+                />
+              }
+            />
+            <ConfigField.Description>
+              {t("quizz:question.config.estimation.closestWinsHint")}
+            </ConfigField.Description>
+          </ConfigField>
+        )}
+
+        {gameMode !== QUIZZ_MODES.SURVEY && !options.closestWins && (
           <ConfigField>
             <ConfigField.Label
               icon={<Crosshair className="size-4" />}

@@ -59,7 +59,9 @@
         "step": "Step",
         "stepHint": "Precision of the slider and the expected answer",
         "margin": "Margin",
-        "marginHint": "Answers within this distance of the correct answer score from 100% (exact) down to 50%. Answers outside score nothing."
+        "marginHint": "Answers within this distance of the correct answer score from 100% (exact) down to 50%. Answers outside score nothing.",
+        "closestWins": "Closest wins",
+        "closestWinsHint": "Only the player(s) closest to the correct answer score, all of them the full points, also on a tie. The margin does not apply."
       },
       "puzzle": {
         "title": "Puzzle",

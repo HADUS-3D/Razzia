@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { estimationAccuracy } from "@razzia/common/questions/estimation"
+import {
+  closestEstimationDistance,
+  estimationAccuracy,
+  isClosestEstimation,
+} from "@razzia/common/questions/estimation"
 
 describe("estimationAccuracy", () => {
   it("gives full accuracy for an exact answer", () => {
@@ -18,5 +22,18 @@ describe("estimationAccuracy", () => {
   it("only accepts the exact value with a zero margin", () => {
     expect(estimationAccuracy(50, 50, 0)).toBe(1)
     expect(estimationAccuracy(51, 50, 0)).toBe(0)
+  })
+})
+
+describe("closest estimation", () => {
+  it("finds the smallest distance", () => {
+    expect(closestEstimationDistance([10, 45, 70], 50)).toBe(5)
+    expect(closestEstimationDistance([], 50)).toBeUndefined()
+  })
+
+  it("treats ties on either side as closest", () => {
+    expect(isClosestEstimation(45, [45, 55, 80], 50)).toBe(true)
+    expect(isClosestEstimation(55, [45, 55, 80], 50)).toBe(true)
+    expect(isClosestEstimation(80, [45, 55, 80], 50)).toBe(false)
   })
 })

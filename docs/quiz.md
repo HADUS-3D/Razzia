@@ -99,6 +99,7 @@ An `"estimation"` question asks for a number instead of offering answers to pick
 - `options.min` / `options.max`: Bounds of the accepted values, `max` must be greater than `min`
 - `options.step`: Precision of the slider (must be greater than 0)
 - `options.margin`: How far from the expected value an answer still counts as correct. An exact answer earns `maxPoints`, an answer at the edge of the margin earns half of it, and anything further away earns nothing (and the `penalty`, if any). A margin of `0` only accepts the exact value
+- `options.closestWins`: Optional boolean, default `false`. When `true`, only the player(s) with the smallest distance to the expected value score, and they all get the full `maxPoints` (no fading with distance). Players that tie for the smallest distance all score. The `margin` is ignored (use `0`), so there is always a winner as long as someone answered. Other players count as wrong (and get the `penalty`, if any)
 
 ## Puzzle questions
 

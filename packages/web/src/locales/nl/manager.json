@@ -41,7 +41,9 @@
       "answered": "Beantwoord",
       "withinMargin": "{{value}} ± {{margin}}",
       "outsideMargin": "Buiten de marge",
-      "average": "Gemiddeld antwoord: {{value}}"
+      "average": "Gemiddeld antwoord: {{value}}",
+      "closest": "Dichtstbij {{value}}",
+      "further": "Verder weg"
     },
     "puzzle": {
       "group": "Groep {{number}}"
