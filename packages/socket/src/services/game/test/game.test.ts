@@ -725,9 +725,10 @@ describe("quiz flow", () => {
       },
     })
     expect(screen?.data).not.toHaveProperty("answers")
-    expect([status("alice")?.name, status("bob")?.name].sort()).toEqual(
-      [STATUS.SELECT_ANSWER, STATUS.WAIT].sort(),
-    )
+    const names = [status("alice")?.name, status("bob")?.name]
+
+    expect(names).toContain(STATUS.SELECT_ANSWER)
+    expect(names).toContain(STATUS.WAIT)
   })
 
   it("scores by answer order when there is no time limit", async () => {
