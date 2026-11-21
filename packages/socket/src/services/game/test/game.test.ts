@@ -1288,6 +1288,35 @@ describe("backgrounds", () => {
     })
   })
 
+  it("shows the quizz background on the leaderboard of players too", async () => {
+    const questions = [
+      createQuestion({ solutions: [0], background: "/media/q1.png" }),
+      createQuestion(),
+    ]
+    const quizz = {
+      ...createQuizz(questions),
+      background: "/media/quizz.png",
+    }
+    const { start, lastEvent, game, status, sockets } = setup(quizz)
+
+    await start()
+    game.selectAnswer(sockets[0], [0])
+    game.selectAnswer(sockets[1], [1])
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    expect(lastEvent("alice", EVENTS.GAME.STATUS)?.data).toMatchObject({
+      name: STATUS.SHOW_RESULT,
+      background: "/media/q1.png",
+    })
+
+    game.advance()
+
+    expect(status("alice")?.name).toBe(STATUS.SHOW_PLAYER_LEADERBOARD)
+    expect(lastEvent("alice", EVENTS.GAME.STATUS)?.data).toMatchObject({
+      background: "/media/quizz.png",
+    })
+  })
+
   it("hides the small image when it is the background", async () => {
     const { start, lastEvent, game } = setup(
       createQuizz([createQuestion({ media: photo, background: photo.url })]),
