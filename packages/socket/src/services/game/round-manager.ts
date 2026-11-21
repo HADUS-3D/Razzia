@@ -215,6 +215,7 @@ export class RoundManager {
 
     const ranking: Status[] = [
       STATUS.SHOW_LEADERBOARD,
+      STATUS.SHOW_PLAYER_LEADERBOARD,
       STATUS.FINISHED,
       STATUS.SUMMARY,
     ]
