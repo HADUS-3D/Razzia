@@ -2,9 +2,11 @@ import { Check } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import type { IntroSection } from "@razzia/common/questions/intro"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import { EVENTS } from "@razzia/common/constants"
 import Button from "@razzia/web/components/Button"
+import IntroIcon from "@razzia/web/features/game/components/IntroIcon"
 import {
   useEvent,
   useSocket,
@@ -15,7 +17,7 @@ interface Props {
   data: CommonStatusDataMap["SHOW_INTRO"]
 }
 
-const Intro = ({ data: { sections, totalPlayers } }: Props) => {
+const Intro = ({ data: { sections, details, totalPlayers } }: Props) => {
   const { t } = useTranslation()
   const { socket } = useSocket()
   const { player, gameId } = usePlayerStore()
@@ -35,6 +37,27 @@ const Intro = ({ data: { sections, totalPlayers } }: Props) => {
     socket.emit(EVENTS.PLAYER.INTRO_READ, { gameId })
   }
 
+  const range = (from: number, to: number) =>
+    from === to ? String(from) : t("game:intro.range", { from, to })
+
+  const sectionText = (section: IntroSection) => {
+    if (section === "estimation") {
+      return t(`game:intro.estimation.text_${details.estimation ?? "margin"}`)
+    }
+
+    if (section === "challenge" && details.challenge) {
+      const { minPercent, maxPercent, minCount, maxCount } = details.challenge
+
+      return t("game:intro.challenge.text", {
+        percent: range(minPercent, maxPercent),
+        count: range(minCount, maxCount),
+        total: totalPlayers,
+      })
+    }
+
+    return t(`game:intro.${section}.text`)
+  }
+
   return (
     <section className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 px-4 py-6">
       <motion.h2
@@ -52,14 +75,15 @@ const Intro = ({ data: { sections, totalPlayers } }: Props) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
-            className="rounded-xl bg-white/90 p-4 text-black shadow-lg md:p-5"
+            className="flex items-center gap-4 rounded-xl bg-white/90 p-4 text-black shadow-lg md:gap-6 md:p-5"
           >
-            <h3 className="text-lg font-bold md:text-2xl">
-              {t(`game:intro.${section}.title`)}
-            </h3>
-            <p className="text-base md:text-xl">
-              {t(`game:intro.${section}.text`)}
-            </p>
+            <IntroIcon section={section} />
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-bold md:text-2xl">
+                {t(`game:intro.${section}.title`)}
+              </h3>
+              <p className="text-base md:text-xl">{sectionText(section)}</p>
+            </div>
           </motion.li>
         ))}
       </ul>
@@ -68,7 +92,7 @@ const Intro = ({ data: { sections, totalPlayers } }: Props) => {
         <Button
           onClick={handleRead}
           disabled={iRead}
-          className="flex items-center gap-2 px-8 py-3 text-xl"
+          className="sticky bottom-3 z-10 flex items-center gap-2 px-8 py-3 text-xl shadow-lg"
         >
           {iRead && <Check className="size-6" />}
           {t(iRead ? "game:intro.readDone" : "game:intro.read")}

@@ -8,6 +8,8 @@ export { default as AnswerComponent } from "@razzia/web/features/questions/multi
 
 export { default as ConfigComponent } from "@razzia/web/features/questions/multi/components/MultiConfig"
 
+export { default as PreparedComponent } from "@razzia/web/features/questions/multi/components/MultiPrepared"
+
 export { default as SolutionPicker } from "@razzia/web/features/questions/multi/components/MultiPicker"
 
 export { choiceInitialValues as initialValues } from "@razzia/web/features/questions/utils"

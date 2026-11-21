@@ -82,12 +82,13 @@ export const seedQuizz = (
   {
     gameMode = "quiz",
     questions = DEFAULT_SEED_QUESTIONS,
-  }: Partial<Pick<Quizz, "gameMode" | "questions">> = {},
+    intro,
+  }: Partial<Pick<Quizz, "gameMode" | "questions" | "intro">> = {},
 ) => {
   const id = subject.toLowerCase().replace(/\W+/gu, "-")
 
   fs.writeFileSync(
     join(CONFIG_PATH, "quizz", `${id}.json`),
-    JSON.stringify({ id, gameMode, subject, questions }),
+    JSON.stringify({ id, gameMode, subject, questions, intro }),
   )
 }
