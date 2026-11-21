@@ -940,6 +940,28 @@ describe("quiz flow", () => {
     expect(pins.map((p) => p.points)).toEqual([1000, 500, 0])
   })
 
+  it("hides the pin image during the preview and shows it when the timer starts", async () => {
+    const { game, status, manager } = setup(createQuizz([createPinQuestion()]))
+
+    void game.start(manager)
+    await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS)
+
+    const preview = status(game.gameId)
+    const previewData = preview?.data as { media?: unknown }
+
+    expect(preview?.name).toBe(STATUS.SHOW_QUESTION)
+    expect(previewData.media).toBeUndefined()
+
+    await vi.advanceTimersByTimeAsync(createPinQuestion().cooldown * 1000)
+
+    const answering = status(game.gameId)
+
+    expect(answering?.name).toBe(STATUS.SELECT_ANSWER)
+    expect(answering?.data).toMatchObject({
+      media: { type: "image", url: "/media/map.png" },
+    })
+  })
+
   it("scores a pin on a real map in km", async () => {
     const { game, sockets, status, start } = setup(
       createQuizz([
