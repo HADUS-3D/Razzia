@@ -1,4 +1,4 @@
-import type { IntroSection } from "@razzia/common/questions/intro"
+import type { IntroDetails, IntroSection } from "@razzia/common/questions/intro"
 import type {
   PinPosition,
   PlayerQuestionOptions,
@@ -51,7 +51,11 @@ export interface PlayerLeaderboardRow {
 
 export interface CommonStatusDataMap {
   /** The explanation before the first question. Players mark it as read; the host clicks to go on. */
-  SHOW_INTRO: { sections: IntroSection[]; totalPlayers: number }
+  SHOW_INTRO: {
+    sections: IntroSection[]
+    details: IntroDetails
+    totalPlayers: number
+  }
   SHOW_START: { time: number }
   SHOW_ROUND: { name: string; number: number; total: number }
   SHOW_PREPARED: {

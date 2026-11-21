@@ -26,7 +26,7 @@ import {
   PUZZLE_GROUPS,
   QUIZZ_MODES,
 } from "@razzia/common/constants"
-import { introSections } from "@razzia/common/questions/intro"
+import { introDetails, introSections } from "@razzia/common/questions/intro"
 import {
   isEstimationOptions,
   isPinOptions,
@@ -347,9 +347,12 @@ export class RoundManager {
     if (this.opts.quizz.intro) {
       this.awaitingIntro = true
       this.introRead.clear()
+      const totalPlayers = this.opts.players.joinedCount()
+
       this.opts.broadcast(STATUS.SHOW_INTRO, {
         sections: introSections(this.opts.quizz.questions),
-        totalPlayers: this.opts.players.joinedCount(),
+        details: introDetails(this.opts.quizz.questions, totalPlayers),
+        totalPlayers,
       })
 
       return

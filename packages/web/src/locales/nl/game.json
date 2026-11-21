@@ -127,7 +127,9 @@
     },
     "estimation": {
       "title": "Schatting",
-      "text": "Vul een getal in. Hoe dichter je erbij zit, hoe meer punten je krijgt."
+      "text_margin": "Vul een getal in. Zit je binnen de marge, dan krijg je punten: hoe dichter je erbij zit, hoe meer.",
+      "text_closest": "Vul een getal in. Wie er het dichtst bij zit krijgt alle punten, de rest krijgt niets.",
+      "text_mixed": "Vul een getal in. Bij sommige vragen krijg je meer punten naarmate je dichterbij zit, bij andere krijgt alleen wie het dichtst bij zit de punten."
     },
     "puzzle": {
       "title": "Puzzel",
@@ -139,11 +141,12 @@
     },
     "challenge": {
       "title": "Topvraag",
-      "text": "Sommige vragen zijn alleen voor de besten. Goed antwoord: je houdt je punten. Fout of geen antwoord: dat kan punten kosten."
+      "text": "Sommige vragen zijn alleen voor de besten: de beste {{percent}}% van de spelers ({{count}} van de {{total}}) krijgt ze, op het eigen device. Goed antwoord: je houdt je punten. Fout of geen antwoord: dat kan punten kosten."
     },
     "read": "Ik heb het gelezen",
     "readDone": "Wachten op de anderen",
     "pending_one": "{{count}} speler heeft het nog niet gelezen",
-    "pending_other": "{{count}} spelers hebben het nog niet gelezen"
+    "pending_other": "{{count}} spelers hebben het nog niet gelezen",
+    "range": "{{from}} tot {{to}}"
   }
 }

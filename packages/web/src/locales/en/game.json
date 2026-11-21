@@ -127,7 +127,9 @@
     },
     "estimation": {
       "title": "Estimate",
-      "text": "Fill in a number. The closer you are, the more points you get."
+      "text_margin": "Fill in a number. If you are within the margin you score: the closer you are, the more points you get.",
+      "text_closest": "Fill in a number. Whoever is closest gets all the points, everyone else gets nothing.",
+      "text_mixed": "Fill in a number. On some questions you get more points the closer you are, on others only the closest player scores."
     },
     "puzzle": {
       "title": "Puzzle",
@@ -139,11 +141,12 @@
     },
     "challenge": {
       "title": "Top challenge",
-      "text": "Some questions are only for the best players. Right answer: you keep your points. Wrong or no answer: it can cost you points."
+      "text": "Some questions are only for the best players: the top {{percent}}% of the players ({{count}} of {{total}}) get them, on their own device. Right answer: you keep your points. Wrong or no answer: it can cost you points."
     },
     "read": "I have read this",
     "readDone": "Waiting for the others",
     "pending_one": "{{count}} player has not read it yet",
-    "pending_other": "{{count}} players have not read it yet"
+    "pending_other": "{{count}} players have not read it yet",
+    "range": "{{from}} to {{to}}"
   }
 }
