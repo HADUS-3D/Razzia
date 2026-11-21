@@ -492,14 +492,9 @@ export class RoundManager {
       return
     }
 
-    const imageMedia =
-      this.questionImage?.type === MEDIA_TYPES.IMAGE
-        ? this.questionImage
-        : undefined
-
     this.toAudience(STATUS.SHOW_QUESTION, {
       question: this.question.question,
-      media: imageMedia,
+      media: this.previewMedia(false),
       cooldown: this.question.cooldown,
     })
 
@@ -538,6 +533,25 @@ export class RoundManager {
     }
 
     this.runStep(0)
+  }
+
+  /**
+   * The image shown with the question. The image of a pin question is the
+   * field players tap, so it stays hidden during the preview: players cannot
+   * study it while the clock is not running.
+   */
+  private previewMedia(answering: boolean) {
+    if (this.questionImage?.type !== MEDIA_TYPES.IMAGE) {
+      return undefined
+    }
+
+    const { options } = this.question
+    const hidden =
+      !answering &&
+      isPinOptions(options) &&
+      (options.mode ?? PIN_MODES.IMAGE) === PIN_MODES.IMAGE
+
+    return hidden ? undefined : this.questionImage
   }
 
   /** The best players of the leaderboard, when the current question is a top challenge. */
@@ -595,10 +609,7 @@ export class RoundManager {
     const asked = this.opts.players
       .getAll()
       .filter((player) => this.challengeIds?.has(player.id))
-    const imageMedia =
-      this.questionImage?.type === MEDIA_TYPES.IMAGE
-        ? this.questionImage
-        : undefined
+    const imageMedia = this.previewMedia(answering)
 
     return {
       question,
