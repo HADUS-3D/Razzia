@@ -402,6 +402,10 @@ class Game {
     this.round.selectAnswer(socket, answerIds, extra)
   }
 
+  markIntroRead(socket: Socket) {
+    this.round.markIntroRead(socket)
+  }
+
   advance() {
     this.round.advance()
   }

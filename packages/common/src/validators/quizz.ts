@@ -164,6 +164,7 @@ export const quizzValidator = z
       .min(0, "errors:quizz.speedBonusRange")
       .max(100, "errors:quizz.speedBonusRange")
       .optional(),
+    intro: z.boolean().optional(),
     questions: z.array(questionValidator).min(1, "errors:quizz.noQuestions"),
   })
   .superRefine((quizz, ctx) => {

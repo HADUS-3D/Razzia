@@ -51,6 +51,7 @@ Quiz Options:
 - `subject`: Title/topic of the quiz
 - `sounds`: Optional `{ "music"?, "answerEnd"?, "leaderboard"?, "podium"? }`, see [Sounds](#sounds)
 - `speedBonus`: Optional, `0`-`100` (default: `100`). How much of the points of a question depends on answering fast. `100` is fully by speed, like the classic scoring. `0` gives every right answer the full `maxPoints`, whatever the speed. `50` gives half of `maxPoints` for any right answer plus up to half more for speed. Useful when some players need more time to read. Estimation and puzzle questions never depend on speed
+- `intro`: Optional, `true` or `false` (default: `false`). Shows an explanation slide before the first question, on the big screen and on the players' devices. It lists only the question types that occur in the quiz (and the top challenge when a question has one). Players have one button to mark it as read, the big screen shows how many have not yet, and it only goes on when the host clicks Next. It is not part of a round
 - `questions`: Array of question objects containing:
   - `type`: `"single"` (exactly one answer), `"multi"` (one or more), `"estimation"` (a number, see [Estimation questions](#estimation-questions)) `"puzzle"` (12 words in 3 groups, see [Puzzle questions](#puzzle-questions)) or `"pin"` (tap a spot on an image or map, see [Pin questions](#pin-questions)). Defaults to `"single"` when omitted
   - `question`: The question text

@@ -485,6 +485,49 @@ describe("quiz flow", () => {
     })
   })
 
+  describe("intro slide", () => {
+    it("waits for the host's click before the countdown", async () => {
+      const quizz = {
+        ...createQuizz([createQuestion({ type: "multi" })]),
+        intro: true,
+        background: "/quizz.png",
+      }
+      const { game, manager, sockets, status, lastEvent } = setup(quizz)
+
+      void game.start(manager)
+      await vi.advanceTimersByTimeAsync(60_000)
+
+      expect(status(game.gameId)).toMatchObject({
+        name: STATUS.SHOW_INTRO,
+        data: { sections: ["multi"], totalPlayers: 2 },
+      })
+
+      game.markIntroRead(sockets[0])
+      game.markIntroRead(sockets[0])
+
+      expect(lastEvent(game.gameId, EVENTS.GAME.PLAYER_ANSWER)?.data).toBe(1)
+      expect(lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject({
+        background: "/quizz.png",
+      })
+
+      game.advance()
+
+      expect(status(game.gameId)?.name).toBe(STATUS.SHOW_START)
+
+      await vi.advanceTimersByTimeAsync(3000)
+
+      expect(status(game.gameId)?.name).toBe(STATUS.SHOW_PREPARED)
+    })
+
+    it("starts on the countdown when the quizz has no intro", () => {
+      const { game, manager, status } = setup(createQuizz([createQuestion()]))
+
+      void game.start(manager)
+
+      expect(status(game.gameId)?.name).toBe(STATUS.SHOW_START)
+    })
+  })
+
   describe("rounds", () => {
     const ROUND_INTRO_MS = 4000
 

@@ -1,10 +1,11 @@
-import { Gauge, ImageIcon, Music, Settings, X } from "lucide-react"
+import { Gauge, ImageIcon, Info, Music, Settings, X } from "lucide-react"
 import { Dialog } from "radix-ui"
 import { useController, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { QUIZZ_MODES } from "@razzia/common/constants"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
+import Switch from "@razzia/web/components/Switch"
 import BackgroundPicker from "@razzia/web/features/quizz/components/BackgroundPicker"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import SoundPicker from "@razzia/web/features/quizz/components/SoundPicker"
@@ -46,6 +47,33 @@ const SpeedBonusField = () => {
       />
       <ConfigField.Description>
         {t("quizz:question.config.speedBonusHint")}
+      </ConfigField.Description>
+    </ConfigField>
+  )
+}
+
+const IntroField = () => {
+  const { t } = useTranslation()
+  const { control } = useFormContext<QuizzFormValues>()
+  const { field } = useController({ control, name: "intro" })
+
+  return (
+    <ConfigField>
+      <ConfigField.Label
+        icon={<Info className="size-4" />}
+        label={t("quizz:settings.intro")}
+        action={
+          <Switch
+            aria-label={t("quizz:settings.intro")}
+            checked={field.value === true}
+            onCheckedChange={(checked) =>
+              field.onChange(checked ? true : undefined)
+            }
+          />
+        }
+      />
+      <ConfigField.Description>
+        {t("quizz:settings.introHint")}
       </ConfigField.Description>
     </ConfigField>
   )
@@ -109,6 +137,8 @@ const QuizzSettingsDialog = () => {
           </div>
 
           <div className="mt-4 flex flex-col gap-5">
+            <IntroField />
+
             {isQuiz && <SpeedBonusField />}
 
             <ConfigField>

@@ -124,6 +124,10 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     ),
   )
 
+  socket.on(EVENTS.PLAYER.INTRO_READ, ({ gameId }) =>
+    withPlayerGame(gameId, socket, (game) => game.markIntroRead(socket)),
+  )
+
   socket.on(EVENTS.MANAGER.ADVANCE, ({ gameId }) =>
     withManagerGame(gameId, socket, (game) => game.advance()),
   )

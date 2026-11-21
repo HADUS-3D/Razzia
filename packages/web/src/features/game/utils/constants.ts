@@ -1,6 +1,7 @@
 import { STATUS } from "@razzia/common/types/game/status"
 import Answers from "@razzia/web/features/game/components/states/Answers"
 import Challenge from "@razzia/web/features/game/components/states/Challenge"
+import Intro from "@razzia/web/features/game/components/states/Intro"
 import Leaderboard from "@razzia/web/features/game/components/states/Leaderboard"
 import PlayerFinished from "@razzia/web/features/game/components/states/PlayerFinished"
 import PlayerLeaderboard from "@razzia/web/features/game/components/states/PlayerLeaderboard"
@@ -39,6 +40,7 @@ export const GAME_STATE_COMPONENTS = {
   [STATUS.SELECT_ANSWER]: Answers,
   [STATUS.SHOW_QUESTION]: Question,
   [STATUS.WAIT]: Wait,
+  [STATUS.SHOW_INTRO]: Intro,
   [STATUS.SHOW_START]: Start,
   [STATUS.SHOW_ROUND]: Round,
   [STATUS.SHOW_RESULT]: Result,
@@ -81,6 +83,7 @@ export function isKeyOf<T extends object>(
 
 export const MANAGER_SKIP_BTN = {
   [STATUS.SHOW_ROOM]: "game:startGame",
+  [STATUS.SHOW_INTRO]: "common:next",
   [STATUS.SHOW_START]: null,
   [STATUS.SHOW_ROUND]: null,
   [STATUS.SHOW_PREPARED]: null,
