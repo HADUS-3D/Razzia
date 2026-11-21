@@ -34,6 +34,7 @@ export interface QuizzFormValues {
   background?: string
   sounds?: QuizzSounds
   speedBonus?: number
+  intro?: boolean
   questions: Question[]
 }
 
@@ -94,6 +95,7 @@ export const QuizzEditorProvider = ({
       background: initialData?.background,
       sounds: initialData?.sounds,
       speedBonus: initialData?.speedBonus,
+      intro: initialData?.intro,
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
   })

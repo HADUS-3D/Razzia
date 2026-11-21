@@ -190,7 +190,9 @@
   "settings": {
     "title": "Quizinstellingen",
     "open": "Quizinstellingen",
-    "description": "Deze instellingen gelden voor de hele quiz. Instellingen van één vraag staan in het menu rechts."
+    "description": "Deze instellingen gelden voor de hele quiz. Instellingen van één vraag staan in het menu rechts.",
+    "intro": "Uitlegslide",
+    "introHint": "Toon vóór de eerste vraag een slide die de vraagtypes in deze quiz uitlegt. Hij gaat alleen verder als je op Volgende klikt."
   },
   "sounds": {
     "question": "Geluiden van deze vraag",

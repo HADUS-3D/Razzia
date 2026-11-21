@@ -28,6 +28,7 @@ export const clientEventValidators = {
   [EVENTS.PLAYER.LOGIN]: z.object({ ticket: z.string().min(1) }),
   [EVENTS.PLAYER.RECONNECT]: gameMessageValidator,
   [EVENTS.PLAYER.LEAVE]: gameMessageValidator,
+  [EVENTS.PLAYER.INTRO_READ]: gameMessageValidator,
   [EVENTS.PLAYER.SELECTED_ANSWER]: gameMessageValidator.extend({
     data: z.object({
       answerKeys: answerKeysValidator.optional(),

@@ -26,6 +26,7 @@ import {
   PUZZLE_GROUPS,
   QUIZZ_MODES,
 } from "@razzia/common/constants"
+import { introSections } from "@razzia/common/questions/intro"
 import {
   isEstimationOptions,
   isPinOptions,
@@ -111,6 +112,10 @@ export class RoundManager {
   private readonly opts: RoundManagerOptions
   private readonly steps: RoundStep[]
   private started = false
+  /** The intro slide is showing; the host's click starts the countdown. */
+  private awaitingIntro = false
+  /** Ids of the players that marked the intro as read. */
+  private introRead = new Set<string>()
   private currentQuestion = 0
   private currentStep = -1
   private playersAnswers: Answer[] = []
@@ -196,6 +201,10 @@ export class RoundManager {
   backgroundFor(status: Status): string | undefined {
     // The countdown that leads into a round already wears the round's
     // background, so the first question's own image never shows before it.
+    if (status === STATUS.SHOW_INTRO) {
+      return this.opts.quizz.background
+    }
+
     const opensRound =
       status === STATUS.SHOW_ROUND ||
       (status === STATUS.SHOW_START && this.question.round)
@@ -335,6 +344,21 @@ export class RoundManager {
 
     this.started = true
 
+    if (this.opts.quizz.intro) {
+      this.awaitingIntro = true
+      this.introRead.clear()
+      this.opts.broadcast(STATUS.SHOW_INTRO, {
+        sections: introSections(this.opts.quizz.questions),
+        totalPlayers: this.opts.players.joinedCount(),
+      })
+
+      return
+    }
+
+    await this.countdownToFirstQuestion()
+  }
+
+  private async countdownToFirstQuestion(): Promise<void> {
     this.opts.broadcast(STATUS.SHOW_START, { time: 3 })
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
     await this.opts.cooldown.start(3)
@@ -352,6 +376,13 @@ export class RoundManager {
     }
 
     this.clearAutoAdvance()
+
+    if (this.awaitingIntro) {
+      this.awaitingIntro = false
+      void this.countdownToFirstQuestion()
+
+      return
+    }
 
     if (this.isAskingQuestion()) {
       this.acceptingAnswers = false
@@ -372,6 +403,7 @@ export class RoundManager {
       return
     }
 
+    this.awaitingIntro = false
     this.acceptingAnswers = false
     this.playersAnswers = []
     this.opts.cooldown.abort()
@@ -924,6 +956,20 @@ export class RoundManager {
     return [Math.min(options.max, Math.max(options.min, value))]
   }
 
+  /** A player marks the intro slide as read; the big screen shows who is still reading. */
+  markIntroRead(socket: Socket): void {
+    const player = this.opts.players.findById(socket.id)
+
+    if (!player || !this.awaitingIntro || this.introRead.has(player.id)) {
+      return
+    }
+
+    this.introRead.add(player.id)
+    this.opts.io
+      .to(this.opts.gameId)
+      .emit(EVENTS.GAME.PLAYER_ANSWER, this.introRead.size)
+  }
+
   selectAnswer(
     socket: Socket,
     answerIds: number[],
@@ -1019,6 +1065,10 @@ export class RoundManager {
   }
 
   updatePlayerId(oldId: string, newId: string): void {
+    if (this.introRead.delete(oldId)) {
+      this.introRead.add(newId)
+    }
+
     if (this.challengeIds?.delete(oldId)) {
       this.challengeIds.add(newId)
     }

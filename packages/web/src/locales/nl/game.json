@@ -114,5 +114,36 @@
     "wrongNone": "Fout of geen antwoord: er gebeurt niets.",
     "others": "Alle anderen houden hun punten en wachten.",
     "who_other": "Alleen de top {{count}} van {{total}} spelers ({{percent}}%) krijgt deze vraag, op het eigen device."
+  },
+  "intro": {
+    "title": "Zo werkt het",
+    "single": {
+      "title": "Meerkeuze",
+      "text": "Kies het ene juiste antwoord. Hoe sneller je antwoordt, hoe meer punten je krijgt."
+    },
+    "multi": {
+      "title": "Meerdere antwoorden",
+      "text": "Meer dan één antwoord kan goed zijn. Selecteer ze allemaal en bevestig daarna."
+    },
+    "estimation": {
+      "title": "Schatting",
+      "text": "Vul een getal in. Hoe dichter je erbij zit, hoe meer punten je krijgt."
+    },
+    "puzzle": {
+      "title": "Puzzel",
+      "text": "12 woorden vormen 3 groepen van 4. Ontdek wat elke groep gemeen heeft en typ de 3 verbanden."
+    },
+    "pin": {
+      "title": "Pin op de kaart",
+      "text": "Tik op de plek op de afbeelding. Hoe dichter je pin, hoe meer punten je krijgt."
+    },
+    "challenge": {
+      "title": "Topvraag",
+      "text": "Sommige vragen zijn alleen voor de besten. Goed antwoord: je houdt je punten. Fout of geen antwoord: dat kan punten kosten."
+    },
+    "read": "Ik heb het gelezen",
+    "readDone": "Wachten op de anderen",
+    "pending_one": "{{count}} speler heeft het nog niet gelezen",
+    "pending_other": "{{count}} spelers hebben het nog niet gelezen"
   }
 }

@@ -190,7 +190,9 @@
   "settings": {
     "title": "Quizz settings",
     "open": "Quizz settings",
-    "description": "These settings apply to the whole quizz. Settings of a single question are in the menu on the right."
+    "description": "These settings apply to the whole quizz. Settings of a single question are in the menu on the right.",
+    "intro": "Explanation slide",
+    "introHint": "Before the first question, show a slide that explains the question types in this quizz. It only goes on when you click Next."
   },
   "sounds": {
     "question": "Sounds of this question",

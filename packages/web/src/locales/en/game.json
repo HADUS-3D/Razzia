@@ -114,5 +114,36 @@
     "wrongNone": "Wrong or no answer: nothing happens.",
     "others": "Everyone else keeps their points and waits.",
     "who_other": "Only the top {{count}} of {{total}} players ({{percent}}%) are asked this question, on their own device."
+  },
+  "intro": {
+    "title": "How it works",
+    "single": {
+      "title": "Multiple choice",
+      "text": "Pick the one right answer. A faster answer earns more points."
+    },
+    "multi": {
+      "title": "Multiple answers",
+      "text": "More than one answer can be right. Select all of them, then confirm."
+    },
+    "estimation": {
+      "title": "Estimate",
+      "text": "Fill in a number. The closer you are, the more points you get."
+    },
+    "puzzle": {
+      "title": "Puzzle",
+      "text": "12 words form 3 groups of 4. Work out what each group has in common and type the 3 connections."
+    },
+    "pin": {
+      "title": "Pin on the map",
+      "text": "Tap the spot on the image. The closer your pin, the more points you get."
+    },
+    "challenge": {
+      "title": "Top challenge",
+      "text": "Some questions are only for the best players. Right answer: you keep your points. Wrong or no answer: it can cost you points."
+    },
+    "read": "I have read this",
+    "readDone": "Waiting for the others",
+    "pending_one": "{{count}} player has not read it yet",
+    "pending_other": "{{count}} players have not read it yet"
   }
 }

@@ -205,6 +205,8 @@ export interface Quizz {
    * 100 (the default) is fully by speed; 0 gives every right answer the same points.
    */
   speedBonus?: number
+  /** Show an explanation slide of the question types before the first question. */
+  intro?: boolean
   questions: Question[]
 }
 
